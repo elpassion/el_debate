@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160425153133) do
+ActiveRecord::Schema.define(version: 20160425215628) do
 
   create_table "answers", force: :cascade do |t|
     t.integer "debate_id"
@@ -20,6 +20,13 @@ ActiveRecord::Schema.define(version: 20160425153133) do
   end
 
   add_index "answers", ["debate_id"], name: "index_answers_on_debate_id"
+
+  create_table "auth_tokens", force: :cascade do |t|
+    t.integer "debate_id"
+    t.string  "value"
+  end
+
+  add_index "auth_tokens", ["debate_id"], name: "index_auth_tokens_on_debate_id"
 
   create_table "debates", force: :cascade do |t|
     t.string   "topic"

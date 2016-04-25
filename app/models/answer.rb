@@ -16,8 +16,8 @@ class Answer < ApplicationRecord
   validates :debate_id, :value, presence: true
 
   def self.default_answers
-    ANSWER_TYPES.map do |answer_type_key, answer_type_value|
-      self.new answer_type: answer_type_value, value: DEFAULT_VALUES[answer_type_key]
+    ANSWER_TYPES.map do |answer_type, answer_type_id|
+      self.new answer_type: answer_type_id, value: DEFAULT_VALUES[answer_type]
     end
   end
 end

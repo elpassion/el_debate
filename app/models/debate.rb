@@ -1,16 +1,21 @@
 class Debate < ApplicationRecord
   has_many :answers, dependent: :delete_all
+  has_many :auth_tokens, dependent: :delete_all
 
   validates :code, presence: true, length: { is: 5 }, numericality: { only_integer: true }
   validates :topic, presence: true
 
-  before_validation :generate_code
+  before_validation :set_code
   after_create :create_answers
 
   private
 
+  def set_code
+    self.code = generate_code
+  end
+
   def generate_code
-    self.code = '99999'
+    '99999'
   end
 
   def create_answers

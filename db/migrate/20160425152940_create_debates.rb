@@ -3,7 +3,6 @@ class CreateDebates < ActiveRecord::Migration[5.0]
     create_table :debates do |t|
       t.string :topic
       t.string :code
-
       t.timestamps
     end
   end
