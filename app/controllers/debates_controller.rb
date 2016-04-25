@@ -10,7 +10,7 @@ class DebatesController < ApplicationController
   def create
     @debate = Debate.new debate_params
     if @debate.save
-      flash[:notice] = 'Debate was successfully created'
+      flash[:notice] = 'Debate was created successfully'
       redirect_to debates_path
     else
       render :new

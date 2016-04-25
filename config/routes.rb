@@ -6,5 +6,9 @@ Rails.application.routes.draw do
 
   resources :debates, only: [:index, :new, :create]
 
+  namespace :api do
+    resource :login, only: [:create]
+  end
+
   root 'debates#index'
 end
