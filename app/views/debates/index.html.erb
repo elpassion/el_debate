@@ -1,0 +1,9 @@
+<h2>Current debates:</h2>
+
+<% @debates.each do |debate| %>
+  <div>
+    <p><%= debate.topic %> [<strong><%= debate.code %></strong>]</p>
+  </div>
+<% end %>
+
+<%= link_to 'New debate', new_debate_path %>
