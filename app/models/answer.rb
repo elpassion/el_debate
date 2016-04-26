@@ -11,7 +11,7 @@ class Answer < ApplicationRecord
   }
 
   belongs_to :debate
-  has_many :votes
+  has_many :votes, dependent: :delete_all
 
   validates :answer_type, inclusion: { in: ANSWER_TYPES.values }
   validates :debate_id, :value, presence: true

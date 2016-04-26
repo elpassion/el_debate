@@ -1,6 +1,7 @@
 class Debate < ApplicationRecord
   has_many :answers, dependent: :delete_all
   has_many :auth_tokens, dependent: :delete_all
+  has_many :votes, through: :answers
 
   validates :code, presence: true, length: { is: 5 }, numericality: { only_integer: true }
   validates :topic, presence: true
