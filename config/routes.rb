@@ -12,10 +12,5 @@ Rails.application.routes.draw do
     resource :vote, only: [:create]
   end
 
-  # Temporary API, to remove after hackathon
-  namespace :t_api do
-    resource :debate, only: [:show, :create]
-  end
-
   root 'debates#index'
 end
