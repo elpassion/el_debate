@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   namespace :api do
     resource :login, only: [:create]
     resource :debate, only: [:show]
+    resource :vote, only: [:create]
   end
 
   root 'debates#index'
