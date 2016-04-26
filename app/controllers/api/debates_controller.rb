@@ -1,5 +1,5 @@
 class Api::DebatesController < Api::ApplicationController
   def show
-    render json: @auth_token.debate
+    render json: DebateSerializer.new(@auth_token.debate).to_json
   end
 end
