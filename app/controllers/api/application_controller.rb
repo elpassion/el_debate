@@ -18,4 +18,9 @@ class Api::ApplicationController < ActionController::Base
       @auth_token = AuthToken.find_by value: token
     end
   end
+
+  def current_debate
+    return unless @auth_token.present?
+    @auth_token.debate
+  end
 end

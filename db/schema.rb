@@ -37,8 +37,10 @@ ActiveRecord::Schema.define(version: 20160426100014) do
 
   create_table "votes", force: :cascade do |t|
     t.integer "answer_id"
+    t.integer "auth_token_id"
   end
 
   add_index "votes", ["answer_id"], name: "index_votes_on_answer_id"
+  add_index "votes", ["auth_token_id"], name: "index_votes_on_auth_token_id"
 
 end
