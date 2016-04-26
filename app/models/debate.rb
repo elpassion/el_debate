@@ -1,9 +1,11 @@
 class Debate < ApplicationRecord
+  CODE_LENGTH = 5
+
   has_many :answers, dependent: :delete_all
   has_many :auth_tokens, dependent: :delete_all
   has_many :votes, through: :answers
 
-  validates :code, presence: true, length: { is: 5 }, numericality: { only_integer: true }
+  validates :code, presence: true, length: { is: CODE_LENGTH }, numericality: { only_integer: true }
   validates :topic, presence: true
 
   before_validation :set_code
@@ -16,7 +18,7 @@ class Debate < ApplicationRecord
   end
 
   def generate_code
-    '99999'
+    Array.new(CODE_LENGTH) { rand(10) }.join
   end
 
   def create_answers
