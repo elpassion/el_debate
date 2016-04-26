@@ -2,7 +2,7 @@
 
 <% @debates.each do |debate| %>
   <div>
-    <p><%= debate.topic %> [<strong><%= debate.code %></strong>]</p>
+    <p><%= link_to debate.topic, debate %> [<strong><%= debate.code %></strong>]</p>
   </div>
 <% end %>
 

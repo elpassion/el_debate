@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   # Serve websocket cable requests in-process
   # mount ActionCable.server => '/cable'
 
-  resources :debates, only: [:index, :new, :create]
+  resources :debates, only: [:index, :show, :new, :create]
 
   namespace :api do
     resource :login, only: [:create]

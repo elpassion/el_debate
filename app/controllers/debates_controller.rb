@@ -3,6 +3,10 @@ class DebatesController < ApplicationController
     @debates = Debate.all.to_a
   end
 
+  def show
+    @debate = Debate.find params[:id]
+  end
+
   def new
     @debate = Debate.new
   end
@@ -11,7 +15,7 @@ class DebatesController < ApplicationController
     @debate = Debate.new debate_params
     if @debate.save
       flash[:notice] = 'Debate was created successfully'
-      redirect_to debates_path
+      redirect_to @debate
     else
       render :new
     end
