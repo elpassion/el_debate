@@ -5,6 +5,8 @@ class TApi::DebatesController < TApi::ApplicationController
     neutral = debate.answers.find_by! answer_type: Answer::ANSWER_TYPES[:neutral]
     negative = debate.answers.find_by! answer_type: Answer::ANSWER_TYPES[:negative]
 
+    sleep 1
+
     render json: {
       topic: debate.topic,
       totalCount: debate.votes.count,
