@@ -1,0 +1,16 @@
+h2
+  | New debate:
+= form_for @debate do |f|
+  - if @debate.errors.any?
+    div
+      ul
+        - @debate.errors.full_messages.each do |message|
+          li
+            = message
+  div
+    p
+      | Topic:
+    = f.text_field :topic
+  div
+    = f.submit
+  = link_to 'Back', debates_path
