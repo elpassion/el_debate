@@ -19,6 +19,7 @@
 
 .negative-box {
   @extend .vote-box;
+  float: right;
 
   &.negative-image {
     background-image: image_url('dashboard/negative.png');
