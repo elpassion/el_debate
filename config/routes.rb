@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
+  devise_for :admin_users, ActiveAdmin::Devise.config
+  ActiveAdmin.routes(self)
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
-
-  resources :debates, only: [:index, :show, :new, :create]
 
   namespace :api do
     resource :login, only: [:create]
@@ -9,7 +9,7 @@ Rails.application.routes.draw do
     resource :vote, only: [:create]
   end
 
-  root 'debates#index'
+  root to: redirect('admin/debates#index')
 
   get '/dashboard/:id', to: 'dashboard#index'
 end
