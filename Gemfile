@@ -13,7 +13,10 @@ gem 'slim-rails'
 gem 'materialize-sass'
 gem 'jquery-turbolinks'
 gem 'sprockets', '~> 3.0'
-
+gem 'activeadmin', github: 'activeadmin'
+gem 'inherited_resources', github: 'activeadmin/inherited_resources'
+gem 'devise'
+gem 'ffaker'
 
 group :development, :test do
   gem 'byebug', platform: :mri
