@@ -10,4 +10,6 @@ Rails.application.routes.draw do
   end
 
   root 'debates#index'
+
+  get '/dashboard/:id', to: 'dashboard#index'
 end

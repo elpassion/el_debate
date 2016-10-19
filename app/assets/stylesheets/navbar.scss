@@ -1,0 +1,52 @@
+nav {
+  background-color: #0f2b27;
+  height: 110px;
+}
+
+.nav-content {
+  padding-top: 15px;
+}
+
+.logo {
+  padding-top: 5px;
+  float: left;
+}
+
+.box {
+  height: 77px;
+  background-repeat: no-repeat;
+}
+
+.key-box {
+  @extend .box;
+  width: 230px;
+  margin: 0 auto;
+  background-color: #0c201e;
+  border-radius: 7px;
+  padding-top: 5px;
+
+  &.key-image {
+    background-image: image_url('navbar/key.png');
+    background-position: 17px 10px;
+  }
+}
+
+.nav-time {
+  padding-top: 12px;
+}
+
+.time-box {
+  @extend .box;
+  width: 140px;
+
+  &.clock-image {
+    float: right;
+    background-image: image_url('navbar/clock.png');
+    background-position: 25px 10px;
+  }
+}
+
+h5.nav-time {
+  font-size: 31px;
+  float: right;
+}

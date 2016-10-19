@@ -22,6 +22,18 @@ class Answer < ApplicationRecord
     end
   end
 
+  def self.positive_value
+    find_by(answer_type: 1).value
+  end
+
+  def self.neutral_value
+    find_by(answer_type: 2).value
+  end
+
+  def self.negative_value
+    find_by(answer_type: 3).value
+  end
+
   def answer_type_key
     ANSWER_TYPES.key answer_type
   end

@@ -1,0 +1,14 @@
+= render partial: 'layouts/navbar', locals: { debate_code: @debate.code }, class: 'header'
+.container.content
+  .row
+    .col.s3.left-align
+      .positive-box.positive-image
+        h4.positive
+          = @debate.answers.positive_value
+    .col.s6.center
+      h5.debate-topic
+        = @debate.topic
+    .col.s3.right-align
+      .negative-box.negative-image
+        h4.negative
+          = @debate.answers.negative_value
