@@ -28,16 +28,18 @@
 
 h4 {
   &.positive {
+    font-weight: 200;
     float: right;
     padding-top: 15px;
-    padding-right: 45px;
+    padding-right: 55px;
     color: $light-blue;
   }
 
   &.negative {
+    font-weight: 200;
     float: right;
     padding-top: 15px;
-    padding-right: 45px;
+    padding-right: 55px;
     color: $light-red;
   }
 }
