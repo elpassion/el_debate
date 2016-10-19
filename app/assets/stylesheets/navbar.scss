@@ -1,5 +1,7 @@
+@import "variables";
+
 nav {
-  background-color: #0f2b27;
+  background-color: $dark-green;
   height: 110px;
 }
 
@@ -21,7 +23,7 @@ nav {
   @extend .box;
   width: 230px;
   margin: 0 auto;
-  background-color: #0c201e;
+  background-color: $black-green;
   border-radius: 7px;
   padding-top: 5px;
 

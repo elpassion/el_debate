@@ -1,7 +1,4 @@
-// Place all the styles related to the Dashboard controller here.
-// They will automatically be included in application.css.
-// You can use Sass (SCSS) here: http://sass-lang.com/
-
+@import "variables";
 
 .vote-box {
   height: 104px;
@@ -34,14 +31,14 @@ h4 {
     float: right;
     padding-top: 15px;
     padding-right: 45px;
-    color: #1297e0;
+    color: $light-blue;
   }
 
   &.negative {
     float: right;
     padding-top: 15px;
     padding-right: 45px;
-    color: #e34549;
+    color: $light-red;
   }
 }
 
