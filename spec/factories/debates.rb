@@ -1,5 +1,5 @@
 FactoryGirl.define do
   factory :debate do
-    topic { Faker::Lorem.sentence }
+    topic { FFaker::HipsterIpsum.sentence }
   end
 end

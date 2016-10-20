@@ -33,7 +33,6 @@ group :development do
 end
 
 group :test do
-  gem 'faker', '~> 1.6'
 end
 
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]

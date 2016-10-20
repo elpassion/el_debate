@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :answer do
-    value { Faker::Lorem.word }
+    value { FFaker::HipsterIpsum.word }
     debate
     answer_type { Answer.answer_types.keys.sample }
 
