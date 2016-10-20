@@ -8,6 +8,13 @@ class VoteService
     ActiveRecord::Base.transaction do
       delete_previous_votes
       create_vote!
+      debate.reload
+      PusherBroadcaster.push!(votes_count: debate.votes.count,
+                              positive_count: debate.positive_count_with_person,
+                              negative_count: debate.negative_count_with_person,
+                              neutral_count: debate.neutral_count,
+                              positive_percent: debate.positive_percent,
+                              negative_percent: debate.negative_percent)
     end
   end
 
