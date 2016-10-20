@@ -7,7 +7,7 @@ class Answer < ApplicationRecord
 
   enum answer_type: { positive: 1, neutral: 2, negative: 3 }
 
-  belongs_to :debate
+  belongs_to :debate, required: true
   has_many :votes, dependent: :delete_all
 
   validates :value, presence: true
