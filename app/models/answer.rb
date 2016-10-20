@@ -5,7 +5,7 @@ class Answer < ApplicationRecord
     negative: 'No'
   }
 
-  enum answer_type: { positive: 1, neutral: 2, negative: 3 }
+  enum answer_type: %i(positive neutral negative)
 
   belongs_to :debate, required: true
   has_many :votes, dependent: :delete_all
