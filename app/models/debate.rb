@@ -14,25 +14,27 @@ class Debate < ApplicationRecord
   after_create :create_answers
 
   def positive_count_with_person
-    votes_count = answers.where(answer_type: 1).first.votes.count
+    votes_count = answers.positive.first.votes.count
     pluralize(votes_count, 'person')
   end
 
   def neutral_count
-    answers.where(answer_type: 2).first.votes.count
+    answers.neutral.first.votes.count
   end
 
   def negative_count_with_person
-    votes_count = answers.where(answer_type: 3).first.votes.count
+    votes_count = answers.negative.first.votes.count
     pluralize(votes_count, 'person')
   end
 
   def positive_percent
-    "#{(answers.first.votes.count / votes.count.to_f * 100.0).round}%"
+    return '0%' if votes.count.zero?
+    "#{(answers.positive.first.votes.count / votes.count.to_f * 100.0).round}%"
   end
 
   def negative_percent
-    "#{(answers.last.votes.count / votes.count.to_f * 100.0).round}%"
+    return '0%' if votes.count.zero?
+    "#{(answers.negative.first.votes.count / votes.count.to_f * 100.0).round}%"
   end
 
   private
