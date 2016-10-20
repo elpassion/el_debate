@@ -9,9 +9,7 @@ describe Answer do
     let(:default_answers) { Answer.default_answers }
 
     it 'validates answer type' do
-      answer = build(:answer, answer_type: 999)
-      expect(answer).not_to be_valid
-      expect(answer.errors[:answer_type]).to include('is not included in the list')
+      expect { build(:answer, answer_type: :invalid_answer) }.to raise_error(ArgumentError)
     end
 
     it 'validates debate existence' do

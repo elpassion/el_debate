@@ -2,18 +2,18 @@ FactoryGirl.define do
   factory :answer do
     value { Faker::Lorem.word }
     debate
-    answer_type { Answer::ANSWER_TYPES.values.sample }
+    answer_type { Answer.answer_types.keys.sample }
 
     factory :positive_answer do
-      answer_type Answer::ANSWER_TYPES[:positive]
+      answer_type :positive
     end
 
     factory :neutral_answer do
-      answer_type Answer::ANSWER_TYPES[:neutral]
+      answer_type :neutral
     end
 
     factory :negative_answer do
-      answer_type Answer::ANSWER_TYPES[:negative]
+      answer_type :negative
     end
   end
 end

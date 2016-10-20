@@ -1,40 +1,36 @@
 class Answer < ApplicationRecord
-  ANSWER_TYPES = {
-    positive: 1,
-    neutral: 2,
-    negative: 3
-  }
   DEFAULT_VALUES = {
     positive: 'Yes',
     neutral: 'Undecided',
     negative: 'No'
   }
 
+  enum answer_type: { positive: 1, neutral: 2, negative: 3 }
+
   belongs_to :debate
   has_many :votes, dependent: :delete_all
 
-  validates :answer_type, inclusion: { in: ANSWER_TYPES.values }
-  validates :debate_id, :value, presence: true
+  validates :value, presence: true
 
   def self.default_answers
-    ANSWER_TYPES.map do |answer_type_key, answer_type_id|
-      self.new answer_type: answer_type_id, value: DEFAULT_VALUES[answer_type_key]
+    DEFAULT_VALUES.map do |answer_type, answer_value|
+      new answer_type: answer_type, value: answer_value
     end
   end
 
   def self.positive_value
-    find_by(answer_type: 1).value
+    positive.first.value
   end
 
   def self.neutral_value
-    find_by(answer_type: 2).value
+    neutral.first.value
   end
 
   def self.negative_value
-    find_by(answer_type: 3).value
+    negative.first.value
   end
 
   def answer_type_key
-    ANSWER_TYPES.key answer_type
+    answer_type.to_sym
   end
 end
