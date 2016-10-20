@@ -10,7 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161019105603) do
+ActiveRecord::Schema.define(version: 20161019111936) do
+
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
 
   create_table "admin_users", force: :cascade do |t|
     t.string   "email",                  default: "", null: false
@@ -25,21 +28,22 @@ ActiveRecord::Schema.define(version: 20161019105603) do
     t.string   "last_sign_in_ip"
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
-    t.index ["email"], name: "index_admin_users_on_email", unique: true
-    t.index ["reset_password_token"], name: "index_admin_users_on_reset_password_token", unique: true
+    t.index ["email"], name: "index_admin_users_on_email", unique: true, using: :btree
+    t.index ["reset_password_token"], name: "index_admin_users_on_reset_password_token", unique: true, using: :btree
   end
 
   create_table "answers", force: :cascade do |t|
     t.integer "debate_id"
     t.string  "value"
     t.integer "answer_type"
-    t.index ["debate_id"], name: "index_answers_on_debate_id"
+    t.index ["debate_id"], name: "index_answers_on_debate_id", using: :btree
   end
 
   create_table "auth_tokens", force: :cascade do |t|
     t.integer "debate_id"
     t.string  "value"
-    t.index ["debate_id"], name: "index_auth_tokens_on_debate_id"
+    t.index ["debate_id"], name: "index_auth_tokens_on_debate_id", using: :btree
+    t.index ["value"], name: "index_auth_tokens_on_value", unique: true, using: :btree
   end
 
   create_table "debates", force: :cascade do |t|
@@ -52,8 +56,8 @@ ActiveRecord::Schema.define(version: 20161019105603) do
   create_table "votes", force: :cascade do |t|
     t.integer "answer_id"
     t.integer "auth_token_id"
-    t.index ["answer_id"], name: "index_votes_on_answer_id"
-    t.index ["auth_token_id"], name: "index_votes_on_auth_token_id"
+    t.index ["answer_id"], name: "index_votes_on_answer_id", using: :btree
+    t.index ["auth_token_id"], name: "index_votes_on_auth_token_id", using: :btree
   end
 
 end
