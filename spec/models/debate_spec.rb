@@ -9,16 +9,13 @@ describe Debate, type: :model do
 
   it 'deletes answers when destroyed' do
     debate = create(:debate)
-    debate.destroy
-    expect(Answer.count).to eq(0)
+    expect { debate.destroy }.to change { Answer.count }
   end
 
   it 'deletes debate auth tokens when destroyed' do
     debate = create(:debate)
     create(:auth_token, debate: debate)
-
-    debate.destroy
-    expect(AuthToken.count).to eq(0)
+    expect { debate.destroy }.to change { AuthToken.count }
   end
 
 
