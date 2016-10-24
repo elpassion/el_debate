@@ -58,4 +58,42 @@ describe Debate, type: :model do
       expect(debate1.code).not_to eq(debate2.code)
     end
   end
+
+  describe '#close!' do
+    let(:debate) { create(:debate) }
+    it 'sets closed_at' do
+      expect { debate.close! }.to change { debate.closed_at }
+    end
+
+    it 'sets specified closed_at time' do
+      time = Time.new()
+      debate.close! time
+      debate.reload
+      expect(debate.closed_at).to eq(time)
+    end
+
+    it 'cannot change closed_at time of closed debate' do
+      time = Time.new()
+      debate.close! time
+      expect { debate.close!(time + 2.hours) }.not_to change { debate.closed_at }
+    end
+  end
+
+  describe '#closed?' do
+    let(:closed_at) { Time.now }
+    let(:debate) { create(:debate, closed_at: closed_at) }
+
+    it 'is closed when closed_at time is in the past' do
+      expect(debate.closed?(closed_at + 1.hour)).to be
+    end
+
+    it 'is not closed when closed_at is not in the past' do
+      expect(debate.closed?(closed_at - 1.hour)).not_to be
+    end
+
+    it 'is not closed when closed_at is not set' do
+      debate = create(:debate, closed_at: nil)
+      expect(debate.closed?).not_to be
+    end
+  end
 end

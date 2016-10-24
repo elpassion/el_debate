@@ -12,6 +12,14 @@ class Debate < ApplicationRecord
   before_create :set_code
   after_create :create_answers
 
+  def close!(now = Time.now)
+    update!(closed_at: now) unless closed_at?
+  end
+
+  def closed?(now = Time.now)
+    closed_at? && closed_at.utc <= now.utc
+  end
+
   private
 
   def set_code
