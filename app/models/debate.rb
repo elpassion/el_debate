@@ -1,14 +1,15 @@
 class Debate < ApplicationRecord
   CODE_LENGTH = 5
 
+  attr_readonly :code
+
   has_many :answers, dependent: :delete_all
   has_many :auth_tokens, dependent: :delete_all
   has_many :votes, through: :answers
 
-  validates :code, presence: true, length: { is: CODE_LENGTH }, numericality: { only_integer: true }
   validates :topic, presence: true
 
-  before_validation :set_code
+  before_create :set_code
   after_create :create_answers
 
   def positive_count
@@ -38,7 +39,9 @@ class Debate < ApplicationRecord
   private
 
   def set_code
-    self.code = generate_code
+    begin
+      self.code = generate_code
+    end while Debate.exists?(code: self.code)
   end
 
   def generate_code
