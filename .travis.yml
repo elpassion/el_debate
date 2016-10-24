@@ -11,4 +11,4 @@ services:
 before_script:
   - psql -c 'create database el_debate_test;' -U postgres
 addons:
-  postgresql: "9.5"
+  postgresql: "9.4"
