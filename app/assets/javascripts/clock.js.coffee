@@ -1,31 +1,38 @@
-isEven = (n) ->
-  n % 2 == 0
+class TimeFormatter
+  constructor: (@date) ->
 
-tickingColan = (currentSeconds) ->
-  if isEven(currentSeconds)
-    ':'
-  else
-    ' '
+  format: ->
+    "#{@hours()}#{@colonTick()}#{@minutes()}"
 
-updateClock = ->
-  currentTime = new Date
+  minutes: ->
+    minutes = @date.getMinutes()
+    (if minutes < 10 then '0' else '') + minutes
 
-  currentHours = currentTime.getHours()
-  currentMinutes = currentTime.getMinutes()
-  currentSeconds = currentTime.getSeconds()
+  hours: ->
+    hours = @date.getHours()
+    if hours >= 0 && hours < 10 then '0' + hours.toString() else hours
 
-  currentMinutes = (if currentMinutes < 10 then '0' else '') + currentMinutes
-  currentSeconds = (if currentSeconds < 10 then '0' else '') + currentSeconds
+  colonTick: ->
+    if @date.getSeconds() % 2 == 0 then ':' else ' '
 
-  currentHours = if currentHours == 0 then '00' else currentHours
+class Clock
+  constructor: (@domNode, @timeFormatter) ->
 
-  currentTimeString = currentHours + tickingColan(currentSeconds) + currentMinutes
+  currentTimeFormatted: =>
+    (new @timeFormatter(new Date())).format()
 
-  $('#current-time').html currentTimeString
-  return
+  render: =>
+    @domNode.innerHTML = @currentTimeFormatted()
+
+  start: ->
+    @render()
+    setInterval @render, 1000
 
 initialize = ->
-  setInterval 'updateClock()', 1000
+  node = document.getElementById 'current-time'
+  (new Clock(node, TimeFormatter)).start()
   return
 
 $(document).ready -> initialize()
+
+
