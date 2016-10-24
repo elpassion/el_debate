@@ -56,9 +56,10 @@ describe Debate, type: :model do
       debate2 = create(:debate)
 
       expect(debate1.code).not_to eq(debate2.code)
+    end
+  end
 
-      describe 'class methods' do
-
+  describe 'counter class methods' do
     let(:debate) { create(:debate) }
     let(:positive_vote!) { create(:vote, answer: debate.positive_answer) }
     let(:negative_vote!) { create(:vote, answer: debate.negative_answer) }
