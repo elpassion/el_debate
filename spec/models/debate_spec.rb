@@ -66,21 +66,20 @@ describe Debate, type: :model do
     end
 
     it 'sets specified closed_at time' do
-      time = Time.new()
+      time = Time.current
       debate.close! time
-      debate.reload
       expect(debate.closed_at).to eq(time)
     end
 
     it 'cannot change closed_at time of closed debate' do
-      time = Time.new()
+      time = Time.current
       debate.close! time
       expect { debate.close!(time + 2.hours) }.not_to change { debate.closed_at }
     end
   end
 
   describe '#closed?' do
-    let(:closed_at) { Time.now }
+    let(:closed_at) { Time.current }
     let(:debate) { create(:debate, closed_at: closed_at) }
 
     it 'is closed when closed_at time is in the past' do
