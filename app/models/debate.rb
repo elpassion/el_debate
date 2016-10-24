@@ -1,6 +1,4 @@
 class Debate < ApplicationRecord
-  include ActionView::Helpers::TextHelper
-
   CODE_LENGTH = 5
 
   has_many :answers, dependent: :delete_all
@@ -13,28 +11,28 @@ class Debate < ApplicationRecord
   before_validation :set_code
   after_create :create_answers
 
-  def positive_count_with_person
-    votes_count = answers.positive.first.votes.count
-    pluralize(votes_count, 'person')
+  def positive_count
+    positive_answer.votes_count
+  end
+
+  def negative_count
+    negative_answer.votes_count
   end
 
   def neutral_count
-    answers.neutral.first.votes.count
+    neutral_answer.votes_count
   end
 
-  def negative_count_with_person
-    votes_count = answers.negative.first.votes.count
-    pluralize(votes_count, 'person')
+  def positive_answer
+    answers.positive.first
   end
 
-  def positive_percent
-    return '0%' if votes.count.zero?
-    "#{(answers.positive.first.votes.count / votes.count.to_f * 100.0).round}%"
+  def negative_answer
+    answers.negative.first
   end
 
-  def negative_percent
-    return '0%' if votes.count.zero?
-    "#{(answers.negative.first.votes.count / votes.count.to_f * 100.0).round}%"
+  def neutral_answer
+    answers.neutral.first
   end
 
   private

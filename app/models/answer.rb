@@ -10,6 +10,8 @@ class Answer < ApplicationRecord
   belongs_to :debate, required: true
   has_many :votes, dependent: :delete_all
 
+  before_destroy :delete_dependents
+
   validates :value, presence: true
 
   def self.default_answers
@@ -32,5 +34,15 @@ class Answer < ApplicationRecord
 
   def answer_type_key
     answer_type.to_sym
+  end
+
+  private
+
+  def delete_dependents
+    vote_ids = self.votes.pluck(:id)
+    Vote.delete_all(answer_id: self.id)
+    vote_ids.each do |v_id|
+      Answer.reset_counters v_id, :votes
+    end
   end
 end

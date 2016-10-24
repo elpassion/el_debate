@@ -1,5 +1,5 @@
 module DashboardHelper
   def pluralize_without_count(count, noun, text = nil)
-    count == 1 ? "#{noun}#{text}" : "#{noun.pluralize}#{text}"
+    count == 1 ? "#{noun}#{text}" : "#{noun.pluralize}#{text}" if count >= 0
   end
 end

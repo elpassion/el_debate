@@ -1,5 +1,6 @@
 module PusherBroadcaster
-  def self.push!(data)
-    Pusher.trigger('dashboard_channel', 'vote', data)
+  def self.push(channel, event, data)
+    Pusher.trigger(channel, event,data)
+  rescue Pusher::Error
   end
 end

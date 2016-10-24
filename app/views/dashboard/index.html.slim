@@ -36,9 +36,9 @@
         #right-progress-bar style="width: #{@debate.negative_percent}"
   .neutral-box
     h4.neutral
-      span.inline Nie wie:
+      span.inline = @debate.answers.neutral_value
       span.inline#neutral-count = @debate.neutral_count
       span.inline#neutral-noun = pluralize_without_count(@debate.neutral_count, 'person')
 
 javascript:
-  var pusher_key = "#{ENV['PUSHER_KEY']}";
+  var pusher_key = "#{Pusher.key}";

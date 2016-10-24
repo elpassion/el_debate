@@ -69,21 +69,21 @@ describe Answer do
 
     describe '#positive_value' do
       it 'returns value for positive answer' do
-        positive_answer = create(:positive_answer)
+        positive_answer = create(:answer, :positive_answer)
         expect(Answer.positive_value).to eq(positive_answer.value)
       end
     end
 
     describe '#neutral_value' do
       it 'returns value for neutral answer' do
-        neutral_answer = create(:neutral_answer)
+        neutral_answer = create(:answer, :neutral_answer)
         expect(Answer.neutral_value).to eq(neutral_answer.value)
       end
     end
 
     describe '#negative_value' do
       it 'returns value for negative answer' do
-        negative_answer = create(:negative_answer)
+        negative_answer = create(:answer, :negative_answer)
         expect(Answer.negative_value).to eq(negative_answer.value)
       end
     end
@@ -95,17 +95,17 @@ describe Answer do
     end
 
     it 'returns ":positive" type symbol for positive answer' do
-      answer = create(:positive_answer)
+      answer = create(:answer, :positive_answer)
       expect(answer.answer_type_key).to eq(:positive)
     end
 
     it 'returns ":neutral" type symbol for neutral answer' do
-      answer = create(:neutral_answer)
+      answer = create(:answer, :neutral_answer)
       expect(answer.answer_type_key).to eq(:neutral)
     end
 
     it 'retuns ":negative" type symbol for negative answer' do
-      answer = create(:negative_answer)
+      answer = create(:answer, :negative_answer)
       expect(answer.answer_type_key).to eq(:negative)
     end
   end
