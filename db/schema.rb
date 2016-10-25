@@ -52,6 +52,7 @@ ActiveRecord::Schema.define(version: 20161021134340) do
     t.string   "code"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "closed_at"
     t.index ["code"], name: "index_debates_on_code", unique: true, using: :btree
   end
 

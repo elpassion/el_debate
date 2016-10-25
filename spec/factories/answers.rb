@@ -15,5 +15,9 @@ FactoryGirl.define do
     trait :negative_answer do
       answer_type :negative
     end
+
+    factory :closed_debate_answer do
+      association :debate, factory: :closed_debate
+    end
   end
 end

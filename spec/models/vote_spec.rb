@@ -12,4 +12,10 @@ describe Vote, type: :model do
     expect(vote).not_to be_valid
     expect(vote.errors[:auth_token]).to include('must exist')
   end
+
+  it 'is invalid when debate is closed' do
+    vote = build(:vote, answer: create(:closed_debate_answer))
+    expect(vote).not_to be_valid
+    expect(vote.errors[:base]).to include('Debate is closed')
+  end
 end
