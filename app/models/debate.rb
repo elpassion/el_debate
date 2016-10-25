@@ -20,6 +20,34 @@ class Debate < ApplicationRecord
     closed_at? && closed_at.utc <= now.utc
   end
 
+  def votes_count
+    votes.count
+  end
+
+  def positive_count
+    positive_answer.votes_count
+  end
+
+  def negative_count
+    negative_answer.votes_count
+  end
+
+  def neutral_count
+    neutral_answer.votes_count
+  end
+
+  def positive_answer
+    answers.positive.first
+  end
+
+  def negative_answer
+    answers.negative.first
+  end
+
+  def neutral_answer
+    answers.neutral.first
+  end
+
   private
 
   def set_code

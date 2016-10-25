@@ -1,5 +1,56 @@
 @import "variables";
 
+span.inline {
+  display: inline;
+}
+
+h4 {
+  &.positive {
+    font-weight: 200;
+    float: right;
+    padding-top: 15px;
+    padding-right: 55px;
+    color: $light-blue;
+  }
+
+  &.negative {
+    font-weight: 200;
+    float: right;
+    padding-top: 15px;
+    padding-right: 55px;
+    color: $light-red;
+  }
+
+  &.neutral {
+    font-weight: 300;
+    font-size: 24px;
+    text-align: center;
+    padding-top: 1px;
+    color: #41a368;
+  }
+}
+
+h5 {
+  &.debate-topic {
+    margin-right: 20px;
+    margin-left: 20px;
+    font-weight: 500;
+  }
+}
+
+
+.row {
+  .col.s5 {
+    width: 44.66667%;
+  }
+}
+
+.row {
+  .col.s2 {
+    width: 10.66667%;
+  }
+}
+
 .vote-box {
   height: 104px;
   width: 230px;
@@ -27,28 +78,101 @@
   }
 }
 
-h4 {
-  &.positive {
-    font-weight: 200;
-    float: right;
-    padding-top: 15px;
-    padding-right: 55px;
-    color: $light-blue;
+.neutral-box {
+  height: 65px;
+  width: 230px;
+  border: 1px dashed gainsboro;
+  border-radius: 7px;
+  background-repeat: no-repeat;
+  margin: 0 auto;
+  margin-top: 100px;
+}
+
+.left-counters {
+  padding-bottom: 30px;
+  margin-bottom: 10px;
+}
+
+.right-counters {
+  padding-bottom: 30px;
+  margin-bottom: 10px;
+}
+
+.progressbar {
+  width: 100%;
+  height: 20px;
+  border-radius: 10px;
+  color: lightgray;
+  background: repeating-linear-gradient(-60deg, white, whitesmoke 4px, whitesmoke 4px, white 7px);
+
+  #right-progress-bar {
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    width: 100%;
+    height: 20px;
+    background-color: $light-red;
+    float: left;
   }
 
-  &.negative {
-    font-weight: 200;
+  #left-progress-bar {
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    width: 100%;
+    height: 20px;
+    background-color: $light-blue;
     float: right;
-    padding-top: 15px;
-    padding-right: 55px;
-    color: $light-red;
   }
 }
 
-h5 {
-  &.debate-topic {
-    margin-right: 20px;
-    margin-left: 20px;
-    font-weight: 500;
-  }
+#negative-percent {
+  font-size: 23px;
+  float: left;
+  color: $light-red;
+  margin-left: 10px;
+}
+
+#positive-percent {
+  font-size: 23px;
+  float: right;
+  color: $light-blue;
+  margin-right: 10px;
+}
+
+#votes-count {
+  font-weight: 400;
+  margin-bottom: 0
+}
+
+#negative-count {
+  font-size: 14px;
+  color: lightgray;
+  float:right;
+  padding-top: 10px;
+}
+
+#positive-count {
+  font-size: 14px;
+  color: lightgray;
+  float: left;
+  padding-top: 10px;
+}
+
+#neutral-count {
+  font-size: 29px;
+  font-weight: 500;
+  margin-left: 10px;
+}
+
+#neutral-noun {
+  font-size: 10px;
+  font-weight: 400;
+  margin-left: 5px;
+}
+
+#votes-noun {
+  color: lightgray;
+}
+
+.debate {
+  margin-bottom: 100px;
 }

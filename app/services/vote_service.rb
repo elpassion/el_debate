@@ -4,10 +4,12 @@ class VoteService
     @auth_token = auth_token
   end
 
-  def vote!
+  def vote!(notifier = DebateNotifier.new(PusherBroadcaster))
     ActiveRecord::Base.transaction do
       delete_previous_votes
       create_vote!
+      debate.reload
+      notifier.notify(debate)
     end
   end
 

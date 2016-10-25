@@ -4,15 +4,15 @@ FactoryGirl.define do
     debate
     answer_type { Answer.answer_types.keys.sample }
 
-    factory :positive_answer do
+    trait :positive_answer do
       answer_type :positive
     end
 
-    factory :neutral_answer do
+    trait :neutral_answer do
       answer_type :neutral
     end
 
-    factory :negative_answer do
+    trait :negative_answer do
       answer_type :negative
     end
 
