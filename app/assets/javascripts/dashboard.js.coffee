@@ -23,8 +23,8 @@ channelBind = (userChannel) ->
   return
 
 initialize = ->
-  pusher = new Pusher(pusher_key);
-  userChannel = pusher.subscribe("dashboard_channel_#{debate_id}");
+  pusher = new Pusher(pusher_key)
+  userChannel = pusher.subscribe("dashboard_channel_#{debate_id}")
   channelBind(userChannel)
 
 $(document).ready -> initialize()
