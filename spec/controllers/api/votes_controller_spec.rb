@@ -55,4 +55,24 @@ describe Api::VotesController, type: :controller do
       expect(json_response['error']).to eq('Debate is closed')
     end
   end
+
+  context 'when changing vote' do
+    let(:new_answer_id) { create(:answer, debate: debate).id }
+
+    before do
+      answer = create(:answer, debate: debate)
+      create(:vote, answer: answer, auth_token: auth_token)
+    end
+
+    before { allow_any_instance_of(DebateNotifier).to receive(:notify) }
+    before { post :create, params: { id: new_answer_id } }
+
+    it 'returns 201 response status' do
+      expect(response).to have_http_status(201)
+    end
+
+    it 'returns empty body' do
+      expect(response.body).to be_blank
+    end
+  end
 end
