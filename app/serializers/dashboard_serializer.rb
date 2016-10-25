@@ -7,7 +7,7 @@ class DashboardSerializer
     {
       id: debate.id,
       topic: debate.topic,
-      votes_count: debate.votes.count,
+      votes_count: debate.votes_count,
       positive_count: debate.positive_count_with_person,
       negative_count: debate.negative_count_with_person,
       neutral_count: debate.neutral_count,

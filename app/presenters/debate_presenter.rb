@@ -10,13 +10,13 @@ class DebatePresenter < SimpleDelegator
   end
 
   def positive_percent
-    return '0%' if debate.votes.count.zero?
-    "#{(debate.positive_count / debate.votes.count.to_f * 100.0).round}%"
+    return '0%' if debate.votes_count.zero?
+    "#{(debate.positive_count / debate.votes_count.to_f * 100.0).round}%"
   end
 
   def negative_percent
-    return '0%' if debate.votes.count.zero?
-    "#{(debate.negative_count / debate.votes.count.to_f * 100.0).round}%"
+    return '0%' if debate.votes_count.zero?
+    "#{(debate.negative_count / debate.votes_count.to_f * 100.0).round}%"
   end
 
   private

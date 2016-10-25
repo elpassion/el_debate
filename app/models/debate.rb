@@ -12,6 +12,10 @@ class Debate < ApplicationRecord
   before_create :set_code
   after_create :create_answers
 
+  def votes_count
+    votes.count
+  end
+
   def positive_count
     positive_answer.votes_count
   end

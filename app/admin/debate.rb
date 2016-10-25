@@ -20,12 +20,12 @@ ActiveAdmin.register Debate do
         end.join(', ').html_safe
       end
       row 'All votes' do |debate|
-        debate.votes.count
+        debate.votes_count
       end
 
       debate.answers.each do |answer|
         row "Votes for #{answer.value}" do
-          answer.votes.count
+          answer.votes_count
         end
       end
     end
