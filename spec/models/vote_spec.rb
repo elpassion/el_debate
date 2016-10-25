@@ -18,4 +18,13 @@ describe Vote, type: :model do
     expect(vote).not_to be_valid
     expect(vote.errors[:base]).to include('Debate is closed')
   end
+
+  it 'is invalid when vote for debate and auth_token already exist' do
+    debate = create(:debate)
+    auth_token = debate.auth_tokens.create
+    create(:vote, answer: debate.answers.sample, auth_token: auth_token)
+
+    expect { Vote.create(answer: debate.answers.sample, auth_token: auth_token) }
+      .to raise_error(ActiveModel::StrictValidationFailed, 'Auth token has already been taken')
+  end
 end

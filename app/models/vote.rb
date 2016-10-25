@@ -4,6 +4,7 @@ class Vote < ApplicationRecord
 
   delegate :debate, to: :answer, allow_nil: true
 
+  validates! :auth_token, uniqueness: true
   validate :debate_is_not_closed
 
   private
