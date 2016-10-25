@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161021134340) do
+ActiveRecord::Schema.define(version: 20161021084326) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -36,7 +36,6 @@ ActiveRecord::Schema.define(version: 20161021134340) do
     t.integer "debate_id"
     t.string  "value"
     t.integer "answer_type"
-    t.integer "votes_count", default: 0, null: false
     t.index ["debate_id"], name: "index_answers_on_debate_id", using: :btree
   end
 
@@ -52,6 +51,7 @@ ActiveRecord::Schema.define(version: 20161021134340) do
     t.string   "code"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "closed_at"
     t.index ["code"], name: "index_debates_on_code", unique: true, using: :btree
   end
 
