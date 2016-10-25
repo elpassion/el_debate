@@ -5,7 +5,7 @@ class DebateNotifier
   end
 
   def notify(debate)
-    broadcaster.push('dashboard_channel', 'vote', serializer.new(debate).to_h)
+    broadcaster.push("dashboard_channel_#{debate.id}", 'vote', serializer.new(debate).to_h)
   end
 
   private

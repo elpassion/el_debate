@@ -42,3 +42,5 @@
 
 javascript:
   var pusher_key = "#{Pusher.key}";
+  pusher = new Pusher(pusher_key);
+  userChannel = pusher.subscribe("dashboard_channel_#{@debate.id}");
