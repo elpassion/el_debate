@@ -1,0 +1,16 @@
+language: ruby
+rvm:
+- 2.3.1
+deploy:
+  provider: heroku
+  api_key:
+    secure: OM92phopPITYBwsYNkA3S/TX6mcNjEMf2gRLYSat9zhJraDOkuDBHalhI2TiNr8tfQr/KMlW45xno6/5a1XbXi5g/GhgCnJSQkwViR8rzdDuRUhWI09NZC5jspJXBaafemwT5ha+3JpLbpgFHwEVJtAA5/GTGjQONZP/tgUjhpUu4LJeMV6z99iUIzQ+YExFZyOTZCw9UQdHQOBrArOkSAz0rB/nZEk/EeJVcUDm5QRuLlm0CPVZ7XGjIzJjBP2AvtdLMEsvieYOQA2j+RtVl/PYvSxt6i51/z2pWR1Og9Vr3c+3jxazAv6D1t3kYf/qvxrx4MV2GjRidi2G7CoKjR6bM7H32IJ7rCAMCdTp5q4cW3G2L8mzWR3OorXnrOXXqH9pWCCLxmKxzBPbv3eKbJeCBzZflZd0zr+FIALJrHAOD0LVLuXFrOiU/BL+LAT3r0zIv8ZmlbSDXpi6+AOH3GIMr6lfpU5jolp4wzfRcwn4LUQlEOnqQKsIV2EWaB0+UYphEpa9TIBgPqP5iKqPruQm8Fkw49iAttY0CBcUnSrW72sJU/bc2XW4kQ3HBAVJpGtto3ShRJcR9VCDBahexI8z8oEEwwoE4wfjsjrR10JutxhEAR+IV0bf5HfTZ8iL9fL9PKaCqDfO6+cNYuWv7hC++LVxw2dpp3HI8o8YQ+g=
+  app: el-debate
+services:
+- postgresql
+before_script:
+  - psql -c 'create database el_debate_test;' -U postgres
+addons:
+  postgresql: "9.4"
+notifications:
+  slack: elpassion:FwGZotuUcN0vBCxHmF1bTPtv

@@ -10,4 +10,5 @@ nav
               = debate_code
         .col.s4
           .time-box.clock-image
-            h5.nav-time 12:31
+            h5.nav-time
+              #current-time = Time.now.strftime('%H:%M')
