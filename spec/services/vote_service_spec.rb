@@ -2,7 +2,8 @@ require 'rails_helper'
 
 describe VoteService do
   let(:auth_token) { create(:auth_token) }
-  let(:answer) { create(:answer, debate: auth_token.debate) }
+  let(:debate) { auth_token.debate }
+  let(:answer) { debate.answers.sample }
 
   describe 'notifications' do
     let(:notifier) { double('notifier') }
@@ -21,7 +22,7 @@ describe VoteService do
   end
 
   describe '#vote!' do
-    let(:new_answer) { create(:answer, debate: auth_token.debate) }
+    let(:new_answer) { debate.answers.sample }
     let!(:old_vote) { create(:vote, answer: answer, auth_token: auth_token) }
     let(:vote_service) { VoteService.new(answer: new_answer, auth_token: auth_token) }
     let(:notifier) { double('notifier', notify: true) }
@@ -43,5 +44,23 @@ describe VoteService do
       expect { vote_service.vote!(notifier) rescue nil }.not_to change { Vote.count }
       expect(auth_token.vote).to eq(old_vote)
     end
+
+    Answer.answer_types.keys.each do |existing_type|
+      Answer.answer_types.keys.reject { |t| t == existing_type }.each do |new_type|
+        context "when changing from #{existing_type} to #{new_type}" do
+          let(:answer) { debate.send("#{existing_type}_answer") }
+          let(:new_answer) { debate.send("#{new_type}_answer") }
+
+          it "decrements debate #{existing_type}_count" do
+            expect { vote_service.vote!(notifier) }.to change { debate.send("#{existing_type}_count") }.by(-1)
+          end
+
+          it "increments debate #{new_type}_count" do
+            expect { vote_service.vote!(notifier) }.to change { debate.send("#{new_type}_count") }.by(1)
+          end
+        end
+      end
+    end
+
   end
 end
