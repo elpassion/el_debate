@@ -16,7 +16,7 @@ class VoteService
   private
 
   def delete_previous_votes
-    debate.votes.where(auth_token: @auth_token).delete_all
+    debate.votes.where(auth_token: @auth_token).destroy_all
   end
 
   def create_vote!
