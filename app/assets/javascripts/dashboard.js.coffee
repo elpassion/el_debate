@@ -2,6 +2,15 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
+class DebateStatus
+  constructor: (@channel, selector) ->
+    @element = $(selector)
+    @channel.bind 'status', @changeStatus
+
+  changeStatus: (status) =>
+    if status == 'closed'
+      @element.text('closed')
+
 pluralizePerson = (count) ->
   if count == 1
     'person'
@@ -26,5 +35,6 @@ initialize = ->
   pusher = new Pusher(pusher_key)
   userChannel = pusher.subscribe("dashboard_channel_#{debate_id}")
   channelBind(userChannel)
+  debateStatus = new DebateStatus(userChannel, '#debate-status')
 
 $(document).ready -> initialize()
