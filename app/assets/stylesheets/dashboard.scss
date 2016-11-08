@@ -150,11 +150,21 @@ h5 {
   padding-top: 10px;
 }
 
+#negative-noun {
+  @extend #negative-count;
+  margin-left: 5px;
+}
+
 #positive-count {
   font-size: 14px;
   color: lightgray;
   float: left;
   padding-top: 10px;
+}
+
+#positive-noun {
+  @extend #positive-count;
+  margin-left: 5px;
 }
 
 #neutral-count {

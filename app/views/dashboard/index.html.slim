@@ -3,37 +3,32 @@
   .row.debate
     .col.s3
       .positive-box.positive-image
-        h4.positive
-          = @debate.answers.positive_value
+        h4.positive = @debate.answers.positive_value
     .col.s6.center
-      h5.debate-topic
-        = @debate.topic
+      h5.debate-topic = @debate.topic
     .col.s3
       .negative-box.negative-image
-        h4.negative
-          = @debate.answers.negative_value
+        h4.negative = @debate.answers.negative_value
   .row
     .col.s5
       .left-counters
-        span.left-align#positive-count
-          = @debate.positive_count_with_person
-        span.right-align#positive-percent
-          = @debate.positive_percent
+        span.left-align#positive-count = @debate.positive_count
+        span#positive-noun = pluralize_without_count(@debate.positive_count, 'person')
+        span.right-align#positive-percent = @debate.positive_percent
       .progressbar
         #left-progress-bar style="width: #{@debate.positive_percent}"
+          .left-tooltip
     .col.s2
-      h4.center-align#votes-count
-        = @debate.votes_count
-      .center-align#votes-noun
-        = pluralize_without_count(@debate.votes_count, 'person')
+      h4.center-align#votes-count= @debate.votes_count
+      .center-align#votes-noun= pluralize_without_count(@debate.votes_count, 'person')
     .col.s5
       .right-counters
-        span.left-align#negative-percent
-          = @debate.negative_percent
-        span.right-align#negative-count
-          = @debate.negative_count_with_person
+        span.left-align#negative-percent= @debate.negative_percent
+        span#negative-noun = pluralize_without_count(@debate.negative_count, 'person')
+        span.right-align#negative-count = @debate.negative_count
       .progressbar
         #right-progress-bar style="width: #{@debate.negative_percent}"
+
   .neutral-box
     h4.neutral
       span.inline = @debate.answers.neutral_value
