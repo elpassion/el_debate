@@ -8,6 +8,9 @@
     .col.s6.center
       h5.debate-topic
         = @debate.topic
+      p#debate-status
+        - if @debate.closed?
+          | closed
     .col.s3
       .negative-box.negative-image
         h4.negative
