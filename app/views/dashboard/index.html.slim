@@ -21,11 +21,13 @@
           = @debate.positive_percent
       .progressbar
         #left-progress-bar style="width: #{@debate.positive_percent}"
-    .col.s2
+    .col.s2#center-info
       h4.center-align#votes-count
         = @debate.votes_count
       .center-align#votes-noun
         = pluralize_without_count(@debate.votes_count, 'person')
+      #circle-chart data-positive=@debate.positive_count data-negative=@debate.negative_count
+      .circle-shadow
     .col.s5
       .right-counters
         span.left-align#negative-percent

@@ -7,6 +7,9 @@ html
     = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => 'reload'
     = javascript_include_tag 'application', 'data-turbolinks-track' => 'reload'
     = javascript_include_tag 'http://js.pusherapp.com/1.9/pusher.min.js'
+
+    = stylesheet_link_tag    'https://cdnjs.cloudflare.com/ajax/libs/chartist/0.10.1/chartist.min.css'
+    = javascript_include_tag 'https://cdnjs.cloudflare.com/ajax/libs/chartist/0.10.1/chartist.min.js'
   body
   #main
     = yield
