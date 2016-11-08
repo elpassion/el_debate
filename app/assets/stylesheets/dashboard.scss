@@ -190,8 +190,8 @@ h5 {
 
   .circle-shadow {
     border-radius: 50%;
-    background-color: rgb(255, 255, 255);
-    box-shadow: 0px 1px 15px 0px rgba(0, 0, 0, 0.16);
+    background-color: white;
+    box-shadow: 0 1px 15px 0 rgba(0, 0, 0, 0.16);
     position: absolute;
     left: -13px;
     top: -20px;
@@ -209,11 +209,11 @@ h5 {
     z-index: 2;
 
     .ct-series-d .ct-slice-donut {
-      stroke: #1297e0;
+      stroke: $light-blue;
     }
 
     .ct-series-b .ct-slice-donut {
-      stroke: #e34549;
+      stroke: $light-red;
     }
 
     .ct-series-a .ct-slice-donut, .ct-series-c .ct-slice-donut {
