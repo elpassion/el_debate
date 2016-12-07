@@ -82,8 +82,6 @@ class Tooltip
     clearTimeout timer
     @open()
     timer = setTimeout @close, 3000
-    return
-
 
 pluralizePerson = (count) ->
   if count == 1
@@ -112,8 +110,6 @@ channelBind = (userChannel, circle) ->
   return
 
 initialize = ->
-  $('.left-tooltip').hide()
-  $('.right-tooltip').hide()
   circle = new Circle('#circle-chart')
   pusher = new Pusher(pusher_key)
   userChannel = pusher.subscribe("dashboard_channel_#{debate_id}")

@@ -131,6 +131,7 @@ p.debate-status {
 
 
 .left-tooltip, .right-tooltip {
+  display: none;
   position: relative;
   border-bottom: 1px dotted black;
   .tooltip-text {
