@@ -35,6 +35,7 @@ group :development do
 end
 
 group :test do
+  gem 'capybara'
 end
 
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]

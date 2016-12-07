@@ -13,7 +13,7 @@ ActiveAdmin.register Debate do
     end
   end
 
-  show title: proc{|debate| debate.topic } do
+  show title: proc { |debate| debate.topic } do
     attributes_table do
       row :topic
       row :code
@@ -29,12 +29,10 @@ ActiveAdmin.register Debate do
           link_to answer.value, admin_debate_answer_path(debate, answer.id)
         end.join(', ').html_safe
       end
-      row 'All votes' do |debate|
-        debate.votes_count
-      end
+      row 'All votes', &:votes_count
 
       debate.answers.each do |answer|
-        row %Q(Votes for "#{answer.value}") do
+        row %(Votes for "#{answer.value}") do
           answer.votes_count
         end
       end
@@ -42,8 +40,8 @@ ActiveAdmin.register Debate do
   end
 
   member_action :close, method: :put do
-    resource.close!
-    redirect_to resource_path, notice: 'Closed!'
+    Debates::CloseService.new(debate: resource).call
+    redirect_to resource_path, notice: 'Debate closed!'
   end
 
   form title: 'New Debate' do |f|

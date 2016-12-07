@@ -5,7 +5,11 @@
       .positive-box.positive-image
         h4.positive = @debate.answers.positive_value
     .col.s6.center
-      h5.debate-topic = @debate.topic
+      h5.debate-topic
+        = @debate.topic
+      p#debate-status
+        - if @debate.closed?
+          | closed
     .col.s3
       .negative-box.negative-image
         h4.negative = @debate.answers.negative_value
@@ -17,10 +21,13 @@
         span.right-align#positive-percent = @debate.positive_percent
       .progressbar
         #left-progress-bar style="width: #{@debate.positive_percent}"
-          .left-tooltip
-    .col.s2
-      h4.center-align#votes-count= @debate.votes_count
-      .center-align#votes-noun= pluralize_without_count(@debate.votes_count, 'person')
+    .col.s2#center-info
+      h4.center-align#votes-count
+        = @debate.votes_count
+      .center-align#votes-noun
+        = pluralize_without_count(@debate.votes_count, 'person')
+      #circle-chart data-positive=@debate.positive_count data-negative=@debate.negative_count
+      .circle-shadow
     .col.s5
       .right-counters
         span.left-align#negative-percent= @debate.negative_percent
