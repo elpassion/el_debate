@@ -65,6 +65,7 @@ class TooltipMessage
 class Tooltip
   constructor: (@domNode, @TooltipMessage, @data, @count) ->
 
+  timer = null
   open: ->
     $(@domNode).show()
     if @domNode == '.left-tooltip'
@@ -81,6 +82,7 @@ class Tooltip
     clearTimeout timer
     @open()
     timer = setTimeout @close, 3000
+    return
 
 
 pluralizePerson = (count) ->
