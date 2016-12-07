@@ -57,7 +57,7 @@ class TooltipMessage
   constructor: (@firstNumber, @secondNumber) ->
 
   message: ->
-    if firstNumber > secondNumber
+    if @firstNumber > @secondNumber
       '+1'
     else
       '-1'
@@ -66,15 +66,21 @@ class Tooltip
   constructor: (@domNode, @TooltipMessage, @data, @count) ->
 
   open: ->
-    $(@domNode).tooltip({content: (new @TooltipMessage(@data['positive_count'], @count)).message()});
-    $(@domNode).tooltip("open");
+    $(@domNode).show()
+    if @domNode == '.left-tooltip'
+      text = (new @TooltipMessage(@data['positive_count'], @count)).message()
+    else
+      text = (new @TooltipMessage(@data['negative_count'], @count)).message()
+    $("#{@domNode} > .tooltip-text").text(text)
 
   close: ->
-    $(@domNode).tooltip("close");
+    $('.left-tooltip').hide()
+    $('.right-tooltip').hide()
 
   start: ->
+    clearTimeout timer
     @open()
-    setTimeout @close() 3000
+    timer = setTimeout @close, 3000
 
 
 pluralizePerson = (count) ->
@@ -85,6 +91,8 @@ pluralizePerson = (count) ->
 
 channelBind = (userChannel, circle) ->
   userChannel.bind 'vote', (data) ->
+    positiveCount = parseInt(document.getElementById('positive-count').innerHTML)
+    negativeCount = parseInt(document.getElementById('negative-count').innerHTML)
     unless data['positive_count'] is positiveCount then (new Tooltip('.left-tooltip', TooltipMessage, data, positiveCount)).start()
     unless data['negative_count'] is negativeCount then (new Tooltip('.right-tooltip', TooltipMessage, data, negativeCount)).start()
     document.getElementById('votes-count').innerHTML = data['votes_count']
@@ -102,6 +110,8 @@ channelBind = (userChannel, circle) ->
   return
 
 initialize = ->
+  $('.left-tooltip').hide()
+  $('.right-tooltip').hide()
   circle = new Circle('#circle-chart')
   pusher = new Pusher(pusher_key)
   userChannel = pusher.subscribe("dashboard_channel_#{debate_id}")
