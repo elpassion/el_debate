@@ -53,30 +53,16 @@ class Circle
     total: 100
     startAngle: @calculateStartAngle()
 
-class TooltipMessage
-  constructor: (@firstNumber, @secondNumber) ->
-
-  message: ->
-    if @firstNumber > @secondNumber
-      '+1'
-    else
-      '-1'
-
 class Tooltip
-  constructor: (@domNode, @TooltipMessage, @data, @count) ->
+  constructor: (@domNode, @text) ->
 
   timer = null
   open: ->
     $(@domNode).show()
-    if @domNode == '.left-tooltip'
-      text = (new @TooltipMessage(@data['positive_count'], @count)).message()
-    else
-      text = (new @TooltipMessage(@data['negative_count'], @count)).message()
-    $("#{@domNode} > .tooltip-text").text(text)
+    $("#{@domNode} > .tooltip-text").text(@text)
 
   close: ->
-    $('.left-tooltip').hide()
-    $('.right-tooltip').hide()
+    $('.left-tooltip, .right-tooltip').hide()
 
   start: ->
     clearTimeout timer
@@ -91,10 +77,8 @@ pluralizePerson = (count) ->
 
 channelBind = (userChannel, circle) ->
   userChannel.bind 'vote', (data) ->
-    positiveCount = parseInt(document.getElementById('positive-count').innerHTML)
-    negativeCount = parseInt(document.getElementById('negative-count').innerHTML)
-    unless data['positive_count'] is positiveCount then (new Tooltip('.left-tooltip', TooltipMessage, data, positiveCount)).start()
-    unless data['negative_count'] is negativeCount then (new Tooltip('.right-tooltip', TooltipMessage, data, negativeCount)).start()
+    unless data['positive_change'] is 0 then (new Tooltip('.left-tooltip', data['positive_change'])).start()
+    unless data['negative_change'] is 0 then (new Tooltip('.right-tooltip', data['negative_change'])).start()
     document.getElementById('votes-count').innerHTML = data['votes_count']
     document.getElementById('votes-noun').innerHTML = pluralizePerson(data['votes_count'])
     document.getElementById('positive-count').innerHTML = "#{data['positive_count']} #{pluralizePerson(data['positive_count'])}"
