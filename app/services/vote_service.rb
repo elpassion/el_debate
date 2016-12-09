@@ -2,7 +2,6 @@ class VoteService
   def initialize(answer:, auth_token:)
     @answer = answer
     @auth_token = auth_token
-    @change_hash = { positive: 0, negative: 0 }
   end
 
   def vote!(notifier = DebateNotifier.new(PusherBroadcaster))
@@ -10,20 +9,22 @@ class VoteService
       delete_previous_votes
       create_vote!
       debate.reload
-      notifier.notify(debate, @change_hash)
+      notifier.notify(debate, change_hash)
     end
   end
 
   private
 
+  attr_reader :auth_token
+
   def delete_previous_votes
-    old_votes = debate.votes.where(auth_token: @auth_token)
+    old_votes = debate.votes.where(auth_token: auth_token)
     add_collection_to_change_hash(old_votes)
     old_votes.destroy_all
   end
 
   def create_vote!
-    @answer.votes.create! auth_token: @auth_token
+    @answer.votes.create! auth_token: auth_token
     add_to_change_hash(@answer, 1)
   end
 
@@ -35,13 +36,17 @@ class VoteService
 
   def add_to_change_hash(answer, counter)
     if answer.positive?
-      @change_hash[:positive] += counter
+      change_hash[:positive] += counter
     elsif answer.negative?
-      @change_hash[:negative] += counter
+      change_hash[:negative] += counter
     end
   end
 
   def debate
     @auth_token.debate
+  end
+
+  def change_hash
+    @change_hash ||= { positive: 0, negative: 0 }
   end
 end
