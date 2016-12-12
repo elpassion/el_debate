@@ -9,7 +9,11 @@ ActiveAdmin.register Debate do
     column :created_at
     column :closed_at
     actions do |debate|
-      link_to('Close', close_admin_debate_path(debate), method: :put) unless debate.closed?
+      if debate.closed?
+        link_to('Reopen', reopen_admin_debate_path(debate), method: :put)
+      else
+        link_to('Close', close_admin_debate_path(debate), method: :put)
+      end
     end
   end
 
@@ -17,13 +21,7 @@ ActiveAdmin.register Debate do
     attributes_table do
       row :topic
       row :code
-      row :closed_at do |debate|
-        if debate.closed_at?
-          debate.closed_at
-        else
-          link_to('Close', close_admin_debate_path(debate), method: :put)
-        end
-      end
+      row :closed_at
       row :answers do |debate|
         debate.answers.map do |answer|
           link_to answer.value, admin_debate_answer_path(debate, answer.id)
@@ -42,6 +40,19 @@ ActiveAdmin.register Debate do
   member_action :close, method: :put do
     Debates::CloseService.new(debate: resource).call
     redirect_to resource_path, notice: 'Debate closed!'
+  end
+
+  member_action :reopen, method: :put do
+    Debates::ReopenService.new(debate: resource).call
+    redirect_to resource_path, notice: 'Debate reopened!'
+  end
+
+  action_item :close_or_reopen, only: :show do
+    if resource.closed?
+      link_to('Reopen', reopen_admin_debate_path(debate), method: :put)
+    else
+      link_to('Close', close_admin_debate_path(debate), method: :put)
+    end
   end
 
   form title: 'New Debate' do |f|

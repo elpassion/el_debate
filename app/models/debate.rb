@@ -20,6 +20,10 @@ class Debate < ApplicationRecord
     closed_at? && closed_at.utc <= now.utc
   end
 
+  def reopen!
+    update!(closed_at: nil) if closed_at?
+  end
+
   def votes_count
     votes.count
   end

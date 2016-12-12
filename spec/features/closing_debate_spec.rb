@@ -10,8 +10,8 @@ feature 'Closing debate' do
 
   scenario 'Closing debate in admin panel' do
     visit admin_debate_path(debate)
-    within 'div.panel' do
-      click_link 'Close'
+    within 'div.title_bar' do
+      click_link_or_button 'Close'
     end
 
     expect(page).to have_selector('div.flash_notice')
