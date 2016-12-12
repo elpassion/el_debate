@@ -77,20 +77,22 @@ pluralizePerson = (count) ->
 
 channelBind = (userChannel, circle) ->
   userChannel.bind 'vote', (data) ->
-    unless data['positive_change'] is 0 then (new Tooltip('.left-tooltip', data['positive_change'])).start()
-    unless data['negative_change'] is 0 then (new Tooltip('.right-tooltip', data['negative_change'])).start()
-    document.getElementById('votes-count').innerHTML = data['votes_count']
-    document.getElementById('votes-noun').innerHTML = pluralizePerson(data['votes_count'])
-    document.getElementById('positive-count').innerHTML = "#{data['positive_count']} #{pluralizePerson(data['positive_count'])}"
-    document.getElementById('negative-count').innerHTML = "#{data['negative_count']} #{pluralizePerson(data['negative_count'])}"
-    document.getElementById('left-progress-bar').style.width = data['positive_percent']
-    document.getElementById('positive-percent').innerHTML = data['positive_percent']
-    document.getElementById('right-progress-bar').style.width = data['negative_percent']
-    document.getElementById('negative-percent').innerHTML = data['negative_percent']
-    document.getElementById('neutral-count').innerHTML = data['neutral_count']
-    document.getElementById('neutral-noun').innerHTML = pluralizePerson(data['neutral_count'])
+    debate = data['debate']
+    change = data['change']
+    unless change['positive'] is 0 then (new Tooltip('.left-tooltip', change['positive'])).start()
+    unless change['negative'] is 0 then (new Tooltip('.right-tooltip', change['negative'])).start()
+    document.getElementById('votes-count').innerHTML = debate['votes_count']
+    document.getElementById('votes-noun').innerHTML = pluralizePerson(debate['votes_count'])
+    document.getElementById('positive-count').innerHTML = "#{debate['positive_count']} #{pluralizePerson(debate['positive_count'])}"
+    document.getElementById('negative-count').innerHTML = "#{debate['negative_count']} #{pluralizePerson(debate['negative_count'])}"
+    document.getElementById('left-progress-bar').style.width = debate['positive_percent']
+    document.getElementById('positive-percent').innerHTML = debate['positive_percent']
+    document.getElementById('right-progress-bar').style.width = debate['negative_percent']
+    document.getElementById('negative-percent').innerHTML = debate['negative_percent']
+    document.getElementById('neutral-count').innerHTML = debate['neutral_count']
+    document.getElementById('neutral-noun').innerHTML = pluralizePerson(debate['neutral_count'])
 
-    circle.update parseInt(data['positive_count']), parseInt(data['negative_count'])
+    circle.update parseInt(debate['positive_count']), parseInt(debate['negative_count'])
   return
 
 initialize = ->
