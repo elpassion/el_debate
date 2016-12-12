@@ -1,7 +1,6 @@
 class DashboardSerializer
-  def initialize(debate, change_hash, presenter = DebatePresenter)
+  def initialize(debate, presenter = DebatePresenter)
     @debate = presenter.new(debate)
-    @change_hash = change_hash
   end
 
   def to_h
@@ -14,12 +13,12 @@ class DashboardSerializer
       neutral_count: debate.neutral_count,
       positive_percent: debate.positive_percent,
       negative_percent: debate.negative_percent,
-      positive_change: change_hash[:positive],
-      negative_change: change_hash[:negative]
+      positive_change: debate.positive_change,
+      negative_change: debate.negative_change
     }
   end
 
   private
 
-  attr_reader :debate, :change_hash
+  attr_reader :debate
 end

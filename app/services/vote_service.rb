@@ -9,7 +9,8 @@ class VoteService
       delete_previous_votes
       create_vote!
       debate.reload
-      notifier.notify(debate, change_hash)
+      debate.change_hash = change_hash
+      notifier.notify(debate)
     end
   end
 

@@ -2,6 +2,7 @@ class Debate < ApplicationRecord
   CODE_LENGTH = 5
 
   attr_readonly :code
+  attr_accessor :change_hash
 
   has_many :answers, dependent: :delete_all
   has_many :auth_tokens, dependent: :delete_all

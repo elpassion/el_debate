@@ -22,4 +22,12 @@ class DebatePresenter < SimpleDelegator
   def votes_count
     positive_count + negative_count
   end
+
+  def positive_change
+    change_hash[:positive]
+  end
+
+  def negative_change
+    change_hash[:negative]
+  end
 end
