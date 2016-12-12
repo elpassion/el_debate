@@ -10,7 +10,7 @@ class VoteChange
 
   def to_h
     {
-      change:
+      vote_change:
         {
            positive: positive,
            negative: negative

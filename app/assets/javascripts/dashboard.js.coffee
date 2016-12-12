@@ -78,9 +78,9 @@ pluralizePerson = (count) ->
 channelBind = (userChannel, circle) ->
   userChannel.bind 'vote', (data) ->
     debate = data['debate']
-    change = data['change']
-    unless change['positive'] is 0 then (new Tooltip('.left-tooltip', change['positive'])).start()
-    unless change['negative'] is 0 then (new Tooltip('.right-tooltip', change['negative'])).start()
+    voteChange = data['vote_change']
+    unless voteChange['positive'] is 0 then (new Tooltip('.left-tooltip', voteChange['positive'])).start()
+    unless voteChange['negative'] is 0 then (new Tooltip('.right-tooltip', voteChange['negative'])).start()
     document.getElementById('votes-count').innerHTML = debate['votes_count']
     document.getElementById('votes-noun').innerHTML = pluralizePerson(debate['votes_count'])
     document.getElementById('positive-count').innerHTML = "#{debate['positive_count']} #{pluralizePerson(debate['positive_count'])}"
