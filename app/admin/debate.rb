@@ -1,5 +1,5 @@
 ActiveAdmin.register Debate do
-  permit_params :topic
+  permit_params :topic, answers_attributes: [:id, :value]
 
   index do
     selectable_column
@@ -47,6 +47,10 @@ ActiveAdmin.register Debate do
   form title: 'New Debate' do |f|
     f.semantic_errors(*f.object.errors.keys)
     f.input :topic
+    f.has_many :answers, new_record: false do |b|
+      b.input :value
+      b.input :answer_type
+    end
     f.actions
   end
 end
