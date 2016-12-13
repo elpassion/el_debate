@@ -53,6 +53,21 @@ class Circle
     total: 100
     startAngle: @calculateStartAngle()
 
+class Tooltip
+  constructor: (@domNode, @text) ->
+
+  timer = null
+  open: ->
+    $(@domNode).show()
+    $("#{@domNode} > .tooltip-text").text(@text)
+
+  close: ->
+    $('.left-tooltip, .right-tooltip').hide()
+
+  start: ->
+    clearTimeout timer
+    @open()
+    timer = setTimeout @close, 3000
 
 pluralizePerson = (count) ->
   if count == 1
@@ -62,18 +77,22 @@ pluralizePerson = (count) ->
 
 channelBind = (userChannel, circle) ->
   userChannel.bind 'vote', (data) ->
-    document.getElementById('votes-count').innerHTML = data['votes_count']
-    document.getElementById('votes-noun').innerHTML = pluralizePerson(data['votes_count'])
-    document.getElementById('positive-count').innerHTML = "#{data['positive_count']} #{pluralizePerson(data['positive_count'])}"
-    document.getElementById('negative-count').innerHTML = "#{data['negative_count']} #{pluralizePerson(data['negative_count'])}"
-    document.getElementById('left-progress-bar').style.width = data['positive_percent']
-    document.getElementById('positive-percent').innerHTML = data['positive_percent']
-    document.getElementById('right-progress-bar').style.width = data['negative_percent']
-    document.getElementById('negative-percent').innerHTML = data['negative_percent']
-    document.getElementById('neutral-count').innerHTML = data['neutral_count']
-    document.getElementById('neutral-noun').innerHTML = pluralizePerson(data['neutral_count'])
+    debate = data['debate']
+    voteChange = data['vote_change']
+    unless voteChange['positive'] is 0 then (new Tooltip('.left-tooltip', voteChange['positive'])).start()
+    unless voteChange['negative'] is 0 then (new Tooltip('.right-tooltip', voteChange['negative'])).start()
+    document.getElementById('votes-count').innerHTML = debate['votes_count']
+    document.getElementById('votes-noun').innerHTML = pluralizePerson(debate['votes_count'])
+    document.getElementById('positive-count').innerHTML = "#{debate['positive_count']} #{pluralizePerson(debate['positive_count'])}"
+    document.getElementById('negative-count').innerHTML = "#{debate['negative_count']} #{pluralizePerson(debate['negative_count'])}"
+    document.getElementById('left-progress-bar').style.width = debate['positive_percent']
+    document.getElementById('positive-percent').innerHTML = debate['positive_percent']
+    document.getElementById('right-progress-bar').style.width = debate['negative_percent']
+    document.getElementById('negative-percent').innerHTML = debate['negative_percent']
+    document.getElementById('neutral-count').innerHTML = debate['neutral_count']
+    document.getElementById('neutral-noun').innerHTML = pluralizePerson(debate['neutral_count'])
 
-    circle.update parseInt(data['positive_count']), parseInt(data['negative_count'])
+    circle.update parseInt(debate['positive_count']), parseInt(debate['negative_count'])
   return
 
 initialize = ->
