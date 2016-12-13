@@ -41,8 +41,8 @@ describe Api::VotesController, type: :controller do
 
   context 'when debate closed' do
     let(:answer_id) { debate.answers.sample.id }
+    let(:debate) { create(:debate, closed_at: (Time.current - 1.hour)) }
 
-    before { debate.close!(Time.current - 1.hour) }
     before { post :create, params: { id: answer_id } }
 
     it 'returns 406 response status' do
