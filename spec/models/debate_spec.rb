@@ -59,25 +59,6 @@ describe Debate, type: :model do
     end
   end
 
-  describe '#close!' do
-    let(:debate) { create(:debate) }
-    it 'sets closed_at' do
-      expect { debate.close! }.to change { debate.closed_at }
-    end
-
-    it 'sets specified closed_at time' do
-      time = Time.current
-      debate.close! time
-      expect(debate.closed_at).to eq(time)
-    end
-
-    it 'cannot change closed_at time of closed debate' do
-      time = Time.current
-      debate.close! time
-      expect { debate.close!(time + 2.hours) }.not_to change { debate.closed_at }
-    end
-  end
-
   describe '#closed?' do
     let(:closed_at) { Time.current }
     let(:debate) { create(:debate, closed_at: closed_at) }
