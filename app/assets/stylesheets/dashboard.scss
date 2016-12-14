@@ -116,6 +116,7 @@ p.debate-status {
     height: 20px;
     background-color: $light-red;
     float: left;
+    transition: 500ms linear;
   }
 
   #left-progress-bar {
@@ -125,6 +126,7 @@ p.debate-status {
     height: 20px;
     background-color: $light-blue;
     float: right;
+    transition: 500ms linear;
   }
 }
 
