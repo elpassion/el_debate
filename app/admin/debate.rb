@@ -49,7 +49,7 @@ ActiveAdmin.register Debate do
     f.input :topic
     f.has_many :answers, new_record: false do |b|
       b.input :value
-      b.input :answer_type
+      b.input :answer_type, :input_html => { :disabled => true }
     end
     f.actions
   end
