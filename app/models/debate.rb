@@ -7,6 +7,7 @@ class Debate < ApplicationRecord
   has_many :auth_tokens, dependent: :delete_all
   has_many :votes, through: :answers
 
+  accepts_nested_attributes_for :answers
   validates :topic, presence: true
 
   before_create :set_code
