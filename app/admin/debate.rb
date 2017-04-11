@@ -65,11 +65,18 @@ ActiveAdmin.register Debate do
 
   form title: 'New Debate' do |f|
     f.semantic_errors(*f.object.errors.keys)
-    f.input :topic
-    f.has_many :answers, new_record: false do |b|
-      b.input :value
-      b.input :answer_type, :input_html => { :disabled => true }
+
+    f.inputs do
+      f.input :topic
     end
+
+    f.inputs do
+      f.has_many :answers, new_record: false do |b|
+        b.input :value
+        b.input :answer_type, :input_html => { :disabled => true }
+      end
+    end
+
     f.actions
   end
 end
