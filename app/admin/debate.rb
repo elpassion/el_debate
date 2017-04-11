@@ -20,7 +20,9 @@ ActiveAdmin.register Debate do
   show title: proc { |debate| debate.topic } do
     attributes_table do
       row :topic
-      row :code
+      row :code do |debate|
+        debate.code.presence || link_to('Generate code', code_admin_debate_path, method: :post)
+      end
       row :closed_at
       row :answers do |debate|
         debate.answers.map do |answer|
@@ -45,6 +47,12 @@ ActiveAdmin.register Debate do
   member_action :reopen, method: :put do
     Debates::ReopenService.new(debate: resource).call
     redirect_to resource_path, notice: 'Debate reopened!'
+  end
+
+  member_action :code, method: :post do
+    resource.generate_code
+    opts = resource.code? ? { notice: 'Code generated' } : { alert: 'Could not generate code' }
+    redirect_to resource_path, opts
   end
 
   action_item :close_or_reopen, only: :show do

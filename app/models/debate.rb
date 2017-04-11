@@ -1,7 +1,12 @@
+require 'code_generator'
+
 class Debate < ApplicationRecord
   CODE_LENGTH = 5
+  CODE_GENERATION_MAX_RETRIES = 5
+  CODE_CHARSET = ('0'..'9')
 
-  attr_readonly :code
+  mattr_accessor :debate_code_generator
+  self.debate_code_generator = CodeGenerator.new(CODE_CHARSET, CODE_LENGTH)
 
   has_many :answers, dependent: :delete_all
   has_many :auth_tokens, dependent: :delete_all
@@ -10,7 +15,8 @@ class Debate < ApplicationRecord
   accepts_nested_attributes_for :answers
   validates :topic, presence: true
 
-  before_create :set_code
+  before_save  :block_code_change
+  after_create :generate_code
   after_create :create_answers
 
   def closed?(now = Time.current)
@@ -45,16 +51,24 @@ class Debate < ApplicationRecord
     answers.neutral.first
   end
 
-  private
-
-  def set_code
-    begin
-      self.code = generate_code
-    end while Debate.exists?(code: self.code)
+  def generate_code
+    debate_code_generator.generate(num_retries: CODE_GENERATION_MAX_RETRIES) do |code|
+      begin
+        update!(code: code)
+      rescue ActiveRecord::RecordNotUnique
+        false
+      end
+    end
+  rescue debate_code_generator.num_retries_error
+    # noop
   end
 
-  def generate_code
-    Array.new(CODE_LENGTH) { rand(10) }.join
+  private
+
+  def block_code_change
+    if code_changed? && code_was.present?
+      self.code = code_was
+    end
   end
 
   def create_answers
