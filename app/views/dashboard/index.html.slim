@@ -15,6 +15,8 @@
         h4.negative = @debate.answers.negative_value
   .row
     .col.s5
+      .left-tooltip
+        .tooltip-text
       .left-counters
         span.left-align#positive-count
           = "#{@debate.positive_count} #{pluralize_without_count(@debate.positive_count, 'person')}"
@@ -22,8 +24,6 @@
           = @debate.positive_percent
       .progressbar
         #left-progress-bar style="width: #{@debate.positive_percent}"
-          .left-tooltip
-            .tooltip-text
     .col.s2#center-info
       h4.center-align#votes-count
         = @debate.votes_count
@@ -32,14 +32,14 @@
       #circle-chart data-positive=@debate.positive_count data-negative=@debate.negative_count
       .circle-shadow
     .col.s5
+      .right-tooltip
+        .tooltip-text
       .right-counters
         span.left-align#negative-percent = @debate.negative_percent
         span.right-align#negative-count
           ="#{@debate.negative_count} #{pluralize_without_count(@debate.negative_count, 'person')}"
       .progressbar
         #right-progress-bar style="width: #{@debate.negative_percent}"
-          .right-tooltip
-            .tooltip-text
 
   .neutral-box
     h4.neutral

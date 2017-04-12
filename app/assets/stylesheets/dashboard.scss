@@ -142,7 +142,7 @@ p.debate-status {
     padding: 5px 0;
     position: absolute;
     z-index: 1;
-    top: -50px;
+    top: -42px;
   }
 
   .tooltip-text::after {
@@ -160,14 +160,14 @@ p.debate-status {
 .right-tooltip {
   float: right;
   .tooltip-text {
-    margin-left: -30px;
+    margin-left: -45px;
   }
 }
 
 .left-tooltip {
   float: left;
   .tooltip-text{
-    margin-left: -16px;
+    margin-left: 9px;
   }
 }
 
