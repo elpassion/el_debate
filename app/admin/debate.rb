@@ -1,5 +1,5 @@
 ActiveAdmin.register Debate do
-  permit_params :topic, answers_attributes: [:id, :value]
+  permit_params :topic, :closed_at, answers_attributes: [:id, :value]
 
   index do
     selectable_column
@@ -68,12 +68,15 @@ ActiveAdmin.register Debate do
 
     f.inputs do
       f.input :topic
+      f.input :closed_at, as: :datetime_picker, local: true
     end
 
-    f.inputs do
-      f.has_many :answers, new_record: false do |b|
-        b.input :value
-        b.input :answer_type, :input_html => { :disabled => true }
+    unless f.object.new_record?
+      f.inputs do
+        f.has_many :answers, new_record: false do |b|
+          b.input :value
+          b.input :answer_type, :input_html => { :disabled => true }
+        end
       end
     end
 
