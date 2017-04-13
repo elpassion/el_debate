@@ -2,7 +2,7 @@ require 'rails_helper'
 
 feature 'Closing debate' do
   given(:admin_user) { create(:admin_user) }
-  given(:debate) { create(:debate, closed_at: nil) }
+  given(:debate) { create(:debate) }
 
   background do
     login_as(admin_user)

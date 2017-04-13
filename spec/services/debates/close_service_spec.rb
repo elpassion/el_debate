@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe Debates::CloseService do
-  let(:debate) { create(:debate, closed_at: nil) }
+  let(:debate) { create(:debate) }
   let(:message_broadcaster) { double('message broadcaster') }
   let(:closing_time) { Time.current - 2.hours }
   let(:service) {described_class.new(debate: debate, message_broadcaster: message_broadcaster)}
