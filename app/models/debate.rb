@@ -20,6 +20,8 @@ class Debate < ApplicationRecord
   after_create :generate_code
   after_create :create_answers
 
+  attribute :closed_at, :datetime, default: -> { Time.current + 1.hour }
+
   def closed?(now = Time.current)
     closed_at? && closed_at.utc <= now.utc
   end

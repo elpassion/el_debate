@@ -76,6 +76,15 @@ describe Debate, type: :model do
     end
   end
 
+  describe '#closed_at' do
+    before { Timecop.freeze }
+    after  { Timecop.return }
+
+    it 'is set by default to close in one hour' do
+      expect(Debate.new.closed_at).to eql(Time.current + 1.hour)
+    end
+  end
+
   describe 'counter class methods' do
     let(:debate) { create(:debate) }
     let(:positive_vote!) { create(:vote, answer: debate.positive_answer) }
