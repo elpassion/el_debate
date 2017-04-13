@@ -47,16 +47,6 @@ describe Debate, type: :model do
       debate.update! topic: FFaker::HipsterIpsum.sentence
       expect(debate.code).to eq(code)
     end
-
-    it 'is unique' do
-      codes = [12345, 12345, 54321]
-      allow_any_instance_of(Debate).to receive(:generate_code).and_return(*codes)
-
-      debate1 = create(:debate)
-      debate2 = create(:debate)
-
-      expect(debate1.code).not_to eq(debate2.code)
-    end
   end
 
   describe '#closed?' do
