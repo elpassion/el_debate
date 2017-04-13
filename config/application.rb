@@ -12,6 +12,7 @@ module ElDebate
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
 
+    config.time_zone = 'Warsaw'
     config.autoload_paths << Rails.root.join('app', 'presenters')
   end
 end
