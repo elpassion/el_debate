@@ -1,11 +1,15 @@
 class DebateNotifier
+  def self.build
+    new(PusherBroadcaster)
+  end
+
   def initialize(broadcaster, serializer = DashboardSerializer)
     @broadcaster = broadcaster
     @debate_serializer = serializer
   end
 
-  def notify(debate, vote_change)
-    broadcaster.push("dashboard_channel_#{debate.id}", 'vote', merge_data(debate, vote_change))
+  def notify(debate, vote_change = {})
+    broadcaster.push("dashboard_channel_#{debate.id}", 'debate_changed', merge_data(debate, vote_change))
   end
 
   private

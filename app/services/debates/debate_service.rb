@@ -1,16 +1,16 @@
 module Debates
   class DebateService
-    def initialize(debate:, message_broadcaster: PusherBroadcaster)
-      @debate = debate
-      @message_broadcaster = message_broadcaster
+    def initialize(debate:, notifier: DebateNotifier.build)
+      @debate   = debate
+      @notifier = notifier
     end
 
     private
 
-    attr_reader :debate
+    attr_reader :debate, :notifier
 
-    def channel
-      "dashboard_channel_#{debate.id}"
+    def notify
+      notifier.notify(debate)
     end
   end
 end

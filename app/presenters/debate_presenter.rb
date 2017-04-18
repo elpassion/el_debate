@@ -22,4 +22,8 @@ class DebatePresenter < SimpleDelegator
   def votes_count
     positive_count + negative_count
   end
+
+  def status
+    closed? ? 'closed' : 'open'
+  end
 end

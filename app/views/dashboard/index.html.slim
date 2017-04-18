@@ -1,4 +1,4 @@
-= render partial: 'layouts/navbar', locals: { debate_code: @debate.code }, class: 'header'
+= render partial: 'layouts/navbar', locals: { debate_code: @debate.code, closed_at: @debate.closed_at }, class: 'header'
 .container.content
   .row.debate
     .col.s3

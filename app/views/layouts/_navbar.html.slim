@@ -9,6 +9,6 @@ nav
             h4.center-align
               = debate_code
         .col.s4
-          .time-box.clock-image
+          #timer.time-box.clock-image data= { closed_at: closed_at.to_i }
             h5.nav-time
-              #current-time = Time.now.strftime('%H:%M')
+              .time-left

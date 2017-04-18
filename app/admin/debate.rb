@@ -55,6 +55,10 @@ ActiveAdmin.register Debate do
     redirect_to resource_path, opts
   end
 
+  after_update do |debate|
+    DebateNotifier.build.notify(debate)
+  end
+
   action_item :close_or_reopen, only: :show do
     if resource.closed?
       link_to('Reopen', reopen_admin_debate_path(debate), method: :put)
