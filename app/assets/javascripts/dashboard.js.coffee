@@ -6,11 +6,11 @@ class DebateStatus
   constructor: (selector) ->
     @element = $(selector)
 
-  subscribe: (channel, event) ->
-    channel.bind 'debate_changed', @changeStatus
+  subscribe: (ticker) ->
+    ticker.bind 'tick', @changeStatus
 
-  changeStatus: (data) =>
-    if data.debate.status == 'closed'
+  changeStatus: (secondsLeft) =>
+    if secondsLeft <= 0
       @element.text('closed')
     else
       @element.text('')
@@ -23,8 +23,8 @@ class Circle
     negative = parseInt(@container.data('negative'))
     @update(positive, negative)
 
-  subscribe: (channel, event) ->
-    channel.bind event, (data) =>
+  subscribe: (channel) ->
+    channel.bind 'debate_changed', (data) =>
       debate = data.debate
       @update(parseInt(debate.positive_count), parseInt(debate.negative_count))
 
@@ -107,11 +107,15 @@ class Countdown
     @node = $(selector)
     @closedAt = parseInt(@node.data('closed-at')) * 1000
     @interval = null
+    @listeners = { 'tick' : [], 'finished' : [] } # event -> [function(data)]
 
-  subscribe: (channel, event) ->
-    channel.bind event, (data) =>
+  subscribe: (channel) ->
+    channel.bind 'debate_changed', (data) =>
       @updateCosedAt(data.debate.closed_at)
       @run()
+
+  bind: (event, fn) ->
+    (@listeners[event] ||= []).push(fn)
 
   run: ->
     unless @interval?
@@ -119,19 +123,28 @@ class Countdown
 
   update: =>
     left = @secondsLeft()
-    node = @node.find('.time-left')
-    if left > 0
-      node.text(new TimeLeft(left).format())
-    else
+    (listener(left) for listener in @listeners['tick'])
+    if left <= 0
       clearInterval @interval
       @interval = null
-      node.text('00:00')
+      (listener(left) for listener in @listeners['finished']) if left <= 0
 
   updateCosedAt: (closedAt) =>
     @closedAt = closedAt * 1000
 
   secondsLeft: =>
     Math.round((@closedAt - Date.now()) / 1000)
+
+class Clock
+  constructor: (selector) ->
+    @node = $(selector)
+
+  subscribe: (ticker) ->
+    ticker.bind 'tick', (secondsLeft) =>
+      if secondsLeft > 0
+        @node.text(new TimeLeft(secondsLeft).format())
+      else
+        @node.text('00:00')
 
 class ProgressBar
   constructor: (selector) ->
@@ -213,23 +226,26 @@ class Votes
     @neutralVotes.update(debate)
     @validVotes.update(debate)
 
-  subscribe: (channel, event) ->
-    channel.bind event, (data) =>
+  subscribe: (channel) ->
+    channel.bind 'debate_changed', (data) =>
       @update(data.debate, data.vote_change)
 
 initialize = ->
   pusher      = new Pusher(pusher_key)
   userChannel = pusher.subscribe("dashboard_channel_#{debate_id}")
-  components  = []
-
   countdown   = new Countdown('.time-box')
+
+  component.subscribe(userChannel) for component in [
+    countdown,
+    (new Circle('#circle-chart')),
+    (new Votes())
+  ]
+
+  component.subscribe(countdown) for component in [
+    (new Clock('.time-box .time-left')),
+    (new DebateStatus('#debate-status')),
+  ]
+
   countdown.run()
-
-  components.push(countdown)
-  components.push(new Circle('#circle-chart'))
-  components.push(new DebateStatus('#debate-status'))
-  components.push(new Votes())
-
-  component.subscribe(userChannel, 'debate_changed') for component in components
 
 $(document).ready -> initialize()
