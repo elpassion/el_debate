@@ -1,10 +1,19 @@
 require 'rails_helper'
 
 describe Debate, type: :model do
+  it 'is valid' do
+    debate = build(:debate)
+    expect(debate).to be_valid
+  end
+
   it 'validates topic presence' do
     debate = build(:debate, topic: '')
     expect(debate).not_to be_valid
-    expect(debate.errors[:topic]).to include("can't be blank")
+  end
+
+  it 'validates closing date presence' do
+    debate = build(:debate, closed_at: nil)
+    expect(debate).not_to be_valid
   end
 
   it 'deletes answers when destroyed' do
@@ -62,8 +71,17 @@ describe Debate, type: :model do
     end
 
     it 'is not closed when closed_at is not set' do
-      debate = create(:debate, closed_at: nil)
+      debate = build(:debate, closed_at: nil)
       expect(debate.closed?).not_to be
+    end
+  end
+
+  describe '#closed_at' do
+    before { Timecop.freeze }
+    after  { Timecop.return }
+
+    it 'is set by default to close in one hour' do
+      expect(Debate.new.closed_at).to eql(Time.current + 1.hour)
     end
   end
 

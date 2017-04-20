@@ -14,10 +14,13 @@ class Debate < ApplicationRecord
 
   accepts_nested_attributes_for :answers
   validates :topic, presence: true
+  validates :closed_at, presence: true
 
   before_save  :block_code_change
   after_create :generate_code
   after_create :create_answers
+
+  attribute :closed_at, :datetime, default: -> { Time.current + 1.hour }
 
   def closed?(now = Time.current)
     closed_at? && closed_at.utc <= now.utc

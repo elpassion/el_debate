@@ -1,8 +1,8 @@
 module Debates
   class ReopenService < DebateService
-    def call
-      @debate.update!(closed_at: nil) if @debate.closed?
-      @message_broadcaster.push(channel, 'status', 'reopened')
+    def call(reopen_for: 1.hour)
+      debate.update!(closed_at: Time.current + reopen_for) if debate.closed?
+      notify
     end
   end
 end

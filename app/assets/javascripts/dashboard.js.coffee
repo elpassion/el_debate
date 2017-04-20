@@ -3,13 +3,17 @@
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
 class DebateStatus
-  constructor: (@channel, selector) ->
+  constructor: (selector) ->
     @element = $(selector)
-    @channel.bind 'status', @changeStatus
 
-  changeStatus: (status) =>
-    if status == 'closed'
+  subscribe: (ticker) ->
+    ticker.bind 'tick', @changeStatus
+
+  changeStatus: (secondsLeft) =>
+    if secondsLeft <= 0
       @element.text('closed')
+    else
+      @element.text('')
 
 class Circle
   constructor: (containerSelector) ->
@@ -19,7 +23,12 @@ class Circle
     negative = parseInt(@container.data('negative'))
     @update(positive, negative)
 
-  update: (positive, negative) ->
+  subscribe: (channel) ->
+    channel.bind 'debate_changed', (data) =>
+      debate = data.debate
+      @update(parseInt(debate.positive_count), parseInt(debate.negative_count))
+
+  update: (positive, negative) =>
     if positive + negative > 0
       @setPercentage(positive, negative)
       @container.show()
@@ -54,52 +63,189 @@ class Circle
     startAngle: @calculateStartAngle()
 
 class Tooltip
-  constructor: (@domNode, @text) ->
+  constructor: (selector, @showTime) ->
+    @node    = $(selector)
+    @timeout = null
 
-  timer = null
-  open: ->
-    $(@domNode).show()
-    $("#{@domNode} > .tooltip-text").text(@text)
+  update: (text) =>
+    @show(text)
 
-  close: ->
-    $('.left-tooltip, .right-tooltip').hide()
+  show: (text) =>
+    clearTimeout(@timeout)
 
-  start: ->
-    clearTimeout timer
-    @open()
-    timer = setTimeout @close, 3000
+    @node.find('.tooltip-text').text(text)
+    @node.show()
 
-pluralizePerson = (count) ->
-  if count == 1
-    'person'
-  else
-    'people'
+    @timeout = setTimeout @hide, @showTime
 
-channelBind = (userChannel, circle) ->
-  userChannel.bind 'vote', (data) ->
-    debate = data['debate']
-    voteChange = data['vote_change']
-    unless voteChange['positive'] is 0 then (new Tooltip('.left-tooltip', voteChange['positive'])).start()
-    unless voteChange['negative'] is 0 then (new Tooltip('.right-tooltip', voteChange['negative'])).start()
-    document.getElementById('votes-count').innerHTML = debate['votes_count']
-    document.getElementById('votes-noun').innerHTML = pluralizePerson(debate['votes_count'])
-    document.getElementById('positive-count').innerHTML = "#{debate['positive_count']} #{pluralizePerson(debate['positive_count'])}"
-    document.getElementById('negative-count').innerHTML = "#{debate['negative_count']} #{pluralizePerson(debate['negative_count'])}"
-    document.getElementById('left-progress-bar').style.width = debate['positive_percent']
-    document.getElementById('positive-percent').innerHTML = debate['positive_percent']
-    document.getElementById('right-progress-bar').style.width = debate['negative_percent']
-    document.getElementById('negative-percent').innerHTML = debate['negative_percent']
-    document.getElementById('neutral-count').innerHTML = debate['neutral_count']
-    document.getElementById('neutral-noun').innerHTML = pluralizePerson(debate['neutral_count'])
+  hide: =>
+    @node.fadeOut()
 
-    circle.update parseInt(debate['positive_count']), parseInt(debate['negative_count'])
-  return
+
+class TimeLeft
+  constructor: (@secondsLeft) ->
+    minutesLeft = Math.floor(@secondsLeft / 60)
+
+    @timeSplitted = [
+      (if minutesLeft >= 60 then Math.floor(minutesLeft / 60) else 0), # hours
+      (if minutesLeft >= 60 then minutesLeft % 60 else minutesLeft),   # minutes
+      (@secondsLeft % 60)                                              # seconds
+    ]
+
+    if @timeSplitted[0] == 0
+      @timeSplitted.shift()
+
+  format: =>
+    (('0' + num)[-2..] for num in @timeSplitted[0...2]).join @separator()
+
+  separator: =>
+    if @secondsLeft % 2 == 0 then ':' else ' '
+
+
+class Countdown
+  constructor: (selector) ->
+    @node = $(selector)
+    @closedAt = parseInt(@node.data('closed-at')) * 1000
+    @interval = null
+    @listeners = { 'tick' : [], 'finished' : [] } # event -> [function(data)]
+
+  subscribe: (channel) ->
+    channel.bind 'debate_changed', (data) =>
+      @updateCosedAt(data.debate.closed_at)
+      @run()
+
+  bind: (event, fn) ->
+    (@listeners[event] ||= []).push(fn)
+
+  run: ->
+    unless @interval?
+      @interval = setInterval @update, 1000
+
+  update: =>
+    left = @secondsLeft()
+    (listener(left) for listener in @listeners['tick'])
+    if left <= 0
+      clearInterval @interval
+      @interval = null
+      (listener(left) for listener in @listeners['finished']) if left <= 0
+
+  updateCosedAt: (closedAt) =>
+    @closedAt = closedAt * 1000
+
+  secondsLeft: =>
+    Math.round((@closedAt - Date.now()) / 1000)
+
+class Clock
+  constructor: (selector) ->
+    @node = $(selector)
+
+  subscribe: (ticker) ->
+    ticker.bind 'tick', (secondsLeft) =>
+      if secondsLeft > 0
+        @node.text(new TimeLeft(secondsLeft).format())
+      else
+        @node.text('00:00')
+
+class ProgressBar
+  constructor: (selector) ->
+    @node = $(selector)
+
+  update: (percent) ->
+    @node.css('width', percent)
+
+class Pluralized
+  pluralize: (count) ->
+    if count == 1 then 'person' else 'people'
+
+class VotesCount extends Pluralized
+  constructor: (selector) ->
+    @node = $(selector)
+
+  update: (count) ->
+    @node.text("#{count} #{@pluralize(count)}")
+
+class MultilineVotesCount extends Pluralized
+  constructor: (counterSelector, nounSelector) ->
+    @counterNode = $(counterSelector)
+    @nounNode    = $(nounSelector)
+
+  update: (count) ->
+    @counterNode.text(count)
+    @nounNode.text(@pluralize(count))
+
+class PositiveVotes
+  constructor: ->
+    @votesCount  = new VotesCount('#positive-count')
+    @progressBar = new ProgressBar('#left-progress-bar')
+    @percentage  = $('#positive-percent')
+    @tooltip     = new Tooltip('.left-tooltip', 3000)
+
+  update: (debate, voteChange) ->
+    @votesCount.update(debate.positive_count)
+    @progressBar.update(debate.positive_percent)
+    @percentage.html(debate.positive_percent)
+    @tooltip.update(voteChange.positive) if voteChange? && voteChange.positive != 0
+
+class NegativeVotes
+  constructor: ->
+    @votesCount  = new VotesCount('#negative-count')
+    @progressBar = new ProgressBar('#right-progress-bar')
+    @percentage  = $('#negative-percent')
+    @tooltip     = new Tooltip('.right-tooltip', 3000)
+
+  update: (debate, voteChange) ->
+    @votesCount.update(debate.negative_count)
+    @progressBar.update(debate.negative_percent)
+    @percentage.html(debate.negative_percent)
+    @tooltip.update(voteChange.negative) if voteChange? && voteChange.negative != 0
+
+class NeutralVotes
+  constructor: ->
+    @counter = new MultilineVotesCount('#neutral-count', '#neutral-noun')
+
+  update: (debate) ->
+    @counter.update(debate.neutral_count)
+
+class ValidVotes
+  constructor: ->
+    @counter = new MultilineVotesCount('#votes-count', '#noun-count')
+
+  update: (debate) ->
+    @counter.update(debate.votes_count)
+
+class Votes
+  constructor: ->
+    @negativeVotes   = new NegativeVotes()
+    @positiveVotes   = new PositiveVotes()
+    @neutralVotes    = new NeutralVotes()
+    @validVotes      = new ValidVotes()
+
+  update: (debate, voteChange) =>
+    @negativeVotes.update(debate, voteChange)
+    @positiveVotes.update(debate, voteChange)
+    @neutralVotes.update(debate)
+    @validVotes.update(debate)
+
+  subscribe: (channel) ->
+    channel.bind 'debate_changed', (data) =>
+      @update(data.debate, data.vote_change)
 
 initialize = ->
-  circle = new Circle('#circle-chart')
-  pusher = new Pusher(pusher_key)
+  pusher      = new Pusher(pusher_key)
   userChannel = pusher.subscribe("dashboard_channel_#{debate_id}")
-  channelBind(userChannel, circle)
-  debateStatus = new DebateStatus(userChannel, '#debate-status')
+  countdown   = new Countdown('.time-box')
+
+  component.subscribe(userChannel) for component in [
+    countdown,
+    (new Circle('#circle-chart')),
+    (new Votes())
+  ]
+
+  component.subscribe(countdown) for component in [
+    (new Clock('.time-box .time-left')),
+    (new DebateStatus('#debate-status')),
+  ]
+
+  countdown.run()
 
 $(document).ready -> initialize()

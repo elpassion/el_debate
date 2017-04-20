@@ -1,8 +1,8 @@
 module Debates
   class CloseService < DebateService
     def call
-      @debate.update!(closed_at: Time.current) unless @debate.closed?
-      @message_broadcaster.push(channel, 'status', 'closed')
+      debate.update!(closed_at: Time.current) unless debate.closed?
+      notify
     end
   end
 end

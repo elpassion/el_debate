@@ -6,14 +6,16 @@ class DashboardSerializer
   def to_h
     {
       debate: {
-        id: debate.id,
-        topic: debate.topic,
-        votes_count: debate.votes_count,
-        positive_count: debate.positive_count,
-        negative_count: debate.negative_count,
-        neutral_count: debate.neutral_count,
+        id:               debate.id,
+        topic:            debate.topic,
+        closed_at:        debate.closed_at.to_i,
+        status:           debate.status,
+        votes_count:      debate.votes_count,
+        positive_count:   debate.positive_count,
+        negative_count:   debate.negative_count,
+        neutral_count:    debate.neutral_count,
         positive_percent: debate.positive_percent,
-        negative_percent: debate.negative_percent
+        negative_percent: debate.negative_percent,
       }
     }
   end
