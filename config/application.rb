@@ -14,5 +14,6 @@ module ElDebate
 
     config.time_zone = 'Warsaw'
     config.autoload_paths << Rails.root.join('app', 'presenters')
+    config.active_job.queue_adapter = :sucker_punch
   end
 end
