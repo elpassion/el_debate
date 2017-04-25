@@ -11,6 +11,7 @@ class Debate < ApplicationRecord
   has_many :answers, dependent: :delete_all
   has_many :auth_tokens, dependent: :delete_all
   has_many :votes, through: :answers
+  has_many :comments, class_name: Slack::Comment
 
   accepts_nested_attributes_for :answers
   validates :topic, presence: true
@@ -21,6 +22,13 @@ class Debate < ApplicationRecord
   after_create :create_answers
 
   attribute :closed_at, :datetime, default: -> { Time.current + 1.hour }
+
+  def self.opened_for_channel!(channel_name)
+    where(
+      "channel_name = ? AND closed_at > ?",
+       channel_name, Time.current
+    ).first!
+  end
 
   def closed?(now = Time.current)
     closed_at? && closed_at.utc <= now.utc
