@@ -1,7 +1,6 @@
 # Place all the behaviors and hooks related to the matching controller here.
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
-
 class DebateStatus
   constructor: (selector) ->
     @element = $(selector)
@@ -234,6 +233,7 @@ initialize = ->
   pusher      = new Pusher(pusher_key)
   userChannel = pusher.subscribe("dashboard_channel_#{debate_id}")
   countdown   = new Countdown('.time-box')
+  slackFeed   = new SlackFeed(userChannel, $('#slack-comments .comments'))
 
   component.subscribe(userChannel) for component in [
     countdown,
@@ -247,5 +247,6 @@ initialize = ->
   ]
 
   countdown.run()
+  slackFeed.run()
 
 $(document).ready -> initialize()
