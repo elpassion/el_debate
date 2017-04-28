@@ -20,6 +20,7 @@ gem 'ffaker'
 gem 'pusher'
 gem 'sucker_punch'
 gem 'faraday'
+gem 'values'
 
 group :development, :test do
   gem 'byebug', platform: :mri
