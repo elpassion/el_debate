@@ -280,5 +280,20 @@ p.debate-status {
 }
 
 #slack-comments {
-  height: 160px;
+  min-height: 160px;
+
+  .comment {
+    padding: 10px;
+    background: #fff;
+
+    .left .image img {
+      width: 96px;
+      height: 96px;
+    }
+
+    .content {
+      padding-left: 15px;
+      text-align: justify;
+    }
+  }
 }

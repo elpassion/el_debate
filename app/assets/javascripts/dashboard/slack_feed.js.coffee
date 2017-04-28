@@ -24,10 +24,10 @@ class SlackChannelObserver
   constructor: (@commentsQueue) ->
 
   subscribe: (channel) ->
-    channel.bind 'newComment', @updateComments
+    channel.bind 'comment_added', @updateComments
 
-  updateComments: (data) =>
-    @commentsQueue.enq(data.comment)
+  updateComments: (comment) =>
+    @commentsQueue.enq(comment)
 
 class Comment
   constructor: (comment) ->
@@ -36,19 +36,21 @@ class Comment
     @username  = comment.user_name
 
   render: ->
-    $('<div>', {class: 'card horizontal'})
+    $('<div>', {class: 'comment z-depth-2 row'})
+      .append(@renderUserInfo())
+      .append(@renderComment())
+
+  renderUserInfo: ->
+    $('<div>', { class: 'left' })
       .append(
-        $('<div>', { class: 'card-image' } )
+        $('<div>', { class: 'image' })
           .append($('<img>', { src: @avatarUrl }))
       )
-      .append(
-        $('<div>', { class: 'card-stacked' })
-          .append(
-            $('<div>', { class: 'card-content' })
-              .append($('<strong>', { text: @username }))
-              .append($('<p>', { text: @comment }))
-          )
-      )
+
+  renderComment: ->
+    $('<div>', { class: 'content col s10' })
+      .append($('<strong>', { text: @username }))
+      .append($('<p>', { text: @comment }))
 
 class CommentsFeed
   constructor: (@commentsQueue, @node, opts = {}) ->
@@ -78,31 +80,6 @@ class CommentsFeed
   unlock: =>
     @canAdd = true
 
-
-class CommentsProducer
-  constructor: ->
-    @subscribers = []
-    @interval    = null
-
-  bind: (evt, subscriber) ->
-    @subscribers.push(subscriber)
-
-  run: ->
-    @interval = setInterval @pushComment, 1500
-    setTimeout =>
-      clearInterval(@interval)
-    , 20000
-
-  pushComment: =>
-    time    = parseInt((new Date()).getTime() / 1000)
-    comment = {
-      created_at:     time,
-      content:        "new comment at: #{time}",
-      user_name:      "username",
-      user_image_url: "http://lorempixel.com/96/96/people/"
-    }
-    subscriber({comment: comment}) for subscriber in @subscribers
-
 class SlackFeed
   constructor: (channel, node) ->
     @comments     = new CommentsQueue()
@@ -114,9 +91,3 @@ class SlackFeed
     @commentsFeed.run()
 
 window.SlackFeed = SlackFeed
-
-$(document).ready ->
-  commentsProducer = new CommentsProducer()
-  slackFeed        = new SlackFeed(commentsProducer, $('#slack-comments .comments'))
-  slackFeed.run()
-  commentsProducer.run()
