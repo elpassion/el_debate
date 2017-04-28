@@ -3,17 +3,15 @@ class Slack::CommentsController < ApplicationController
 
   rescue_from StandardError do |e|
     Rails.logger.error e
-    render json: Slack::ResponseSerializer.with(
-      response_type: "in_channel",
-      text: "There was a problem submitting your comment"
-    ).to_json
+    render json: Slack::ResponseSerializer.in_channel(
+      "There was a problem submitting your comment"
+    )
   end
 
   def help
-    render json: Slack::ResponseSerializer.with(
-      response_type: "ephemeral",
-      text: "Please provide the comment content."
-    ).to_json
+    render json: Slack::ResponseSerializer.not_public(
+      "Please provide the comment content."
+    )
   end
 
   def create
@@ -23,15 +21,13 @@ class Slack::CommentsController < ApplicationController
       Slack::UserMaker.perform_later(user_maker_params)
     end
 
-    render json: Slack::ResponseSerializer.with(
-      response_type: "in_channel",
-      text: "Your comment was submitted."
-    ).to_json
+    render json: Slack::ResponseSerializer.in_channel(
+      "Your comment was submitted."
+    )
   rescue ActiveRecord::RecordNotFound
-    render json: Slack::ResponseSerializer.with(
-      response_type: "in_channel",
-      text: "Your channel is not assigned to any active debate."
-    ).to_json
+    render json: Slack::ResponseSerializer.in_channel(
+      "Your channel is not assigned to any active debate."
+    )
   end
 
   private
