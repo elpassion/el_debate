@@ -14,9 +14,9 @@ class Api::ApplicationController < ActionController::Base
   end
 
   def authenticate
-    authenticate_or_request_with_http_token do |token, options|
-      @auth_token = AuthToken.find_by value: token
-    end
+    @auth_token = TokenRequester.new(request.headers).auth_token
+
+    head :unauthorized unless @auth_token
   end
 
   def current_debate

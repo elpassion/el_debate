@@ -5,8 +5,7 @@ describe Api::VotesController, type: :controller do
   let(:auth_token) { debate.auth_tokens.create }
 
   before do
-    token = ActionController::HttpAuthentication::Token.encode_credentials(auth_token.value)
-    request.env['HTTP_AUTHORIZATION'] = token
+    request.env['HTTP_AUTHORIZATION'] = auth_token.value
   end
 
   context 'when answer not found' do
