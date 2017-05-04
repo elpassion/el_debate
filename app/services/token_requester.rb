@@ -4,9 +4,7 @@ class TokenRequester
   end
 
   def auth_token
-    token = get_token_from_headers
-
-    return unless token
+    return unless (token = get_token_from_headers)
     AuthToken.find_by_value token
   end
 
@@ -15,7 +13,6 @@ class TokenRequester
   attr_reader :request_headers
 
   def get_token_from_headers
-    return unless request_headers['Authorization'].present?
-    request_headers['Authorization']
+    request_headers['Authorization'].presence
   end
 end
