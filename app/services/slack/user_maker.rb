@@ -1,6 +1,6 @@
 class Slack::UserMaker < ApplicationJob
   mattr_accessor :slack_api_client
-  self.slack_api_client = Slack::ApiClient.new
+  self.slack_api_client = Slack::ApiClient.build
 
   def perform(params)
     user_api_data = slack_api_client.get_user_data(
