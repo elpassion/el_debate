@@ -47,6 +47,10 @@
       span.inline#neutral-count = @debate.neutral_count
       span.inline#neutral-noun = pluralize_without_count(@debate.neutral_count, 'person')
 
+  #slack-comments.row
+    .col.s8.offset-s2
+      .comments
+
 javascript:
   var pusher_key = "#{Pusher.key}";
   var debate_id = "#{@debate.id}";
