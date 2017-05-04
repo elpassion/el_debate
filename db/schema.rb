@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161021134340) do
+ActiveRecord::Schema.define(version: 20170427150225) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -50,10 +50,31 @@ ActiveRecord::Schema.define(version: 20161021134340) do
   create_table "debates", force: :cascade do |t|
     t.string   "topic"
     t.string   "code"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+    t.datetime "closed_at"
+    t.string   "channel_name"
+    t.index ["channel_name"], name: "index_debates_on_channel_name", using: :btree
+    t.index ["code"], name: "index_debates_on_code", unique: true, using: :btree
+  end
+
+  create_table "slack_comments", force: :cascade do |t|
+    t.integer  "slack_user_id"
+    t.text     "content"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+    t.integer  "debate_id"
+    t.index ["debate_id"], name: "index_slack_comments_on_debate_id", using: :btree
+    t.index ["slack_user_id"], name: "index_slack_comments_on_slack_user_id", using: :btree
+  end
+
+  create_table "slack_users", force: :cascade do |t|
+    t.string   "slack_id"
+    t.string   "name"
+    t.string   "image_url"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.datetime "closed_at"
-    t.index ["code"], name: "index_debates_on_code", unique: true, using: :btree
+    t.index ["slack_id"], name: "index_slack_users_on_slack_id", unique: true, using: :btree
   end
 
   create_table "votes", force: :cascade do |t|

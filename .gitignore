@@ -27,3 +27,6 @@
 .ruby-gemset
 .env
 .zshrc
+
+config/initializers/aliases.rb
+
