@@ -7,13 +7,17 @@ describe Slack::ApiClient do
       Slack::ApiClient.new(network_provider)
     end
 
+    let(:api_host) do
+      "https://slack.com/"
+    end
+
     let(:api_endpoint) do
-      'https://slack.com/api/users.info'
+      "/api/users.info"
     end
 
     context "all went good" do
       let(:network_provider) do
-        Faraday.new do |builder|
+        Faraday.new(api_host) do |builder|
           builder.adapter :test, nil do |stub|
             stub.get(api_endpoint) do |env|
               [200, {}, api_response.to_json]
@@ -44,7 +48,7 @@ describe Slack::ApiClient do
 
     context "there was a network problem" do
       let(:network_provider) do
-        Faraday.new do |builder|
+        Faraday.new(api_host) do |builder|
           builder.adapter :test do |stub|
             stub.get(api_endpoint) do |env|
               [500, {}, 'error' ]
