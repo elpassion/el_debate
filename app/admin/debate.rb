@@ -8,6 +8,7 @@ ActiveAdmin.register Debate do
     column :code
     column :created_at
     column :closed_at
+    column :channel_name
     actions do |debate|
       if debate.closed?
         link_to('Reopen', reopen_admin_debate_path(debate), method: :put)
@@ -24,6 +25,7 @@ ActiveAdmin.register Debate do
         debate.code.presence || link_to('Generate code', code_admin_debate_path, method: :post)
       end
       row :closed_at
+      row :channel_name
       row :answers do |debate|
         debate.answers.map do |answer|
           link_to answer.value, admin_debate_answer_path(debate, answer.id)
@@ -72,6 +74,7 @@ ActiveAdmin.register Debate do
 
     f.inputs do
       f.input :topic
+      f.input :channel_name
       f.input :closed_at, as: :datetime_picker, local: true
     end
 
