@@ -1,6 +1,6 @@
 class Slack::User < ApplicationRecord
   self.table_name = "slack_users"
 
-  has_many :comments, class_name: Slack::Comment
+  has_many :comments, class_name: Slack::Comment, foreign_key: :slack_user_id
 end
 
