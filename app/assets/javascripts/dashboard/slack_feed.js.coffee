@@ -84,7 +84,7 @@ class SlackFeed
   constructor: (channel, node) ->
     @comments     = new CommentsQueue()
     @slackFeed    = new SlackChannelObserver(@comments)
-    @commentsFeed = new CommentsFeed(@comments, node)
+    @commentsFeed = new CommentsFeed(@comments, node, commentsCount: 2)
     @slackFeed.subscribe(channel)
 
   run: ->
