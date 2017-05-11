@@ -30,15 +30,22 @@ class SlackChannelObserver
     @commentsQueue.enq(comment)
 
 class Comment
-  constructor: (comment) ->
-    @avatarUrl = comment.user_image_url
-    @comment   = comment.content
-    @username  = comment.user_name
+  constructor: (comment, opts = {}) ->
+    @avatarUrl  = comment.user_image_url
+    @comment    = comment.content
+    @username   = comment.user_name
+    @visibleFor = opts.visibleFor || 15000
 
   render: ->
-    $('<div>', {class: 'comment z-depth-2 row'})
-      .append(@renderUserInfo())
-      .append(@renderComment())
+    element = $('<div>', {class: 'comment z-depth-2 row'})
+                .append(@renderUserInfo())
+                .append(@renderComment())
+
+    setTimeout ->
+      element.remove()
+    , @visibleFor
+
+    element
 
   renderUserInfo: ->
     $('<div>', { class: 'left' })
