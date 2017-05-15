@@ -76,7 +76,7 @@ class CommentsFeed
     if currentComments.length == @commentsCount
       currentComments[currentComments.length - 1].remove()
 
-    comment = new Comment(@commentsQueue.deq())
+    comment = new Comment(@commentsQueue.deq(), visibleFor: 20000)
     @node.prepend(comment.render())
     @lock()
 
