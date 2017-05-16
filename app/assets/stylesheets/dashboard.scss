@@ -287,7 +287,7 @@ p.debate-status {
   .comment {
     padding: 10px;
     background: #fff;
-    -webkit-animation:
+    animation:
             slideIn 5s 0s forwards,
             slideOut 9s 15s forwards;
 
@@ -303,7 +303,7 @@ p.debate-status {
   }
 }
 
-@-webkit-keyframes slideIn {
+@keyframes slideIn {
   0% {
     transform: translateX(-900px);
   }
@@ -312,7 +312,7 @@ p.debate-status {
   }
 }
 
-@-webkit-keyframes slideOut {
+@keyframes slideOut {
   25% {
     transform: translateX(0);
   }
