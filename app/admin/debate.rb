@@ -1,5 +1,5 @@
 ActiveAdmin.register Debate do
-  permit_params :topic, :closed_at, answers_attributes: [:id, :value]
+  permit_params :topic, :closed_at, :channel_name, answers_attributes: [:id, :value]
 
   index do
     selectable_column
