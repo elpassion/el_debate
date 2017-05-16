@@ -280,11 +280,16 @@ p.debate-status {
 }
 
 #slack-comments {
-  min-height: 160px;
+  .comments {
+    height: 284px;
+  }
 
   .comment {
     padding: 10px;
     background: #fff;
+    animation:
+            slideIn 5s 0s forwards,
+            slideOut 9s 15s forwards;
 
     .left .image img {
       width: 96px;
@@ -295,6 +300,24 @@ p.debate-status {
       padding-left: 15px;
       text-align: justify;
     }
+  }
+}
+
+@keyframes slideIn {
+  0% {
+    transform: translateX(-900px);
+  }
+  25% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideOut {
+  25% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(1500px);
   }
 }
 
