@@ -49,6 +49,11 @@
 
   #slack-comments.row
     .col.s8.offset-s2
+      - if @debate.channel_name.present?
+        .call-for-action
+          | Comment a discussion on
+          span.channel-title = @debate.channel_name
+          | channel
       .comments
 
 javascript:

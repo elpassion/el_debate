@@ -70,15 +70,22 @@ class CommentsFeed
 
   updateComments: =>
     return unless @canAdd
+    @checkForCallToAction()
     return if @commentsQueue.isEmpty()
 
-    currentComments = @node.children()
+    currentComments = @node.children(['comment'])
     if currentComments.length == @commentsCount
       currentComments[currentComments.length - 1].remove()
 
     comment = new Comment(@commentsQueue.deq(), visibleFor: 20000)
     @node.prepend(comment.render())
     @lock()
+
+  checkForCallToAction: =>
+    if @node.children(['comment']).length == 0 && @commentsQueue.isEmpty()
+      $('.call-for-action').css('display', 'block')
+    else
+      $('.call-for-action').css('display', 'none')
 
   lock: =>
     @canAdd = false
