@@ -4,6 +4,7 @@ class Api::ApplicationController < ActionController::Base
   before_action :destroy_session, :authenticate
 
   rescue_from StandardError do |exception|
+    ExceptionNotifier.notify_exception(exception)
     render json: { error: exception.message }, status: :internal_server_error
   end
 
