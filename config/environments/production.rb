@@ -86,7 +86,7 @@ Rails.application.configure do
 
   config.middleware.use ExceptionNotification::Rack,
                         slack: {
-                            webhook_url: ENV['WEBHOOK_URL'],
+                            webhook_url: ENV.fetch['WEBHOOK_URL'],
                             channel: '#el-debate',
                             additional_parameters: {
                                 mrkdwn: true
