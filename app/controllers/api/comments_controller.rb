@@ -20,6 +20,6 @@ class Api::CommentsController < Api::ApplicationController
   end
 
   def debate
-    @_debate ||= AuthToken.find_by_value(params.fetch(:auth_token)).debate
+    @_debate ||= AuthToken.find_by_value(@auth_token).debate
   end
 end
