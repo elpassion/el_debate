@@ -33,6 +33,11 @@ describe CommentMaker do
       expect(comment.slack_user).to eq user
     end
 
+    it "returns anonymous user if user_id is not given" do
+      comment = subject.call(params)
+      expect(comment.user.name).to eq 'Anonymous'
+    end
+
     it "executes a CommentNotifier service" do
       expect(notifier_mock).to receive(:call)
       subject.call(params)

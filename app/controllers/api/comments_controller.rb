@@ -14,12 +14,8 @@ class Api::CommentsController < Api::ApplicationController
 
   def comment_maker_params
     {
-      debate_id: debate.id,
+      debate_id: current_debate.id,
       comment_text: params.fetch(:text)
     }
-  end
-
-  def debate
-    @_debate ||= AuthToken.find_by_value(@auth_token).debate
   end
 end

@@ -1,6 +1,6 @@
 class Comment < ApplicationRecord
   belongs_to :debate
-  belongs_to :slack_user, class_name: Slack::User, foreign_key: :slack_user_id
+  belongs_to :slack_user, class_name: Slack::User, foreign_key: :slack_user_id, optional: true
   validates :content, presence: true
 
   def user
