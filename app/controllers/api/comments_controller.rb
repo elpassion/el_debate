@@ -2,7 +2,7 @@ class Api::CommentsController < Api::ApplicationController
 
   def create
     if debate
-      Api::CommentMaker.call(comment_maker_params)
+      CommentMaker.call(comment_maker_params)
 
       head :created
     else

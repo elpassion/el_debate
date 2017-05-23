@@ -1,4 +1,4 @@
-class AbstractCommentMaker
+class CommentMaker
   def initialize(notifier)
     @notifier = notifier
   end
@@ -8,7 +8,11 @@ class AbstractCommentMaker
   end
 
   def call(params)
-    comment = create_comment(params)
+    comment = Comment.create!(
+        slack_user_id: params[:user_id],
+        content: params.fetch(:comment_text),
+        debate_id: params.fetch(:debate_id)
+    )
 
     @notifier.call(
         params.fetch(:debate_id),
@@ -16,11 +20,5 @@ class AbstractCommentMaker
     )
 
     comment
-  end
-
-  protected
-
-  def create_comment(params)
-    raise 'Not implemented!'
   end
 end

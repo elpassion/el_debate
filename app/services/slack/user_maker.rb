@@ -13,7 +13,7 @@ class Slack::UserMaker < ApplicationJob
       image_url: user_api_data.fetch(:user_image_url)
     )
 
-    Slack::CommentMaker.call(params.merge(user_id: user.id))
+    CommentMaker.call(params.merge(user_id: user.id))
     user
   rescue Slack::ApiNetworkError => e
     Rails.logger.error e

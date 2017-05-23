@@ -16,7 +16,7 @@ class Slack::CommentsController < ApplicationController
 
   def create
     if debate && user
-      Slack::CommentMaker.call(comment_maker_params)
+      CommentMaker.call(comment_maker_params)
     else
       Slack::UserMaker.perform_later(user_maker_params)
     end
