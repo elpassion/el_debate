@@ -233,7 +233,7 @@ initialize = ->
   pusher      = new Pusher(pusher_key)
   userChannel = pusher.subscribe("dashboard_channel_#{debate_id}")
   countdown   = new Countdown('.time-box')
-  slackFeed   = new SlackFeed(userChannel, $('#slack-comments .comments'))
+  feed        = new Feed(userChannel, $('#slack-comments .comments'))
 
   component.subscribe(userChannel) for component in [
     countdown,
@@ -247,6 +247,6 @@ initialize = ->
   ]
 
   countdown.run()
-  slackFeed.run()
+  feed.run()
 
 $(document).ready -> initialize()

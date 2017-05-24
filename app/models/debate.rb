@@ -11,7 +11,7 @@ class Debate < ApplicationRecord
   has_many :answers, dependent: :delete_all
   has_many :auth_tokens, dependent: :delete_all
   has_many :votes, through: :answers
-  has_many :comments, class_name: Slack::Comment
+  has_many :comments
 
   accepts_nested_attributes_for :answers
   validates :topic, presence: true

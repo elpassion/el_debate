@@ -1,4 +1,4 @@
-class Slack::CommentNotifier
+class CommentNotifier
   def initialize(broadcaster)
     @broadcaster = broadcaster
   end
@@ -11,7 +11,7 @@ class Slack::CommentNotifier
     @broadcaster.push(
       "dashboard_channel_#{debate_id}",
       "comment_added",
-      Slack::CommentSerializer.new(comment).to_h
+      CommentSerializer.new(comment).to_h
     )
   end
 end

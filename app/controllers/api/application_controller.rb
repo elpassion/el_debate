@@ -22,6 +22,6 @@ class Api::ApplicationController < ActionController::Base
 
   def current_debate
     return unless @auth_token.present?
-    @auth_token.debate
+    @_current_debate ||= @auth_token.debate
   end
 end

@@ -20,7 +20,7 @@ class CommentsQueue
       a.created_at - b.created_at
 
 
-class SlackChannelObserver
+class ChannelObserver
   constructor: (@commentsQueue) ->
 
   subscribe: (channel) ->
@@ -94,14 +94,14 @@ class CommentsFeed
   unlock: =>
     @canAdd = true
 
-class SlackFeed
+class Feed
   constructor: (channel, node) ->
     @comments     = new CommentsQueue()
-    @slackFeed    = new SlackChannelObserver(@comments)
+    @feed         = new ChannelObserver(@comments)
     @commentsFeed = new CommentsFeed(@comments, node, commentsCount: 2)
-    @slackFeed.subscribe(channel)
+    @feed.subscribe(channel)
 
   run: ->
     @commentsFeed.run()
 
-window.SlackFeed = SlackFeed
+window.Feed = Feed

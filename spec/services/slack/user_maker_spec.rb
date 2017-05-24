@@ -13,7 +13,7 @@ describe Slack::UserMaker do
   describe "perform" do
     context "all went good" do
       before do
-        allow(Slack::CommentMaker).to receive(:call)
+        allow(CommentMaker).to receive(:call)
       end
 
       before do
@@ -31,8 +31,8 @@ describe Slack::UserMaker do
         }.to change(Slack::User, :count).by(1)
       end
 
-      it "executes a Slack::CommentMaker service with correct params" do
-        expect(Slack::CommentMaker).to receive(:call).with(
+      it "executes a CommentMaker service with correct params" do
+        expect(CommentMaker).to receive(:call).with(
           hash_including(params)
         )
         subject
@@ -60,8 +60,8 @@ describe Slack::UserMaker do
         }.not_to change(Slack::User, :count)
       end
 
-      it "does not execute Slack::CommentMaker" do
-        expect(Slack::CommentMaker).not_to receive(:call)
+      it "does not execute CommentMaker" do
+        expect(CommentMaker).not_to receive(:call)
         subject
       end
     end
