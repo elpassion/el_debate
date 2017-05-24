@@ -2,7 +2,7 @@ class Comment < ApplicationRecord
   belongs_to :debate
   belongs_to :slack_user, class_name: Slack::User, foreign_key: :slack_user_id, optional: true
   validates :content, presence: true
-  delegate :image_url, :name, to: :user, prefix: true, allow_nil: true
+  delegate :image_url, :name, to: :user, prefix: true
 
   def user
     slack_user || self.class.anonymous_user
