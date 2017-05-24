@@ -35,7 +35,7 @@ describe CommentMaker do
 
     it "returns anonymous user if user_id is not given" do
       comment = subject.call(params)
-      expect(comment.user.name).to eq 'Anonymous'
+      expect(comment.user_name).to eq 'Anonymous'
     end
 
     it "executes a CommentNotifier service" do

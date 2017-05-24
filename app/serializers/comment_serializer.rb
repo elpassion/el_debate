@@ -6,8 +6,8 @@ class CommentSerializer
   def to_h
     {
       content: comment.content,
-      user_image_url: comment.user.image_url,
-      user_name: comment.user.name,
+      user_image_url: comment.user_image_url,
+      user_name: comment.user_name,
       created_at: comment.created_at.to_i
     }
   end
