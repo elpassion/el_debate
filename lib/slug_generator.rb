@@ -4,10 +4,6 @@ class SlugGenerator
     @code_generator = code_generator
   end
 
-  def self.call(object)
-    new.call(object)
-  end
-
   def call(object)
     raw = object.public_send(attribute)
     base = raw.downcase.gsub(/[^0-9a-z ]/i, '').split(' ').first(6).join('-')
