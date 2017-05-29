@@ -24,6 +24,7 @@ gem 'values'
 gem 'rack-cors', :require => 'rack/cors'
 gem 'exception_notification'
 gem 'slack-notifier'
+gem 'rack-attack'
 
 group :development, :test do
   gem 'byebug', platform: :mri
