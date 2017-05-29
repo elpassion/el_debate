@@ -19,7 +19,7 @@ class VoteService
 
   def create_or_update_vote!
     if previous_vote
-      previous_vote.update_attributes(answer_id: answer.id)
+      previous_vote.update! answer_id: answer.id
     else
       answer.votes.create! auth_token: auth_token
     end
