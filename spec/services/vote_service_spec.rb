@@ -29,6 +29,7 @@ describe VoteService do
 
     it 'updates answer_id if previous vote exists' do
       expect { vote_service.vote!(notifier) }.to_not change { Vote.count }
+      auth_token.reload
       expect(auth_token.vote.answer_id).to eq(new_answer.id)
     end
 
