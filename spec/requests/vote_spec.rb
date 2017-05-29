@@ -8,6 +8,6 @@ describe 'Voting', type: :request do
     expect(response).to have_http_status :success
     post api_vote_path, params: { id: auth_token.debate.answers.sample.id }, headers: { 'Authorization' => auth_token.value }
     expect(response).to have_http_status 429
-    expect(response.headers[:status]).to eq 'request_limit_reached'
+    expect(response.body).to eq "{\"status\"=>\"request_limit_reached\"}"
   end
 end

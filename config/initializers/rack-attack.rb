@@ -8,6 +8,10 @@ class Rack::Attack
   end
 
   Rack::Attack.throttled_response = lambda do |env|
-    [ 429, { status: 'request_limit_reached' }, []]
+    [
+      429,
+      { 'Content-Type' => 'application/json' },
+     [{ 'status' => 'request_limit_reached' }]
+    ]
   end
 end

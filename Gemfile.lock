@@ -350,7 +350,7 @@ DEPENDENCIES
   pg
   puma (~> 3.0)
   pusher
-  rack-attack
+  rack-attack (~> 5.0.1)
   rack-cors
   rails (>= 5.0.0.1, < 5.1)
   rspec-rails (~> 3.5)
