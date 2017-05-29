@@ -2,9 +2,9 @@ require 'rails_helper'
 require 'code_generator'
 
 describe CodeGenerator do
-  let(:charset) { ('a'..'d').to_a }
   let(:length)  { 5 }
-  subject { described_class.new(charset, length) }
+  let(:charset) { ('a'..'d').to_a }
+  subject { described_class.new(length, charset) }
 
   it 'sets code with provided length' do
     expect(subject.generate.length).to be length

@@ -56,7 +56,7 @@ ActiveAdmin.register Debate do
   end
 
   member_action :code, method: :post do
-    resource.generate_code
+    resource.update!(code: CodeGenerator.new.generate)
     opts = resource.code? ? { notice: 'Code generated' } : { alert: 'Could not generate code' }
     redirect_to resource_path, opts
   end
@@ -92,5 +92,15 @@ ActiveAdmin.register Debate do
     end
 
     f.actions
+  end
+
+  controller do
+    def create
+      new_debate = DebateMaker.call(
+        permitted_params.require(:debate)
+      )
+
+      redirect_to admin_debate_path(new_debate)
+    end
   end
 end

@@ -2,15 +2,7 @@ require 'code_generator'
 
 class Debate < ApplicationRecord
   CODE_LENGTH = 5
-  CODE_GENERATION_MAX_RETRIES = 5
   CODE_CHARSET = ('0'..'9')
-
-  mattr_accessor :debate_code_generator, :slug_generator
-  self.debate_code_generator = CodeGenerator.new(CODE_CHARSET, CODE_LENGTH)
-  self.slug_generator = SlugGenerator.new(
-    :topic,
-    self.debate_code_generator
-  )
 
   has_many :answers, dependent: :delete_all
   has_many :auth_tokens, dependent: :delete_all
@@ -22,8 +14,6 @@ class Debate < ApplicationRecord
   validates :closed_at, presence: true
 
   before_save  :block_code_change
-  before_create :generate_code, :generate_slug
-  after_create :create_answers
 
   attribute :closed_at, :datetime, default: -> { Time.current + 1.hour }
 
@@ -66,31 +56,11 @@ class Debate < ApplicationRecord
     answers.neutral.first
   end
 
-  def generate_code
-    debate_code_generator.generate(num_retries: CODE_GENERATION_MAX_RETRIES) do |code|
-      begin
-        self.code = code
-      rescue ActiveRecord::RecordNotUnique
-        false
-      end
-    end
-  rescue debate_code_generator.num_retries_error
-    # noop
-  end
-
-  def generate_slug
-    self.slug = slug_generator.call(self)
-  end
-
   private
 
   def block_code_change
     if code_changed? && code_was.present?
       self.code = code_was
     end
-  end
-
-  def create_answers
-    self.answers = Answer.default_answers
   end
 end
