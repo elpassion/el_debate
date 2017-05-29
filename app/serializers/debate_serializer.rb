@@ -1,7 +1,7 @@
 class DebateSerializer
-  def initialize(debate, auth_token)
+  def initialize(debate, auth_token_id)
     @debate = debate
-    @auth_token = auth_token
+    @auth_token_id = auth_token_id
   end
 
   def to_json
@@ -21,6 +21,6 @@ class DebateSerializer
   end
 
   def last_answer_id
-    @debate.votes.find_by(auth_token: @auth_token).try(:answer_id)
+    @debate.votes.find_by(auth_token_id: @auth_token_id)&.answer_id
   end
 end
