@@ -27,7 +27,7 @@ describe VoteService do
     let(:vote_service) { VoteService.new(answer: new_answer, auth_token: auth_token) }
 
     it 'creates new vote' do
-      expect { vote_service.vote!(notifier) }.to change { Vote.count }
+      expect { vote_service.vote!(notifier) }.to change(Vote, :count).by 1
     end
 
     context 'when already voted' do
