@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170522090443) do
+ActiveRecord::Schema.define(version: 20170529080613) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -64,8 +64,10 @@ ActiveRecord::Schema.define(version: 20170522090443) do
     t.datetime "updated_at",   null: false
     t.datetime "closed_at"
     t.string   "channel_name"
+    t.string   "slug"
     t.index ["channel_name"], name: "index_debates_on_channel_name", using: :btree
     t.index ["code"], name: "index_debates_on_code", unique: true, using: :btree
+    t.index ["slug"], name: "index_debates_on_slug", unique: true, using: :btree
   end
 
   create_table "slack_users", force: :cascade do |t|
