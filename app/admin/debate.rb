@@ -21,6 +21,10 @@ ActiveAdmin.register Debate do
   show title: proc { |debate| debate.topic } do
     attributes_table do
       row :topic
+      row :link do |debate|
+        link_to "Go to dashboard", "/dashboard/#{debate.slug}"
+      end
+
       row :code do |debate|
         debate.code.presence || link_to('Generate code', code_admin_debate_path, method: :post)
       end

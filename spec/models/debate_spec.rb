@@ -58,6 +58,14 @@ describe Debate, type: :model do
     end
   end
 
+  describe "#slug" do
+    let(:debate) { create(:debate) }
+
+    it "assigns slug after object creation" do
+      expect(debate.slug).not_to be_nil
+    end
+  end
+
   describe '#closed?' do
     let(:closed_at) { Time.current }
     let(:debate) { create(:debate, closed_at: closed_at) }

@@ -17,7 +17,7 @@ feature 'Reopening debate' do
     expect(page).to have_selector('div.flash_notice')
     expect(page).to have_content('Debate reopened!')
 
-    visit "/dashboard/#{debate.id}"
+    visit "/dashboard/#{debate.slug}"
     within 'p#debate-status' do
       expect(page).not_to have_content('closed')
     end
