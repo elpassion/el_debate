@@ -6,9 +6,8 @@ class VoteService
 
   def vote!(notifier = DebateNotifier.new(PusherBroadcaster))
     ActiveRecord::Base.transaction do
-      vote_change = VoteChange.new(answer, previous_votes)
-      delete_previous_votes
-      create_vote!
+      vote_change = VoteChange.new(answer, previous_vote)
+      create_or_update_vote!
       debate.reload
       notifier.notify(debate, vote_change)
     end
@@ -18,19 +17,19 @@ class VoteService
 
   attr_reader :auth_token, :answer
 
-  def delete_previous_votes
-    previous_votes.destroy_all
-  end
-
-  def create_vote!
-    @answer.votes.create! auth_token: auth_token
+  def create_or_update_vote!
+    if previous_vote
+      previous_vote.update_attributes(answer_id: answer.id)
+    else
+      answer.votes.create! auth_token: auth_token
+    end
   end
 
   def debate
     @auth_token.debate
   end
 
-  def previous_votes
-    @previous_votes ||= debate.votes.where(auth_token: auth_token)
+  def previous_vote
+    @previous_vote ||= debate.votes.find_by(auth_token: auth_token)
   end
 end
