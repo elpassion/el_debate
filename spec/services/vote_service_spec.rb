@@ -22,45 +22,44 @@ describe VoteService do
   end
 
   describe '#vote!' do
-    let(:new_answer) { debate.answers.sample }
-    let!(:old_vote) { create(:vote, answer: answer, auth_token: auth_token) }
-    let(:vote_service) { VoteService.new(answer: new_answer, auth_token: auth_token) }
     let(:notifier) { double('notifier', notify: true) }
+    let(:new_answer) { debate.answers.first }
+    let(:vote_service) { VoteService.new(answer: new_answer, auth_token: auth_token) }
 
-    it 'replaces older vote for given auth token' do
-      expect { vote_service.vote!(notifier) }.not_to change { Vote.count }
-      expect(auth_token.vote).not_to eq(:old_vote)
+    it 'creates new vote' do
+      expect { vote_service.vote!(notifier) }.to change(Vote, :count).by 1
     end
 
-    it 'deletes existing votes for given auth token' do
-      old_id = old_vote.id
-      vote_service.vote!(notifier)
-      expect(Vote.pluck(:id)).not_to include(old_id)
-    end
+    context 'when already voted' do
+      let!(:old_vote) { create(:vote, answer: answer, auth_token: auth_token) }
 
-    it 'deos not delete old votes if something goes wrong' do
-      allow(vote_service).to receive(:create_vote!).and_raise('something went wrong')
+      it 'updates answer_id if previous vote exists' do
+        expect { vote_service.vote!(notifier) }.to_not change { Vote.count }
+        auth_token.reload
+        expect(auth_token.vote.answer_id).to eq(new_answer.id)
+      end
 
-      expect { vote_service.vote!(notifier) rescue nil }.not_to change { Vote.count }
-      expect(auth_token.vote).to eq(old_vote)
-    end
+      it 'does not delete old votes if something goes wrong' do
+        expect { vote_service.vote!(notifier) rescue nil }.not_to change { Vote.count }
+        expect(auth_token.vote).to eq(old_vote)
+      end
 
-    Answer.answer_types.keys.each do |existing_type|
-      Answer.answer_types.keys.reject { |t| t == existing_type }.each do |new_type|
-        context "when changing from #{existing_type} to #{new_type}" do
-          let(:answer) { debate.send("#{existing_type}_answer") }
-          let(:new_answer) { debate.send("#{new_type}_answer") }
+      Answer.answer_types.keys.each do |existing_type|
+        Answer.answer_types.keys.reject { |t| t == existing_type }.each do |new_type|
+          context "when changing from #{existing_type} to #{new_type}" do
+            let(:answer) { debate.send("#{existing_type}_answer") }
+            let(:new_answer) { debate.send("#{new_type}_answer") }
 
-          it "decrements debate #{existing_type}_count" do
-            expect { vote_service.vote!(notifier) }.to change { debate.send("#{existing_type}_count") }.by(-1)
-          end
+            it "decrements debate #{existing_type}_count" do
+              expect { vote_service.vote!(notifier) }.to change { debate.send("#{existing_type}_count") }.by(-1)
+            end
 
-          it "increments debate #{new_type}_count" do
-            expect { vote_service.vote!(notifier) }.to change { debate.send("#{new_type}_count") }.by(1)
+            it "increments debate #{new_type}_count" do
+              expect { vote_service.vote!(notifier) }.to change { debate.send("#{new_type}_count") }.by(1)
+            end
           end
         end
       end
     end
-
   end
 end
