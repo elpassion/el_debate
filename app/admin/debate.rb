@@ -56,7 +56,7 @@ ActiveAdmin.register Debate do
   end
 
   member_action :code, method: :post do
-    resource.update!(code: CodeGenerator.new.generate)
+    resource.update(code: CodeGenerator.for(Debate).generate)
     opts = resource.code? ? { notice: 'Code generated' } : { alert: 'Could not generate code' }
     redirect_to resource_path, opts
   end

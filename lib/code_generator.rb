@@ -7,6 +7,13 @@ class CodeGenerator
 
   NumRetriesExceeded = Class.new(StandardError)
 
+  def self.for(klass)
+    new(
+      klass::CODE_LENGTH,
+      klass::CODE_CHARSET
+    )
+  end
+
   def initialize(length = CODE_LENGTH, charset = CODE_CHARSET)
     @length  = length
     @charset = Array(charset)

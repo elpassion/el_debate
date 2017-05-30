@@ -8,10 +8,7 @@ class DebateMaker
   end
 
   def self.call(params)
-    code_generator = CodeGenerator.new(
-      Debate::CODE_LENGTH,
-      Debate::CODE_CHARSET,
-    )
+    code_generator = CodeGenerator.for(Debate)
 
     new(
       code_generator,
