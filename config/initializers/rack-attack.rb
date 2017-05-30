@@ -11,7 +11,7 @@ class Rack::Attack
     [
       429,
       { 'Content-Type' => 'application/json' },
-     [{ 'status' => 'request_limit_reached' }]
+      [{ 'status' => 'request_limit_reached' }.to_json]
     ]
   end
 end
