@@ -30,6 +30,7 @@ class VoteService
   end
 
   def previous_vote
-    @previous_vote ||= debate.votes.find_by(auth_token: auth_token)
+    return @previous_vote if defined?(@previous_vote)
+    @previous_vote = debate.votes.find_by(auth_token: auth_token)
   end
 end
