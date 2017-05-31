@@ -8,11 +8,11 @@ class DebateMaker
   end
 
   def self.call(params)
-    code_generator = CodeGenerator.for(Debate)
+    code_generator = ::CodeGenerator.for(Debate)
 
     new(
       code_generator,
-      SlugGenerator.new(:topic, code_generator)
+      ::SlugGenerator.new(:topic, code_generator)
     ).call(params)
   end
 
