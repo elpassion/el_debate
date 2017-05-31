@@ -18,8 +18,8 @@ class DebateMaker
 
   def call(params)
     debate = Debate.new(params)
-    generate_code(debate)
     generate_slug(debate)
+    generate_code(debate)
     debate.save
 
     add_default_answers(debate)
@@ -31,11 +31,8 @@ class DebateMaker
 
   def generate_code(debate)
     code_generator.generate(num_retries: CODE_GENERATION_MAX_RETRIES) do |code|
-      begin
-        debate.code = code
-      rescue ActiveRecord::RecordNotUnique
-        false
-      end
+      next if Debate.find_by(code: code)
+      debate.code = code
     end
   rescue code_generator.num_retries_error
     # noop
