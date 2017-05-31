@@ -6,5 +6,7 @@ FactoryGirl.define do
     factory :closed_debate do
       closed_at { Time.current - 1.hour }
     end
+
+    initialize_with { DebateMaker.call(attributes) }
   end
 end

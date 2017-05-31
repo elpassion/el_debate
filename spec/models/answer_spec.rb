@@ -64,7 +64,7 @@ describe Answer do
 
   describe 'class value methods' do
     before do
-      allow_any_instance_of(Debate).to receive(:create_answers).and_return([])
+      allow_any_instance_of(DebateMaker).to receive(:add_default_answers).and_return([])
     end
 
     describe '#positive_value' do
@@ -91,7 +91,7 @@ describe Answer do
 
   describe '#answer_type_key' do
     before do
-      allow_any_instance_of(Debate).to receive(:create_answers).and_return([])
+      allow_any_instance_of(DebateMaker).to receive(:add_default_answers).and_return([])
     end
 
     it 'returns ":positive" type symbol for positive answer' do

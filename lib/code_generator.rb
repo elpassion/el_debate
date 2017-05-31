@@ -1,9 +1,22 @@
 class CodeGenerator
+  CODE_LENGTH = 5
+  CODE_CHARSET = ('0'..'9')
+
+  private_constant :CODE_LENGTH
+  private_constant :CODE_CHARSET
+
   NumRetriesExceeded = Class.new(StandardError)
 
-  def initialize(charset, length)
-    @charset = Array(charset)
+  def self.for(klass)
+    new(
+      klass::CODE_LENGTH,
+      klass::CODE_CHARSET
+    )
+  end
+
+  def initialize(length = CODE_LENGTH, charset = CODE_CHARSET)
     @length  = length
+    @charset = Array(charset)
   end
 
   def generate(num_retries: 1)
