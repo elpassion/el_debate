@@ -12,7 +12,8 @@ class Debate < ApplicationRecord
   accepts_nested_attributes_for :answers
   validates :topic, presence: true
   validates :closed_at, presence: true
-  validates :code, presence: true, uniqueness: true
+  validates :code, presence: true, uniqueness: true,
+                   length: { is: CODE_LENGTH }, numericality: { only_integer: true }
 
   before_save  :block_code_change
 
