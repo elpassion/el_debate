@@ -9,7 +9,7 @@ class VoteService
       vote_change = VoteChange.new(answer, previous_vote)
       create_or_update_vote!
       debate.reload
-      notifier.notify(debate, vote_change)
+      notifier.notify_about_votes(debate, vote_change)
     end
   end
 

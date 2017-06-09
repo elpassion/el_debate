@@ -5,7 +5,7 @@
       .row.debate
         .col.s3
         .col.s6.center
-          h5 class=(@debate.closed? ? 'closed-debate' : 'debate-topic')
+          h5#debate-topic class=(@debate.closed? ? 'closed-debate' : 'debate-topic')
             = @debate.topic
           p#debate-status
             - if @debate.closed?

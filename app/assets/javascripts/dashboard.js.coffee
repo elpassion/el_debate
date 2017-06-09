@@ -128,6 +128,15 @@ class Votes
     channel.bind 'debate_changed', (data) =>
       @update(data.debate, data.vote_change)
 
+class Debate
+  subscribe: (channel) ->
+    channel.bind 'debate_opened', =>
+      $('#debate-status').text('')
+      $('#debate-topic')[0].className = 'debate-topic'
+    channel.bind 'debate_closed', =>
+      $('#debate-status').text('Debate is closed.')
+      $('#debate-topic')[0].className = 'closed-debate'
+
 initialize = ->
   pusher      = new Pusher(pusher_key)
   userChannel = pusher.subscribe("dashboard_channel_#{debate_id}")
@@ -135,7 +144,8 @@ initialize = ->
 
   component.subscribe(userChannel) for component in [
     (new Circle('#circle-chart')),
-    (new Votes())
+    (new Votes()),
+    (new Debate())
   ]
 
   feed.run()

@@ -63,7 +63,7 @@ describe Api::VotesController, type: :controller do
       create(:vote, answer: answer, auth_token: auth_token)
     end
 
-    before { allow_any_instance_of(DebateNotifier).to receive(:notify) }
+    before { allow_any_instance_of(DebateNotifier).to receive(:notify_about_votes) }
     before { post :create, params: { id: new_answer_id } }
 
     it 'returns 201 response status' do

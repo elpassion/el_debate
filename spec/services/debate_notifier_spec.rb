@@ -5,12 +5,23 @@ describe DebateNotifier do
   let(:debate)      { create(:debate) }
   let(:channel)     { "dashboard_channel_#{debate.id}" }
   let(:broadcaster) { double('PusherBroadcaster') }
-  let(:event)       { 'debate_changed' }
 
   it 'notifies about debate current state' do
     expect(broadcaster)
-      .to receive(:push).with(channel, event, hash_including(:debate))
-    subject.notify(debate)
+      .to receive(:push).with(channel, 'debate_changed', hash_including(:debate))
+    subject.notify_about_votes(debate)
+  end
+
+  it 'notifies about opening of debate' do
+    expect(broadcaster)
+        .to receive(:push).with(channel, 'debate_opened', {})
+    subject.notify_about_opening(debate)
+  end
+
+  it 'notifies about closing of debate' do
+    expect(broadcaster)
+        .to receive(:push).with(channel, 'debate_closed', {})
+    subject.notify_about_closing(debate)
   end
 
   context 'with vote changes' do
@@ -24,9 +35,9 @@ describe DebateNotifier do
 
     it 'notifies about vote change' do
       expect(broadcaster)
-        .to receive(:push).with(channel, event, hash_including(:debate, changes))
+        .to receive(:push).with(channel, 'debate_changed', hash_including(:debate, changes))
 
-      subject.notify(debate, vote_change)
+      subject.notify_about_votes(debate, vote_change)
     end
   end
 

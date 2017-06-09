@@ -66,6 +66,23 @@ describe Debate, type: :model do
     end
   end
 
+  describe '#open' do
+    let(:notifier) { double('DebateNotifier') }
+    let(:debate) { create(:debate, :closed_debate) }
+
+    it 'is opening a closed debate' do
+      expect{ debate.open }.to change{ debate.is_closed? }.from(true).to(false)
+    end
+  end
+
+  describe '#close' do
+    let(:debate) { create(:debate) }
+
+    it 'is closing an opened debate' do
+      expect{ debate.close }.to change{ debate.is_closed? }.from(false).to(true)
+    end
+  end
+
   describe '#closed?' do
     let(:debate) { create(:debate) }
 
@@ -74,7 +91,7 @@ describe Debate, type: :model do
     end
 
     it 'might be closed manually' do
-      debate.close!
+      debate.close
       expect(debate.is_closed?).to be
     end
   end

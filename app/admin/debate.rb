@@ -46,12 +46,12 @@ ActiveAdmin.register Debate do
   end
 
   member_action :close, method: :put do
-    resource.close!
+    Debates::CloseService.new(debate: resource).call
     redirect_to resource_path, notice: 'Debate closed!'
   end
 
   member_action :reopen, method: :put do
-    resource.open!
+    Debates::OpenService.new(debate: resource).call
     redirect_to resource_path, notice: 'Debate reopened!'
   end
 
@@ -62,7 +62,7 @@ ActiveAdmin.register Debate do
   end
 
   after_update do |debate|
-    DebateNotifier.build.notify(debate)
+    DebateNotifier.build.notify_about_votes(debate)
   end
 
   action_item :close_or_reopen, only: :show do
