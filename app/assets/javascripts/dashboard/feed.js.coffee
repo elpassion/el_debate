@@ -34,16 +34,13 @@ class Comment
     @avatarUrl  = comment.user_image_url
     @comment    = comment.content
     @username   = comment.user_name
-    @visibleFor = opts.visibleFor || 15000
 
   render: ->
-    element = $('<div>', {class: 'comment z-depth-2 row'})
+    element = $('<div>', {class: 'comment'})
                 .append(@renderUserInfo())
+                .append(@renderUserName())
+                .append(@renderCurrentTime())
                 .append(@renderComment())
-
-    setTimeout ->
-      element.remove()
-    , @visibleFor
 
     element
 
@@ -53,16 +50,29 @@ class Comment
         $('<div>', { class: 'image' })
           .append($('<img>', { src: @avatarUrl }))
       )
+  renderUserName: ->
+    $('<div>', { class: 'username col s10' })
+      .append($('<strong>', { text: @username }))
+
+  renderCurrentTime: ->
+    today = new Date
+    minutes = today.getMinutes()
+    minutes = (if minutes < 10 then '0' else '') + minutes
+
+    hours = today.getHours()
+    hours = if hours >= 0 && hours < 10 then '0' + hours.toString() else hours
+
+    $('<div>', { class: 'time col s10' })
+    .append($('<span>', { text: hours + ':' + minutes }))
 
   renderComment: ->
-    $('<div>', { class: 'content col s10' })
-      .append($('<strong>', { text: @username }))
+    $('<div>', { class: 'content' })
       .append($('<p>', { text: @comment }))
 
 class CommentsFeed
   constructor: (@commentsQueue, @node, opts = {}) ->
     @canAdd        = true
-    @lockTime      = opts.lockTime || 5000
+    @lockTime      = opts.lockTime || 1000
     @commentsCount = opts.commentsCount || 1
 
   run: ->
@@ -76,8 +86,7 @@ class CommentsFeed
     currentComments = @node.children(['comment'])
     if currentComments.length == @commentsCount
       currentComments[currentComments.length - 1].remove()
-
-    comment = new Comment(@commentsQueue.deq(), visibleFor: 20000)
+    comment = new Comment(@commentsQueue.deq())
     @node.prepend(comment.render())
     @lock()
 
@@ -98,7 +107,7 @@ class Feed
   constructor: (channel, node) ->
     @comments     = new CommentsQueue()
     @feed         = new ChannelObserver(@comments)
-    @commentsFeed = new CommentsFeed(@comments, node, commentsCount: 2)
+    @commentsFeed = new CommentsFeed(@comments, node, commentsCount: 40)
     @feed.subscribe(channel)
 
   run: ->

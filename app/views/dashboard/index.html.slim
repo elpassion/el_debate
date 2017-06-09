@@ -1,60 +1,62 @@
 = render partial: 'layouts/navbar', locals: { debate_code: @debate.code, closed_at: @debate.closed_at }, class: 'header'
-.container.content
-  .row.debate
-    .col.s3
-      .positive-box.positive-image
-        h4.positive = @debate.answers.positive_value
-    .col.s6.center
-      h5.debate-topic
-        = @debate.topic
-      p#debate-status
-        - if @debate.closed?
-          | closed
-    .col.s3
-      .negative-box.negative-image
-        h4.negative = @debate.answers.negative_value
-  .row
-    .col.s5
-      .left-tooltip
-        .tooltip-text
-      .left-counters
-        span.left-align#positive-count
-          = "#{@debate.positive_count} #{pluralize_without_count(@debate.positive_count, 'person')}"
-        span.right-align#positive-percent
-          = @debate.positive_percent
-      .progressbar
-        #left-progress-bar style="width: #{@debate.positive_percent}"
-    .col.s2#center-info
-      h4.center-align#votes-count
-        = @debate.votes_count
-      .center-align#votes-noun
-        = pluralize_without_count(@debate.votes_count, 'person')
-      #circle-chart data-positive=@debate.positive_count data-negative=@debate.negative_count
-      .circle-shadow
-    .col.s5
-      .right-tooltip
-        .tooltip-text
-      .right-counters
-        span.left-align#negative-percent = @debate.negative_percent
-        span.right-align#negative-count
-          ="#{@debate.negative_count} #{pluralize_without_count(@debate.negative_count, 'person')}"
-      .progressbar
-        #right-progress-bar style="width: #{@debate.negative_percent}"
+.row
+  .col.s8
+    .container.content
+      .row.debate
+        .col.s3
+        .col.s6.center
+          h5 class=(@debate.closed? ? 'closed-debate' : 'debate-topic')
+            = @debate.topic
+          p#debate-status
+            - if @debate.closed?
+              | Debate is closed.
+          .votes-box
+            h4.votes-count
+              span.inline#votes-count = @debate.votes_count
+              span.inline#noun-count = pluralize_without_count(@debate.votes_count, 'person') + ' debating'
+        .col.s3
+      .row.answer-values
+        .col.s4
+          .positive-box.positive-image
+            h4.positive = @debate.answers.positive_value
+        .col.s1
+        .col.s4.negative-value
+          .negative-box.negative-image
+            h4.negative = @debate.answers.negative_value
+      .row
+        .col.s5
+          .left-counters
+            span.left-align#positive-count
+              = "#{@debate.positive_count} #{pluralize_without_count(@debate.positive_count, 'person')}"
+            span.right-align#positive-percent
+              = @debate.positive_percent
+          .progressbar.left-border-radius
+            #left-progress-bar style="width: #{@debate.positive_percent}"
+        .col.s2#center-info
+          h4.center-align#neutral-count
+            = @debate.neutral_count
+          .center-align#neutral-noun
+            = @debate.answers.neutral_value
+          #circle-chart data-positive=@debate.positive_count data-negative=@debate.negative_count
+          .circle-shadow
+        .col.s5
+          .right-counters
+            span.left-align#negative-percent = @debate.negative_percent
+            span.right-align#negative-count
+              ="#{@debate.negative_count} #{pluralize_without_count(@debate.negative_count, 'person')}"
+          .progressbar.right-border-radius
+            #right-progress-bar style="width: #{@debate.negative_percent}"
 
-  .neutral-box
-    h4.neutral
-      span.inline = @debate.answers.neutral_value
-      span.inline#neutral-count = @debate.neutral_count
-      span.inline#neutral-noun = pluralize_without_count(@debate.neutral_count, 'person')
-
-  #slack-comments.row
-    .col.s8.offset-s2
       - if @debate.channel_name.present?
         .call-for-action
           | Comment a discussion on
           span.channel-title = @debate.channel_name
           | channel
-      .comments
+  .col.s4
+    #slack-comments
+      #comments-feed
+        .comments
+
 
 javascript:
   var pusher_key = "#{Pusher.key}";

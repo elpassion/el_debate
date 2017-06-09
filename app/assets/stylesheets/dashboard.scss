@@ -2,37 +2,49 @@
 
 span.inline {
   display: inline;
+  margin: 4px;
 }
 
 h4 {
   &.positive {
-    font-weight: 200;
     color: $light-blue;
     display: table-cell;
-    vertical-align: middle;
+    white-space: nowrap;
+    float: right;
+    padding-top: 14px;
   }
 
   &.negative {
-    font-weight: 200;
     color: $light-red;
     display: table-cell;
-    vertical-align: middle;
+    white-space: nowrap;
+    float: left;
+    padding-top: 14px;
   }
 
-  &.neutral {
+  &.votes-count {
     font-weight: 300;
     font-size: 24px;
     text-align: center;
     padding-top: 1px;
-    color: #41a368;
+    color: $grey;
   }
 }
 
 h5 {
+  line-height: 150%;
+
   &.debate-topic {
     margin-right: 20px;
     margin-left: 20px;
     font-weight: 500;
+  }
+
+  &.closed-debate {
+    margin-right: 20px;
+    margin-left: 20px;
+    font-weight: 400;
+    color: $grey;
   }
 }
 
@@ -55,56 +67,80 @@ p.debate-status {
 
 .vote-box {
   height: 104px;
-  width: 230px;
+  width: 250px;
   background-repeat: no-repeat;
+  margin-bottom: 10px;
   padding-left: 80px;
+  padding-bottom: 15px;
   display: table;
   text-align: center;
 }
 
+.answer-values {
+  padding-left: 180px;
+}
+
+.negative-value {
+  padding-right: 25px !important;
+}
+
 .positive-box {
   @extend .vote-box;
+  float: right;
 
   &.positive-image {
-    background-image: image_url('dashboard/positive.png');
-    background-position: 21px 23px;
+    background-image: image_url('dashboard/positive.svg');
+    background-position: right center;
+    background-size: 40px;
+    padding-right: 50px;
+    margin-right: 20px;
   }
 }
 
 .negative-box {
   @extend .vote-box;
-  float: right;
+  float: left;
 
   &.negative-image {
-    background-image: image_url('dashboard/negative.png');
-    background-position: 21px 23px;
+    background-image: image_url('dashboard/negative.svg');
+    background-position: left center;
+    background-size: 40px;
+    padding-left: 50px;
+    margin-left: 60px;
   }
 }
 
-.neutral-box {
+.votes-box {
   height: 65px;
   width: 230px;
   background-repeat: no-repeat;
   margin: 0 auto;
-  margin-top: 100px;
+  margin-top: 20px;
 }
 
 .left-counters {
-  padding-bottom: 30px;
-  margin-bottom: 10px;
 }
 
 .right-counters {
-  padding-bottom: 30px;
-  margin-bottom: 10px;
 }
 
 .progressbar {
+  margin-top: -50px;
+  overflow: hidden;
   width: 100%;
   height: 20px;
-  border-radius: 10px;
   color: lightgray;
   background: repeating-linear-gradient(-60deg, white, whitesmoke 4px, whitesmoke 4px, white 7px);
+
+  &.left-border-radius {
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+  }
+
+  &.right-border-radius {
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+  }
 
   #right-progress-bar {
     border-top-right-radius: 10px;
@@ -113,7 +149,7 @@ p.debate-status {
     height: 20px;
     background-color: $light-red;
     float: left;
-    transition: 500ms linear;
+    transition: width 500ms;
   }
 
   #left-progress-bar {
@@ -123,69 +159,26 @@ p.debate-status {
     height: 20px;
     background-color: $light-blue;
     float: right;
-    transition: 500ms linear;
-  }
-}
-
-
-
-.left-tooltip, .right-tooltip {
-  display: none;
-  position: relative;
-  border-bottom: 1px dotted black;
-  .tooltip-text {
-    width: 40px;
-    background-color: black;
-    color: #fff;
-    text-align: center;
-    border-radius: 6px;
-    padding: 5px 0;
-    position: absolute;
-    z-index: 1;
-    top: -42px;
-  }
-
-  .tooltip-text::after {
-    content: " ";
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    margin-left: -5px;
-    border-width: 5px;
-    border-style: solid;
-    border-color: black transparent transparent transparent;
-  }
-}
-
-.right-tooltip {
-  float: right;
-  .tooltip-text {
-    margin-left: -45px;
-  }
-}
-
-.left-tooltip {
-  float: left;
-  .tooltip-text{
-    margin-left: 9px;
+    transition: width 500ms;
   }
 }
 
 #negative-percent {
-  font-size: 23px;
+  font-size: 35px;
   float: left;
   color: $light-red;
-  margin-left: 10px;
+  margin-left: 35px;
 }
 
 #positive-percent {
-  font-size: 23px;
+  font-size: 35px;
   float: right;
   color: $light-blue;
-  margin-right: 10px;
+  margin-right: 35px;
 }
 
 #negative-count {
+  margin-top: -35px;
   font-size: 14px;
   color: lightgray;
   float:right;
@@ -198,6 +191,7 @@ p.debate-status {
 }
 
 #positive-count {
+  margin-top: -35px;
   font-size: 14px;
   color: lightgray;
   float: left;
@@ -210,15 +204,11 @@ p.debate-status {
 }
 
 #neutral-count {
-  font-size: 29px;
   font-weight: 500;
-  margin-left: 10px;
 }
 
 #neutral-noun {
-  font-size: 10px;
   font-weight: 400;
-  margin-left: 5px;
 }
 
 #votes-noun {
@@ -226,20 +216,21 @@ p.debate-status {
 }
 
 .debate {
-  margin-bottom: 80px;
+  margin-bottom: 65px;
 }
 
 #center-info {
   position: relative;
 
-  #votes-count {
+  #neutral-count {
+    margin-top: -70px;
     position: relative;
     z-index: 2;
     font-weight: 400;
     margin-bottom: 0
   }
 
-  #votes-noun {
+  #neutral-noun {
     position: relative;
     z-index: 2;
     color: lightgray;
@@ -251,7 +242,7 @@ p.debate-status {
     box-shadow: 0 1px 15px 0 rgba(0, 0, 0, 0.16);
     position: absolute;
     left: -13px;
-    top: -20px;
+    top: -110px;
     width: 140px;
     height: 140px;
     z-index: 1;
@@ -262,7 +253,7 @@ p.debate-status {
     height: 153px;
     position: absolute;
     left: -20px;
-    top: -27px;
+    top: -115px;
     z-index: 2;
 
     .ct-series-d .ct-slice-donut {
@@ -280,45 +271,63 @@ p.debate-status {
 }
 
 #slack-comments {
+  height: calc(100vh - 110px);
+  border-left: 1px solid $grey;
+  background: white;
+  overflow: hidden;
+
+  #comments-feed {
+    transition: padding-top 1s;
+  }
+
+  .moved-feed {
+  }
+
   .comments {
     height: 284px;
+    width: 90%;
+    padding: 25px;
   }
 
   .comment {
     padding: 10px;
-    background: #fff;
-    animation:
-            slideIn 5s 0s forwards,
-            slideOut 9s 15s forwards;
+    animation: fadeIn 1s;
 
     .left .image img {
-      width: 96px;
-      height: 96px;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+    }
+
+    .username {
+      padding-left: 15px;
+      font-size: 20px;
+    }
+
+    .time {
+      padding-left: 15px;
+      font-size: 17px;
+      margin-top: -2px;
+      color: $grey;
     }
 
     .content {
-      padding-left: 15px;
       text-align: justify;
+      width: 100%;
+      float: left;
+
+      p {
+        color: $dark-grey;
+        margin: 10px 0 35px;
+        font-size: 25px;
+      }
     }
   }
 }
 
-@keyframes slideIn {
-  0% {
-    transform: translateX(-900px);
-  }
-  25% {
-    transform: translateX(0);
-  }
-}
-
-@keyframes slideOut {
-  25% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(1500px);
-  }
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
 .call-for-action {
@@ -334,4 +343,10 @@ p.debate-status {
     padding-left: 33px;
     padding-right: 15px;
   }
+}
+
+p#debate-status {
+  font-weight: 500;
+  font-size: 20px;
+  margin-top: 55px;
 }

@@ -1,14 +1,13 @@
 nav
-  .container
-    .nav-wrapper
-      .row.nav-content
-        .col.s4
-          = image_tag('navbar/logo_white.png', height: 60, width: 123, class: 'logo')
-        .col.s4
-          .key-box.key-image
-            h4.center-align
-              = debate_code
-        .col.s4
-          #timer.time-box.clock-image data= { closed_at: closed_at.to_i }
-            h5.nav-time
-              .time-left
+  .row.nav-content
+    .col.s4.logo
+      = image_tag('navbar/logo_white.png', height: 60, width: 123, class: 'logo')
+    .col.s4
+      .key-box
+        h4.center-align#debate-code
+          = debate_code
+          .code-info use this PIN in mobile application
+    .col.s4.time
+      #timer.time-box
+        h5.nav-time
+          #current-time = Time.now.strftime('%H:%M')
