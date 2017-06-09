@@ -17,7 +17,7 @@ FactoryGirl.define do
     end
 
     factory :closed_debate_answer do
-      association :debate, factory: :closed_debate
+      association :debate, :closed_debate
     end
   end
 end

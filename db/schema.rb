@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170529080613) do
+ActiveRecord::Schema.define(version: 20170609093423) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -62,9 +62,9 @@ ActiveRecord::Schema.define(version: 20170529080613) do
     t.string   "code"
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
-    t.datetime "closed_at"
     t.string   "channel_name"
     t.string   "slug"
+    t.boolean  "is_closed"
     t.index ["channel_name"], name: "index_debates_on_channel_name", using: :btree
     t.index ["code"], name: "index_debates_on_code", unique: true, using: :btree
     t.index ["slug"], name: "index_debates_on_slug", unique: true, using: :btree

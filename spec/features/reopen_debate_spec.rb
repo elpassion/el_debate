@@ -2,7 +2,7 @@ require 'rails_helper'
 
 feature 'Reopening debate' do
   given(:admin_user) { create(:admin_user) }
-  given(:debate) { create(:debate, closed_at: Time.now) }
+  given(:debate) { create(:debate, :closed_debate) }
 
   background do
     login_as(admin_user)
