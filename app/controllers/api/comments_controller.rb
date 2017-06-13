@@ -2,7 +2,7 @@ class Api::CommentsController < Api::ApplicationController
 
   def create
     if current_debate
-      CommentMaker.call(comment_maker_params)
+      Mobile::CommentMaker.perform(comment_maker_params)
 
       head :created
     else
@@ -11,6 +11,19 @@ class Api::CommentsController < Api::ApplicationController
   end
 
   private
+
+  def user
+    @_user ||= MobileUser.find_by(
+        auth_token_id: @auth_token.id
+    )
+  end
+
+  def user_maker_params
+    {
+      name: params.fetch(:username),
+      auth_token_id: @auth_token.id
+    }
+  end
 
   def comment_maker_params
     {
