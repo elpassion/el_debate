@@ -1,7 +1,7 @@
 class Rack::Attack
   Rack::Attack.cache.store = ActiveSupport::Cache::MemoryStore.new
 
-  throttle('api/vote', limit: 1, period: 5.seconds) do |req|
+  throttle('api/vote', limit: 2, period: 1.second) do |req|
     if req.path == '/api/vote' && req.post?
       req.env['HTTP_AUTHORIZATION'].presence
     end
