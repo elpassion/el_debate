@@ -60,11 +60,11 @@ ActiveRecord::Schema.define(version: 20170609093423) do
   create_table "debates", force: :cascade do |t|
     t.string   "topic"
     t.string   "code"
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
     t.string   "channel_name"
     t.string   "slug"
-    t.boolean  "is_closed"
+    t.boolean  "closed",       default: false, null: false
     t.index ["channel_name"], name: "index_debates_on_channel_name", using: :btree
     t.index ["code"], name: "index_debates_on_code", unique: true, using: :btree
     t.index ["slug"], name: "index_debates_on_slug", unique: true, using: :btree

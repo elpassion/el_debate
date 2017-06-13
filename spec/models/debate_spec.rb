@@ -13,7 +13,7 @@ describe Debate, type: :model do
 
   it 'is opened by default' do
     debate = create(:debate)
-    expect(debate.is_closed?).not_to be
+    expect(debate.closed?).not_to be
   end
 
   it 'deletes answers when destroyed' do
@@ -71,7 +71,7 @@ describe Debate, type: :model do
     let(:debate) { create(:debate, :closed_debate) }
 
     it 'is opening a closed debate' do
-      expect{ debate.open }.to change{ debate.is_closed? }.from(true).to(false)
+      expect{ debate.open }.to change{ debate.closed? }.from(true).to(false)
     end
   end
 
@@ -79,7 +79,7 @@ describe Debate, type: :model do
     let(:debate) { create(:debate) }
 
     it 'is closing an opened debate' do
-      expect{ debate.close }.to change{ debate.is_closed? }.from(false).to(true)
+      expect{ debate.close }.to change{ debate.closed? }.from(false).to(true)
     end
   end
 
@@ -87,12 +87,12 @@ describe Debate, type: :model do
     let(:debate) { create(:debate) }
 
     it 'is opened by default' do
-      expect(debate.is_closed?).not_to be
+      expect(debate.closed?).not_to be
     end
 
     it 'might be closed manually' do
       debate.close
-      expect(debate.is_closed?).to be
+      expect(debate.closed?).to be
     end
   end
 

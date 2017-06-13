@@ -8,7 +8,7 @@ class DashboardSerializer
       debate: {
         id:               debate.id,
         topic:            debate.topic,
-        is_closed:        debate.closed?,
+        closed:           debate.closed?,
         status:           debate.status,
         votes_count:      debate.votes_count,
         positive_count:   debate.positive_count,

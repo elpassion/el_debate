@@ -1,5 +1,5 @@
 ActiveAdmin.register Debate do
-  permit_params :topic, :is_closed, :channel_name, answers_attributes: [:id, :value]
+  permit_params :topic, :closed, :channel_name, answers_attributes: [:id, :value]
 
   index do
     selectable_column
@@ -7,7 +7,7 @@ ActiveAdmin.register Debate do
     column :topic
     column :code
     column :created_at
-    column :is_closed
+    column :closed
     column :channel_name
     actions do |debate|
       if debate.closed?
@@ -28,7 +28,7 @@ ActiveAdmin.register Debate do
       row :code do |debate|
         debate.code.presence || link_to('Generate code', code_admin_debate_path, method: :post)
       end
-      row :is_closed
+      row :closed
       row :channel_name
       row :answers do |debate|
         debate.answers.map do |answer|

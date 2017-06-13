@@ -3,7 +3,7 @@ FactoryGirl.define do
     topic { FFaker::HipsterIpsum.sentence }
 
     trait :closed_debate do
-      is_closed true
+      closed true
     end
 
     initialize_with { DebateMaker.call(attributes) }

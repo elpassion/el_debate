@@ -16,25 +16,22 @@ class Debate < ApplicationRecord
 
   before_save  :block_code_change
 
-  attribute :is_closed, :boolean, default: false
-  alias_attribute :closed?, :is_closed
-
   mattr_accessor :debate_notifier
   self.debate_notifier = DebateNotifier.build
 
+  scope :opened_debates, -> { where(closed: false) }
+  scope :closed_debates, -> { where(closed: true) }
+
   def self.opened_for_channel!(channel_name)
-    where(
-      "channel_name = ? AND is_closed = 'f'",
-       channel_name
-    ).first!
+    opened_debates.where(channel_name: channel_name).first!
   end
 
   def open
-    update(is_closed: false)
+    update(closed: false)
   end
 
   def close
-    update(is_closed: true)
+    update(closed: true)
   end
 
   def votes_count
