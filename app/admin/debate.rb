@@ -1,5 +1,5 @@
 ActiveAdmin.register Debate do
-  permit_params :topic, :closed_at, :channel_name, answers_attributes: [:id, :value]
+  permit_params :topic, :closed, :channel_name, answers_attributes: [:id, :value]
 
   index do
     selectable_column
@@ -7,7 +7,7 @@ ActiveAdmin.register Debate do
     column :topic
     column :code
     column :created_at
-    column :closed_at
+    column :closed
     column :channel_name
     actions do |debate|
       if debate.closed?
@@ -28,7 +28,7 @@ ActiveAdmin.register Debate do
       row :code do |debate|
         debate.code.presence || link_to('Generate code', code_admin_debate_path, method: :post)
       end
-      row :closed_at
+      row :closed
       row :channel_name
       row :answers do |debate|
         debate.answers.map do |answer|
@@ -51,7 +51,7 @@ ActiveAdmin.register Debate do
   end
 
   member_action :reopen, method: :put do
-    Debates::ReopenService.new(debate: resource).call
+    Debates::OpenService.new(debate: resource).call
     redirect_to resource_path, notice: 'Debate reopened!'
   end
 
@@ -62,7 +62,7 @@ ActiveAdmin.register Debate do
   end
 
   after_update do |debate|
-    DebateNotifier.build.notify(debate)
+    DebateNotifier.build.notify_about_votes(debate)
   end
 
   action_item :close_or_reopen, only: :show do
@@ -79,7 +79,6 @@ ActiveAdmin.register Debate do
     f.inputs do
       f.input :topic
       f.input :channel_name
-      f.input :closed_at, as: :datetime_picker, local: true
     end
 
     unless f.object.new_record?

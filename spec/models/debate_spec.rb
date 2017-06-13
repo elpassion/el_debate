@@ -11,9 +11,9 @@ describe Debate, type: :model do
     expect(debate).not_to be_valid
   end
 
-  it 'validates closing date presence' do
-    debate = build(:debate, closed_at: nil)
-    expect(debate).not_to be_valid
+  it 'is opened by default' do
+    debate = create(:debate)
+    expect(debate.closed?).not_to be
   end
 
   it 'deletes answers when destroyed' do
@@ -66,30 +66,33 @@ describe Debate, type: :model do
     end
   end
 
-  describe '#closed?' do
-    let(:closed_at) { Time.current }
-    let(:debate) { create(:debate, closed_at: closed_at) }
+  describe '#open' do
+    let(:notifier) { double('DebateNotifier') }
+    let(:debate) { create(:debate, :closed_debate) }
 
-    it 'is closed when closed_at time is in the past' do
-      expect(debate.closed?(closed_at + 1.hour)).to be
-    end
-
-    it 'is not closed when closed_at is not in the past' do
-      expect(debate.closed?(closed_at - 1.hour)).not_to be
-    end
-
-    it 'is not closed when closed_at is not set' do
-      debate = build(:debate, closed_at: nil)
-      expect(debate.closed?).not_to be
+    it 'is opening a closed debate' do
+      expect{ debate.open }.to change{ debate.closed? }.from(true).to(false)
     end
   end
 
-  describe '#closed_at' do
-    before { Timecop.freeze }
-    after  { Timecop.return }
+  describe '#close' do
+    let(:debate) { create(:debate) }
 
-    it 'is set by default to close in one hour' do
-      expect(Debate.new.closed_at).to eql(Time.current + 1.hour)
+    it 'is closing an opened debate' do
+      expect{ debate.close }.to change{ debate.closed? }.from(false).to(true)
+    end
+  end
+
+  describe '#closed?' do
+    let(:debate) { create(:debate) }
+
+    it 'is opened by default' do
+      expect(debate.closed?).not_to be
+    end
+
+    it 'might be closed manually' do
+      debate.close
+      expect(debate.closed?).to be
     end
   end
 
@@ -124,7 +127,7 @@ describe Debate, type: :model do
   describe ".opened_for_channel!" do
     context "there is an open debate for a given channel" do
       let!(:debate) do
-        create(:debate, channel_name: 'channel_name', closed_at: 2.hours.from_now)
+        create(:debate, channel_name: 'channel_name')
       end
 
       it "returns it" do

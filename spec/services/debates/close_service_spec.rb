@@ -3,11 +3,10 @@ require 'rails_helper'
 describe Debates::CloseService do
   let(:debate)       { create(:debate) }
   let(:notifier)     { instance_double('DebateNotifier') }
-  let(:closing_time) { Time.current - 2.hours }
   subject            { described_class.new(debate: debate, notifier: notifier) }
 
   before do
-    allow(notifier).to receive(:notify)
+    allow(notifier).to receive(:notify_about_closing)
   end
 
   it 'closes debate' do
@@ -16,12 +15,7 @@ describe Debates::CloseService do
   end
 
   it 'notifies about closing debate' do
-    expect(notifier).to receive(:notify).with(debate)
+    expect(notifier).to receive(:notify_about_closing).with(debate)
     subject.call
-  end
-
-  it 'doesn\'t change closed_at time of closed debate' do
-    debate.update(closed_at:  closing_time)
-    expect{ subject.call }.not_to change{ debate.closed_at }
   end
 end

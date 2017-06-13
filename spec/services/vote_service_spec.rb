@@ -10,19 +10,19 @@ describe VoteService do
     let(:service) { described_class.new(answer: answer, auth_token: auth_token) }
 
     it 'saves vote even if broadcaster does not notify user' do
-      allow(notifier).to receive(:notify).and_return false
+      allow(notifier).to receive(:notify_about_votes).and_return false
       expect(service.vote!(notifier)).to be_falsey
       expect(answer.debate.votes_count).to eq 1
     end
 
     it 'calls notifier #notify method' do
-      expect(notifier).to receive(:notify)
+      expect(notifier).to receive(:notify_about_votes)
       service.vote!(notifier)
     end
   end
 
   describe '#vote!' do
-    let(:notifier) { double('notifier', notify: true) }
+    let(:notifier) { double('notifier', notify_about_votes: true) }
     let(:new_answer) { debate.answers.first }
     let(:vote_service) { VoteService.new(answer: new_answer, auth_token: auth_token) }
 

@@ -1,22 +1,22 @@
 require 'rails_helper'
 
-describe Debates::ReopenService do
-  let(:debate)   { create(:debate, closed_at: Time.now) }
+describe Debates::OpenService do
+  let(:debate)   { create(:debate, :closed_debate) }
   let(:notifier) { instance_double('DebateNotifier') }
   subject        { described_class.new(debate: debate, notifier: notifier) }
   let(:message_broadcaster) { double('message broadcaster') }
 
   before do
-    allow(notifier).to receive(:notify)
+    allow(notifier).to receive(:notify_about_opening)
   end
 
-  it 'closes debate' do
+  it 'opens debate' do
     subject.call
     expect(debate).not_to be_closed
   end
 
-  it 'notifies about closing debate' do
-    expect(notifier).to receive(:notify).with(debate)
+  it 'notifies about opening debate' do
+    expect(notifier).to receive(:notify_about_opening).with(debate)
     subject.call
   end
 end

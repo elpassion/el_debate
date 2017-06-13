@@ -11,23 +11,27 @@ class Debate < ApplicationRecord
 
   accepts_nested_attributes_for :answers
   validates :topic, presence: true
-  validates :closed_at, presence: true
   validates :code, presence: true, uniqueness: true,
                    length: { is: CODE_LENGTH }, numericality: { only_integer: true }
 
   before_save  :block_code_change
 
-  attribute :closed_at, :datetime, default: -> { Time.current + 1.hour }
+  mattr_accessor :debate_notifier
+  self.debate_notifier = DebateNotifier.build
+
+  scope :opened_debates, -> { where(closed: false) }
+  scope :closed_debates, -> { where(closed: true) }
 
   def self.opened_for_channel!(channel_name)
-    where(
-      "channel_name = ? AND closed_at > ?",
-       channel_name, Time.current
-    ).first!
+    opened_debates.where(channel_name: channel_name).first!
   end
 
-  def closed?(now = Time.current)
-    closed_at? && closed_at.utc <= now.utc
+  def open
+    update(closed: false)
+  end
+
+  def close
+    update(closed: true)
   end
 
   def votes_count
