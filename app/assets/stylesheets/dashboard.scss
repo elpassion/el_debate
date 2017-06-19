@@ -345,6 +345,21 @@ p.debate-status {
   }
 }
 
+.call-for-action.from-mobile {
+  color: $dark-grey;
+  margin-top: 50px;
+  padding-top: 5px;
+  padding-left: 70px;
+  text-align: left;
+
+  .app-icon {
+    border-radius: 10%;
+    margin-right: 20px;
+    margin-bottom: -12px;
+  }
+}
+
+
 p#debate-status {
   font-weight: 500;
   font-size: 20px;
