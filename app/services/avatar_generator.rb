@@ -1,12 +1,12 @@
 class AvatarGenerator
-  URL = 'https://api.adorable.io/avatars/80/'
-  FILE_FORMAT = '.png'
+  BASE_URL = 'https://api.adorable.io/avatars/'
+  IMAGE_SIZE = '80'
 
-  def initialize(key)
-    @key = key.to_s
+  def initialize(identifier)
+    @identifier = identifier.to_s
   end
 
-  def generate_avatar_url
-    URL + @key + FILE_FORMAT
+  def generate_url
+    BASE_URL + IMAGE_SIZE + "/#{@identifier}"
   end
 end

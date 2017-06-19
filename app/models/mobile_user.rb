@@ -3,7 +3,7 @@ class MobileUser < ApplicationRecord
   belongs_to :auth_token
 
   def image_url
-    AvatarGenerator.new(auth_token.value).generate_avatar_url
+    AvatarGenerator.new(auth_token.value).generate_url
   end
 end
 

@@ -4,17 +4,15 @@ class Api::LoginsController < Api::ApplicationController
 
   def create
     form = MobileUserForm.new(::MobileUser.new)
-    if form.validate(user_params.merge(auth_token: auth_token))
+    if form.validate(user_params.merge(auth_token: @auth_token))
       form.save
-      render json: { auth_token: auth_token, debate_closed: auth_token.debate.closed? }
+      render json: { auth_token: @auth_token, debate_closed: @auth_token.debate.closed? }
     else
       render json: { error: form.error_messages }, status: :bad_request
     end
   end
 
   private
-
-  attr_reader :auth_token
 
   def create_debate_auth_token
     debate = Debate.find_by code: params[:code]
