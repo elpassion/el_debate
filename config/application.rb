@@ -24,7 +24,5 @@ module ElDebate
     end
 
     config.middleware.use Rack::Attack
-
-    config.autoload_paths += %W(#{config.root}/app/models/comments)
   end
 end

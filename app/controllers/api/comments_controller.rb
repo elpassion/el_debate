@@ -12,12 +12,6 @@ class Api::CommentsController < Api::ApplicationController
 
   private
 
-  def user
-    @_user ||= MobileUser.find_by(
-        auth_token_id: @auth_token.id
-    )
-  end
-
   def user_maker_params
     {
       name: params.fetch(:username),

@@ -3,7 +3,7 @@ class MobileUser < ApplicationRecord
   belongs_to :auth_token
 
   def image_url
-    "https://api.adorable.io/avatars/80/#{auth_token.value}.png"
+    AvatarGenerator.new(auth_token.value).generate_avatar_url
   end
 end
 
