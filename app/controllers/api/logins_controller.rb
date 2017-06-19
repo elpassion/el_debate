@@ -5,7 +5,7 @@ class Api::LoginsController < Api::ApplicationController
     debate = Debate.find_by code: params[:code]
     if debate.present?
       auth_token = debate.auth_tokens.create!
-      render json: { auth_token: auth_token.value }
+      render json: { auth_token: auth_token.value, debate_closed: debate.closed? }
     else
       render json: { error: 'Debate not found' }, status: :not_found
     end
