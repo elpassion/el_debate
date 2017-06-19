@@ -12,7 +12,8 @@
           .votes-box
             h4.votes-count
               span.inline#votes-count = @debate.votes_count
-              span.inline#noun-count = pluralize_without_count(@debate.votes_count, 'person') + ' debating'
+              span.inline#noun-count = pluralize_without_count(@debate.votes_count, 'person')
+              span.inline debating
       .row.answer-values
         .col.s4
           .positive-box.positive-image
