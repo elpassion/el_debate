@@ -2,9 +2,8 @@
 .row
   .col.s8
     .container.content
-      .row.debate
-        .col.s3
-        .col.s6.center
+      .debate
+        .center
           h5#debate-topic class=(@debate.closed? ? 'closed-debate' : 'debate-topic')
             = @debate.topic
           p#debate-status
@@ -14,7 +13,6 @@
             h4.votes-count
               span.inline#votes-count = @debate.votes_count
               span.inline#noun-count = pluralize_without_count(@debate.votes_count, 'person') + ' debating'
-        .col.s3
       .row.answer-values
         .col.s4
           .positive-box.positive-image
