@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe CommentMaker do
+describe Slack::CommentMaker do
 
   let(:notifier_mock) do
     double(:comment_notifier, call: nil)
@@ -18,24 +18,19 @@ describe CommentMaker do
   end
 
   subject do
-    CommentMaker.new(notifier_mock)
+    Slack::CommentMaker.new(notifier_mock)
   end
 
   describe "#call" do
     it "creates a new comment" do
       expect {
         subject.call(params)
-      }.to change(Comment, :count).by(1)
+      }.to change(SlackComment, :count).by(1)
     end
 
-    it "assigns a comment to a correct user if given" do
+    it "assigns a comment to a correct user" do
       comment = subject.call(params.merge(user_id: user.id))
-      expect(comment.slack_user).to eq user
-    end
-
-    it "returns anonymous user if user_id is not given" do
-      comment = subject.call(params)
-      expect(comment.user_name).to eq 'Anonymous'
+      expect(comment.user).to eq user
     end
 
     it "executes a CommentNotifier service" do

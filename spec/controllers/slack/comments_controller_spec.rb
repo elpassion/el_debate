@@ -34,7 +34,7 @@ describe Slack::CommentsController do
       end
 
       it "executes the comment maker service" do
-        expect(CommentMaker).to receive(:call).with(
+        expect(Slack::CommentMaker).to receive(:perform).with(
           hash_including({
             slack_user_id: "existing_user_id",
             comment_text: "comment_text"
@@ -47,7 +47,7 @@ describe Slack::CommentsController do
 
     context "debate not found by a given name" do
       it "does not execute any of the service objects" do
-        expect(CommentMaker).not_to receive(:call)
+        expect(Slack::CommentMaker).not_to receive(:perform)
         expect(Slack::UserMaker).not_to receive(:perform_later)
 
         post :create, params: slack_params

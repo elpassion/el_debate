@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170609093423) do
+ActiveRecord::Schema.define(version: 20170612122533) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -48,13 +48,14 @@ ActiveRecord::Schema.define(version: 20170609093423) do
   end
 
   create_table "comments", force: :cascade do |t|
-    t.integer  "slack_user_id"
+    t.integer  "user_id"
     t.text     "content"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.integer  "debate_id"
+    t.string   "type"
     t.index ["debate_id"], name: "index_comments_on_debate_id", using: :btree
-    t.index ["slack_user_id"], name: "index_comments_on_slack_user_id", using: :btree
+    t.index ["user_id"], name: "index_comments_on_user_id", using: :btree
   end
 
   create_table "debates", force: :cascade do |t|
@@ -68,6 +69,14 @@ ActiveRecord::Schema.define(version: 20170609093423) do
     t.index ["channel_name"], name: "index_debates_on_channel_name", using: :btree
     t.index ["code"], name: "index_debates_on_code", unique: true, using: :btree
     t.index ["slug"], name: "index_debates_on_slug", unique: true, using: :btree
+  end
+
+  create_table "mobile_users", force: :cascade do |t|
+    t.string   "name"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+    t.integer  "auth_token_id"
+    t.index ["auth_token_id"], name: "index_mobile_users_on_auth_token_id", using: :btree
   end
 
   create_table "slack_users", force: :cascade do |t|
@@ -86,4 +95,5 @@ ActiveRecord::Schema.define(version: 20170609093423) do
     t.index ["auth_token_id"], name: "index_votes_on_auth_token_id", using: :btree
   end
 
+  add_foreign_key "mobile_users", "auth_tokens"
 end

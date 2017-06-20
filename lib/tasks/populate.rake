@@ -8,7 +8,7 @@ namespace :populate do
   desc 'Create random debates'
   task debates: :environment do
     3.times do
-      Debate.create(topic: FFaker::HipsterIpsum.sentence.tr(?., ??))
+      DebateMaker.call(topic: FFaker::HipsterIpsum.sentence.tr(?., ??))
     end
   end
 end
