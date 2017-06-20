@@ -6,7 +6,7 @@ class Api::LoginsController < Api::ApplicationController
     form = MobileUserForm.new(::MobileUser.new)
     if form.validate(user_params.merge(auth_token: @auth_token))
       form.save
-      render json: { auth_token: @auth_token, debate_closed: @auth_token.debate.closed? }
+      render json: { auth_token: @auth_token, debate_closed: @debate.closed? }
     else
       render json: { error: form.error_messages }, status: :bad_request
     end
@@ -15,9 +15,9 @@ class Api::LoginsController < Api::ApplicationController
   private
 
   def create_debate_auth_token
-    debate = Debate.find_by code: params[:code]
-    return render json: { error: 'Debate not found' }, status: :not_found unless debate
-    @auth_token = debate.auth_tokens.create!
+    @debate = Debate.find_by code: params[:code]
+    return render json: { error: 'Debate not found' }, status: :not_found unless @debate
+    @auth_token = @debate.auth_tokens.create!
   end
 
   def user_params
