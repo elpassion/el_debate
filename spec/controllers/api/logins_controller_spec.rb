@@ -24,20 +24,17 @@ describe Api::LoginsController, type: :controller do
     end
   end
 
-  context 'when username exists in debate' do
-    before do
-      create(:mobile_user, auth_token: create(:auth_token, debate: debate), name: params[:username])
-      post :create, params: params
-    end
+  context 'mobile user validation' do
+    before { post :create, params: params.merge!(username: nil) }
 
-    it 'returns bad request status' do
+    it 'returns bad request error if username is not valid' do
       expect(response).to have_http_status(:bad_request)
     end
 
     it 'returns proper error message' do
       json_response = JSON.parse(response.body)
       expect(json_response).to include('error')
-      expect(json_response['error']).to eq('Name has to be unique')
+      expect(json_response['error']).to eq("Username can't be blank")
     end
   end
 
@@ -64,7 +61,7 @@ describe Api::LoginsController, type: :controller do
     let(:debate) { create(:debate, :closed_debate) }
 
     before do
-      post :create, params: { code: debate.code }
+      post :create, params: { code: debate.code, username: 'Abc' }
     end
 
     it 'returns debate_closed flag set to true' do
@@ -75,7 +72,7 @@ describe Api::LoginsController, type: :controller do
 
   context 'when debate is opened' do
     before do
-      post :create, params: { code: debate.code }
+      post :create, params: { code: debate.code, username: 'Abc' }
     end
 
     it 'returns debate_closed flag set to false' do

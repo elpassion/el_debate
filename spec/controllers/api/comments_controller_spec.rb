@@ -4,7 +4,8 @@ describe Api::CommentsController do
   describe "#create" do
     let(:params) do
       {
-        text: "comment_text"
+        text: "comment_text",
+        username: "username"
       }
     end
 
@@ -21,7 +22,8 @@ describe Api::CommentsController do
         expect(Mobile::CommentMaker).to receive(:perform).with(
             hash_including({
                                debate_id: debate.id,
-                               comment_text: "comment_text"
+                               comment_text: "comment_text",
+                               user_id: mobile_user.id
                            })
         )
 

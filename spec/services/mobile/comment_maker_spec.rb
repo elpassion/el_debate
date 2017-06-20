@@ -14,7 +14,8 @@ describe Mobile::CommentMaker do
     {
         comment_text: 'No agree',
         debate_id: 123,
-        auth_token_id: user.auth_token.id
+        auth_token_id: user.auth_token.id,
+        username: 'username'
     }
   end
 
