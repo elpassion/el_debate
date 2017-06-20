@@ -12,15 +12,9 @@ class Api::CommentsController < Api::ApplicationController
 
   private
 
-  def user_maker_params
-    {
-      name: params.fetch(:username),
-      auth_token_id: @auth_token.id
-    }
-  end
-
   def comment_maker_params
     {
+      auth_token_id: @auth_token.id,
       debate_id: current_debate.id,
       comment_text: params.fetch(:text)
     }

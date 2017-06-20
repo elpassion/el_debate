@@ -6,15 +6,16 @@ describe Mobile::CommentMaker do
     double(:comment_notifier, call: nil)
   end
 
+  let(:user) do
+    create(:mobile_user)
+  end
+
   let(:params) do
     {
         comment_text: 'No agree',
-        debate_id: 123
+        debate_id: 123,
+        auth_token_id: user.auth_token.id
     }
-  end
-
-  let(:user) do
-    create(:mobile_user)
   end
 
   subject do
