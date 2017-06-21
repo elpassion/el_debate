@@ -34,7 +34,7 @@ describe Api::LoginsController, type: :controller do
     it 'returns proper error message' do
       json_response = JSON.parse(response.body)
       expect(json_response).to include('error')
-      expect(json_response['error']).to eq("Username can't be blank")
+      expect(json_response['error']).to eq('User invalid')
     end
   end
 

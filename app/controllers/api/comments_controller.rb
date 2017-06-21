@@ -1,5 +1,6 @@
 class Api::CommentsController < Api::ApplicationController
-  before_action :update_and_set_user
+  before_action :set_user
+  before_action :update_username_if_changed
 
   def create
     if current_debate
@@ -13,10 +14,12 @@ class Api::CommentsController < Api::ApplicationController
 
   private
 
-  def update_and_set_user
+  def set_user
     @user = MobileUser.find_by(auth_token: @auth_token)
-    @user.update(name: params.fetch(:username))
-    @user
+  end
+
+  def update_username_if_changed
+    @user.update_attribute(:name, params.fetch(:username))
   end
 
   def comment_maker_params
