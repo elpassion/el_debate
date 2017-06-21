@@ -25,6 +25,5 @@ module ElDebate
 
     config.middleware.use Rack::Attack
 
-    config.autoload_paths += %W(#{config.root}/app/forms)
   end
 end

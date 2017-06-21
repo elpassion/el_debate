@@ -1,7 +1,7 @@
 class Mobile::CommentMaker < AbstractCommentMaker
   def call(params)
     comment = MobileComment.create!(
-        user_id: MobileUser.find_by(auth_token_id: params[:auth_token_id]).id,
+        user_id: params[:user_id],
         content: params.fetch(:comment_text),
         debate_id: params.fetch(:debate_id)
     )

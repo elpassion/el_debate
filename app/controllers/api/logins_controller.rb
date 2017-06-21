@@ -3,12 +3,11 @@ class Api::LoginsController < Api::ApplicationController
   before_action :create_debate_auth_token
 
   def create
-    form = ::MobileUserForm.new(::MobileUser.new)
-    if form.validate(user_params.merge(auth_token: @auth_token))
-      form.save
+    user = MobileUser.new(user_params)
+    if user.save
       render json: { auth_token: @auth_token.value, debate_closed: @debate.closed? }
     else
-      render json: { error: form.error_messages }, status: :bad_request
+      render json: { error: 'User invalid' }, status: :bad_request
     end
   end
 
@@ -21,6 +20,9 @@ class Api::LoginsController < Api::ApplicationController
   end
 
   def user_params
-    { name: params[:username] }
+    {
+      name: params[:username],
+      auth_token: @auth_token
+    }
   end
 end
