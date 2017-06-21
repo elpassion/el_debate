@@ -88,7 +88,20 @@ class CommentsFeed
       currentComments[currentComments.length - 1].remove()
     comment = new Comment(@commentsQueue.deq())
     @node.prepend(comment.render())
+    @node.addClass('moving-feed')
+
+    $comments = @node.find('.comment')
+    $newComment = $($comments[0])
+    $previousHighestComment = $($comments[1])
+
+    if $previousHighestComment
+      $previousHighestComment.css('margin-top', $newComment.outerHeight())
+    removeClassCallback = () =>
+      @node.removeClass('moving-feed')
+      $previousHighestComment.css('margin-top', 0)
+    setTimeout(removeClassCallback, 300)
     @lock()
+    @removeOldestComment()
 
   checkForCallToAction: =>
     if @node.children(['comment']).length == 0 && @commentsQueue.isEmpty()
@@ -99,6 +112,10 @@ class CommentsFeed
   lock: =>
     @canAdd = false
     setTimeout @unlock, @lockTime
+
+  removeOldestComment: =>
+    if @node.children(['comment']).length > 10
+      @node.children(['comment']).last().remove()
 
   unlock: =>
     @canAdd = true

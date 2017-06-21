@@ -278,21 +278,37 @@ p.debate-status {
   overflow: hidden;
 
   #comments-feed {
-    transition: padding-top 1s;
   }
 
-  .moved-feed {
+  .moving-feed {
+    .comment {
+      &:nth-child(1) {
+        opacity: 0;
+        position: absolute;
+        width: 100%;
+      }
+      &:nth-child(2) {
+        transition: margin-top 300ms ease-in-out;
+      }
+    }
   }
 
   .comments {
-    height: 284px;
     width: 90%;
     padding: 25px;
+    position: relative;
   }
 
   .comment {
     padding: 10px;
-    animation: fadeIn 1s;
+    opacity: 1;
+    transition: opacity 300ms ease-in-out;
+
+    &:after {
+      content: "";
+      display: table;
+      clear: both;
+    }
 
     .left .image img {
       border-radius: 50%;
@@ -321,14 +337,10 @@ p.debate-status {
         color: $dark-grey;
         margin: 10px 0 35px;
         font-size: 25px;
+        word-wrap: break-word;
       }
     }
   }
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
 }
 
 .call-for-action {
@@ -359,7 +371,6 @@ p.debate-status {
     margin-bottom: -12px;
   }
 }
-
 
 p#debate-status {
   font-weight: 500;
