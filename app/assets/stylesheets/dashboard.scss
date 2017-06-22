@@ -288,7 +288,7 @@ p.debate-status {
         width: 100%;
       }
       &:nth-child(2) {
-        transition: margin-top 300ms ease-in-out;
+        transition: margin-top 200ms ease-in-out;
       }
     }
   }
@@ -302,7 +302,7 @@ p.debate-status {
   .comment {
     padding: 10px;
     opacity: 1;
-    transition: opacity 300ms ease-in-out;
+    transition: opacity 200ms ease-in-out;
 
     &:after {
       content: "";

@@ -99,7 +99,7 @@ class CommentsFeed
     removeClassCallback = () =>
       @node.removeClass('moving-feed')
       $previousHighestComment.css('margin-top', 0)
-    setTimeout(removeClassCallback, 300)
+    setTimeout(removeClassCallback, 200)
     @lock()
     @removeOldestComment()
 
