@@ -1,4 +1,5 @@
 require 'rails_helper'
+
 describe Slack::UserMaker do
   subject do
     Slack::UserMaker.new.perform(params)
@@ -48,7 +49,7 @@ describe Slack::UserMaker do
     context "there was a problem fetching data" do
       before do
         Slack::UserMaker.slack_api_client = double(:slack_api_client).tap do |client|
-          client.stub(:get_user_data) {
+          allow(client).to receive(:get_user_data) {
             raise Slack::ApiNetworkError, 'Error'
           }
         end
