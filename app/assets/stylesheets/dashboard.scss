@@ -71,18 +71,9 @@ p.debate-status {
   width: 250px;
   background-repeat: no-repeat;
   margin-bottom: 10px;
-  padding-left: 80px;
   padding-bottom: 15px;
   display: table;
   text-align: center;
-}
-
-.answer-values {
-  padding-left: 180px;
-}
-
-.negative-value {
-  padding-right: 25px !important;
 }
 
 .positive-box {
@@ -94,7 +85,7 @@ p.debate-status {
     background-position: right center;
     background-size: 40px;
     padding-right: 50px;
-    margin-right: 20px;
+    margin-right: 25px;
   }
 }
 
@@ -107,7 +98,7 @@ p.debate-status {
     background-position: left center;
     background-size: 40px;
     padding-left: 50px;
-    margin-left: 60px;
+    margin-left: 25px;
   }
 }
 
@@ -125,13 +116,22 @@ p.debate-status {
 .right-counters {
 }
 
-.progressbar {
-  margin-top: -50px;
+.progress-bar-container {
+  position: relative;
+  top: -100px;
   overflow: hidden;
-  width: 100%;
+  width: calc(100% - 1.25rem);
   height: 20px;
   color: lightgray;
   background: repeating-linear-gradient(-60deg, white, whitesmoke 4px, whitesmoke 4px, white 7px);
+
+  &.positive {
+    margin-right: 1.25rem;
+  }
+
+  &.negative {
+    margin-left: 1.25rem;
+  }
 
   &.left-border-radius {
     border-top-left-radius: 10px;
@@ -143,24 +143,18 @@ p.debate-status {
     border-bottom-right-radius: 10px;
   }
 
-  #right-progress-bar {
-    border-top-right-radius: 10px;
-    border-bottom-right-radius: 10px;
+  #positive-progress-bar, #negative-progress-bar {
     width: 100%;
     height: 20px;
-    background-color: $light-red;
-    float: left;
     transition: width 500ms;
   }
 
-  #left-progress-bar {
-    border-top-left-radius: 10px;
-    border-bottom-left-radius: 10px;
-    width: 100%;
-    height: 20px;
+  #positive-progress-bar {
     background-color: $light-blue;
-    float: right;
-    transition: width 500ms;
+  }
+
+  #negative-progress-bar {
+    background-color: $light-red;
   }
 }
 
@@ -237,23 +231,10 @@ p.debate-status {
     color: lightgray;
   }
 
-  .circle-shadow {
-    border-radius: 50%;
-    background-color: white;
-    box-shadow: 0 1px 15px 0 rgba(0, 0, 0, 0.16);
-    position: absolute;
-    left: -13px;
-    top: -110px;
-    width: 140px;
-    height: 140px;
-    z-index: 1;
-  }
-
   #circle-chart {
-    width: 153px;
-    height: 153px;
     position: absolute;
-    left: -20px;
+    width: calc(100% + 5.5rem);
+    left: -2.75rem;
     top: -115px;
     z-index: 2;
 
