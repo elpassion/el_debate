@@ -95,11 +95,15 @@ ActiveAdmin.register Debate do
 
   controller do
     def create
-      new_debate = DebateMaker.call(
+      @debate = DebateMaker.call(
         permitted_params.require(:debate)
       )
 
-      redirect_to admin_debate_path(new_debate)
+      if @debate.persisted?
+        redirect_to admin_debate_path(@debate)
+      else
+        render :new
+      end
     end
   end
 end
