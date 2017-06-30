@@ -20,6 +20,10 @@ class DebateNotifier
     broadcaster.push("dashboard_channel_#{debate.id}", 'debate_opened', {})
   end
 
+  def notify_about_reset(debate)
+    broadcaster.push("dashboard_channel_#{debate.id}", 'debate_reset', {})
+  end
+
   private
 
   attr_reader :broadcaster, :debate_serializer

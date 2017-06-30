@@ -24,6 +24,12 @@ describe DebateNotifier do
     subject.notify_about_closing(debate)
   end
 
+  it 'notifies about debate reset' do
+    expect(broadcaster)
+        .to receive(:push).with(channel, 'debate_reset', {})
+    subject.notify_about_reset(debate)
+  end
+
   context 'with vote changes' do
     let(:vote_change) { instance_double('VoteChange') }
     let(:changes) { {vote_change: {positive: 1, negative: 0}} }
