@@ -61,5 +61,6 @@
 
 
 javascript:
-  var pusher_key = "#{Pusher.key}";
-  var debate_id = "#{@debate.id}";
+  var pusherAppKey = "#{ENV['PUSHER_APP_ID']}";
+  var pusherAppCluster = "#{ENV['PUSHER_APP_CLUSTER']}";
+  var debateId = "#{@debate.id}";

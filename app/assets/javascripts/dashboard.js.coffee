@@ -147,8 +147,8 @@ class Debate
       $('#debate-topic')[0].className = 'closed-debate'
 
 initialize = ->
-  pusher      = new Pusher(pusher_key)
-  userChannel = pusher.subscribe("dashboard_channel_#{debate_id}")
+  pusher      = new Pusher(pusherAppKey, { cluster: pusherAppCluster })
+  userChannel = pusher.subscribe("dashboard_channel_#{debateId}")
   feed        = new Feed(userChannel, $('#slack-comments .comments'))
 
   component.subscribe(userChannel) for component in [
