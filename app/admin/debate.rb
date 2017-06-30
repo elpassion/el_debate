@@ -57,6 +57,7 @@ ActiveAdmin.register Debate do
   end
 
   member_action :reset, method: :put do
+    Debates::ResetService.new(debate: resource).call
     redirect_to resource_path(resource), notice: 'Debate reset!'
   end
 
