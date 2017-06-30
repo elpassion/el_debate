@@ -26,7 +26,7 @@ describe DebateNotifier do
 
   it 'notifies about debate reset' do
     expect(broadcaster)
-        .to receive(:push).with(channel, 'debate_reset', {})
+        .to receive(:push).with(channel, 'debate_reset', hash_including(:debate))
     subject.notify_about_reset(debate)
   end
 

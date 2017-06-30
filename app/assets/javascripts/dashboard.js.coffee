@@ -10,9 +10,12 @@ class Circle
     @update(positive, negative)
 
   subscribe: (channel) ->
-    channel.bind 'debate_changed', (data) =>
-      debate = data.debate
-      @update(parseInt(debate.positive_count), parseInt(debate.negative_count))
+    channel.bind('debate_changed', @onDebateChanged)
+    channel.bind('debate_reset', @onDebateChanged)
+
+  onDebateChanged: (data) =>
+    debate = data.debate
+    @update(parseInt(debate.positive_count), parseInt(debate.negative_count))
 
   update: (positive, negative) =>
     if positive + negative > 0
@@ -125,8 +128,14 @@ class Votes
     @validVotes.update(debate)
 
   subscribe: (channel) ->
-    channel.bind 'debate_changed', (data) =>
-      @update(data.debate, data.vote_change)
+    channel.bind('debate_changed', @onDebateChanged)
+    channel.bind('debate_reset', @onDebateReset)
+
+  onDebateChanged: (data) =>
+    @update(data.debate, data.voteChange)
+
+  onDebateReset: (data) =>
+    @update(data.debate, {})
 
 class Debate
   subscribe: (channel) ->
