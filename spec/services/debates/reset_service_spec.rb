@@ -19,7 +19,7 @@ describe Debates::ResetService do
 
   it 'changes all votes in the debate to neutral' do
     expect { subject }.to change {
-      [positive_answer.votes.count, neutral_answer.votes.count, negative_answer.votes.count]
+      [positive_answer, neutral_answer, negative_answer].map { |answer| answer.reload.votes_count }
     }.from(
       [2, 1, 1]
     ).to(

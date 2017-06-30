@@ -8,7 +8,10 @@ module Debates
     private
 
     def reset_votes
-      debate.votes.update_all(answer_id: debate.neutral_answer.id)
+      ActiveRecord::Base.transaction do
+        debate.votes.update_all(answer_id: debate.neutral_answer.id)
+        debate.answers.each { |answer| Answer.reset_counters(answer.id, :votes) }
+      end
     end
 
     def notify_about_reset
