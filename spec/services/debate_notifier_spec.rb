@@ -23,22 +23,4 @@ describe DebateNotifier do
         .to receive(:push).with(channel, 'debate_closed', {})
     subject.notify_about_closing(debate)
   end
-
-  context 'with vote changes' do
-    let(:vote_change) { instance_double('VoteChange') }
-    let(:changes) { {vote_change: {positive: 1, negative: 0}} }
-
-    before do
-      allow(vote_change)
-        .to receive(:to_h).and_return(changes)
-    end
-
-    it 'notifies about vote change' do
-      expect(broadcaster)
-        .to receive(:push).with(channel, 'debate_changed', hash_including(:debate, changes))
-
-      subject.notify_about_votes(debate, vote_change)
-    end
-  end
-
 end

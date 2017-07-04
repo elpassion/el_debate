@@ -6,10 +6,9 @@ class VoteService
 
   def vote!(notifier = DebateNotifier.new(PusherBroadcaster))
     ActiveRecord::Base.transaction do
-      vote_change = VoteChange.new(answer, previous_vote)
       create_or_update_vote!
       debate.reload
-      notifier.notify_about_votes(debate, vote_change)
+      notifier.notify_about_votes(debate)
     end
   end
 

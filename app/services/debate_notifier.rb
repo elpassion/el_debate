@@ -8,8 +8,8 @@ class DebateNotifier
     @debate_serializer = serializer
   end
 
-  def notify_about_votes(debate, vote_change = {})
-    broadcaster.push("dashboard_channel_#{debate.id}", 'debate_changed', merge_data(debate, vote_change))
+  def notify_about_votes(debate)
+    broadcaster.push("dashboard_channel_#{debate.id}", 'debate_changed', debate_data(debate))
   end
 
   def notify_about_closing(debate)
@@ -24,7 +24,7 @@ class DebateNotifier
 
   attr_reader :broadcaster, :debate_serializer
 
-  def merge_data(debate, vote_change)
-    debate_serializer.new(debate).to_h.merge(vote_change.to_h)
+  def debate_data(debate)
+    debate_serializer.new(debate).to_h
   end
 end
