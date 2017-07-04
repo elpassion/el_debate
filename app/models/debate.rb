@@ -51,15 +51,15 @@ class Debate < ApplicationRecord
   end
 
   def positive_answer
-    answers.positive.first
+    @positive_answer ||= answers.positive.take
   end
 
   def negative_answer
-    answers.negative.first
+    @negative_answer ||= answers.negative.take
   end
 
   def neutral_answer
-    answers.neutral.first
+    @neutral_answer ||= answers.neutral.take
   end
 
   private
