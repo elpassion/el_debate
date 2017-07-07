@@ -1,14 +1,14 @@
 class Slack::CommentMaker < AbstractCommentMaker
   def call(params)
     comment = SlackComment.create!(
-        user_id: params[:user_id],
-        content: params.fetch(:comment_text),
-        debate_id: params.fetch(:debate_id)
+      user_id: params[:user_id],
+      content: params.fetch(:comment_text).squish,
+      debate_id: params.fetch(:debate_id)
     )
 
     @notifier.call(
-        params.fetch(:debate_id),
-        comment
+      params.fetch(:debate_id),
+      comment
     )
 
     comment
