@@ -1,41 +1,37 @@
 require 'rails_helper'
 
 describe Slack::CommentMaker do
-
-  let(:notifier_mock) do
-    double(:comment_notifier, call: nil)
-  end
-
+  let(:notifier_mock) { double(:notifier, call: nil) }
+  let(:user) { create(:slack_user) }
   let(:params) do
     {
-        comment_text: "No agree",
-        debate_id: 123
+      comment_text: "I  do  not agree \n with this",
+      debate_id: 123,
+      user_id: user.id
     }
   end
+  subject { described_class.new(notifier_mock).call(params) }
 
-  let(:user) do
-    create(:slack_user)
-  end
-
-  subject do
-    Slack::CommentMaker.new(notifier_mock)
-  end
-
-  describe "#call" do
-    it "creates a new comment" do
-      expect {
-        subject.call(params)
-      }.to change(SlackComment, :count).by(1)
+  describe '#call' do
+    it 'creates a new comment' do
+      expect { subject }.to change(SlackComment, :count).by(1)
     end
 
-    it "assigns a comment to a correct user" do
-      comment = subject.call(params.merge(user_id: user.id))
-      expect(comment.user).to eq user
+    it 'returns a mobile comment' do
+      expect(subject).to be_a SlackComment
     end
 
-    it "executes a CommentNotifier service" do
+    it 'assigns a correct user to a comment' do
+      expect(subject.user).to eq user
+    end
+
+    it 'saves a content without unnecessary whitespaces' do
+      expect(subject.content).to eq 'I do not agree with this'
+    end
+
+    it 'calls a notification service' do
       expect(notifier_mock).to receive(:call)
-      subject.call(params)
+      subject
     end
   end
 end

@@ -7,7 +7,6 @@ describe Mobile::CommentMaker do
     {
       comment_text: "I  do  not agree \n with this",
       debate_id: 123,
-      username: 'TestUsername',
       user_id: user.id
     }
   end
