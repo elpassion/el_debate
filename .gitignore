@@ -20,13 +20,7 @@
 # Ignore Byebug command history file.
 .byebug_history
 
-# Idea files
-/.idea
-
+# Ignore env files.
 .ruby-version
 .ruby-gemset
 .env
-.zshrc
-
-config/initializers/aliases.rb
-
