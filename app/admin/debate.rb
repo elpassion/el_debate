@@ -11,9 +11,10 @@ ActiveAdmin.register Debate do
     column :channel_name
     actions do |debate|
       if debate.closed?
-        link_to('Reopen', reopen_admin_debate_path(debate), method: :put)
+        item 'Reopen', reopen_admin_debate_path(debate), method: :put, class: 'member_link'
       else
-        link_to('Close', close_admin_debate_path(debate), method: :put)
+        item 'Reset', reset_admin_debate_path(debate), method: :put, class: 'member_link'
+        item 'Close', close_admin_debate_path(debate), method: :put, class: 'member_link'
       end
     end
   end
@@ -47,30 +48,39 @@ ActiveAdmin.register Debate do
 
   member_action :close, method: :put do
     Debates::CloseService.new(debate: resource).call
-    redirect_to resource_path, notice: 'Debate closed!'
+    redirect_to resource_path(resource), notice: 'Debate closed!'
   end
 
   member_action :reopen, method: :put do
     Debates::OpenService.new(debate: resource).call
-    redirect_to resource_path, notice: 'Debate reopened!'
+    redirect_to resource_path(resource), notice: 'Debate reopened!'
+  end
+
+  member_action :reset, method: :put do
+    Debates::ResetService.new(debate: resource).call
+    redirect_to resource_path(resource), notice: 'Debate reset!'
   end
 
   member_action :code, method: :post do
     resource.update(code: CodeGenerator.for(Debate).generate)
     opts = resource.code? ? { notice: 'Code generated' } : { alert: 'Could not generate code' }
-    redirect_to resource_path, opts
+    redirect_to resource_path(resource), opts
   end
 
   after_update do |debate|
-    DebateNotifier.build.notify_about_votes(debate)
+    DebateNotifier.new.notify_about_votes(debate)
+  end
+  
+  action_item :reopen, only: :show, if: -> { debate.closed? } do
+    link_to 'Reopen', reopen_admin_debate_path(debate), method: :put
   end
 
-  action_item :close_or_reopen, only: :show do
-    if resource.closed?
-      link_to('Reopen', reopen_admin_debate_path(debate), method: :put)
-    else
-      link_to('Close', close_admin_debate_path(debate), method: :put)
-    end
+  action_item :close, only: :show, if: -> { !debate.closed? } do
+    link_to 'Reset', reset_admin_debate_path(debate), method: :put
+  end
+
+  action_item :reset, only: :show, if: -> { !debate.closed? } do
+    link_to 'Close', close_admin_debate_path(debate), method: :put
   end
 
   form title: 'New Debate' do |f|

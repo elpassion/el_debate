@@ -10,9 +10,12 @@ class Circle
     @update(positive, negative)
 
   subscribe: (channel) ->
-    channel.bind 'debate_changed', (data) =>
-      debate = data.debate
-      @update(parseInt(debate.positive_count), parseInt(debate.negative_count))
+    channel.bind('debate_changed', @onDebateChanged)
+    channel.bind('debate_reset', @onDebateChanged)
+
+  onDebateChanged: (data) =>
+    debate = data.debate
+    @update(parseInt(debate.positive_count), parseInt(debate.negative_count))
 
   update: (positive, negative) =>
     if positive + negative > 0
@@ -138,8 +141,8 @@ class Debate
       $('#debate-topic')[0].className = 'closed-debate'
 
 initialize = ->
-  pusher      = new Pusher(pusher_key)
-  userChannel = pusher.subscribe("dashboard_channel_#{debate_id}")
+  pusher      = new Pusher(pusherAppKey, { cluster: pusherAppCluster, encrypted: true })
+  userChannel = pusher.subscribe("dashboard_channel_#{debateId}")
   feed        = new Feed(userChannel, $('#slack-comments .comments'))
 
   component.subscribe(userChannel) for component in [

@@ -19,6 +19,18 @@ class DebatePresenter < SimpleDelegator
     "#{(negative_count / votes_count.to_f * 100.0).round}%"
   end
 
+  def positive_value
+    positive_answer.value
+  end
+
+  def negative_value
+    negative_answer.value
+  end
+
+  def neutral_value
+    neutral_answer.value
+  end
+
   def votes_count
     positive_count + negative_count
   end
