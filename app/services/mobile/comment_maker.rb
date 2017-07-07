@@ -1,16 +1,7 @@
 class Mobile::CommentMaker < AbstractCommentMaker
-  def call(params)
-    comment = MobileComment.create!(
-      user_id: params[:user_id],
-      content: params.fetch(:comment_text).squish,
-      debate_id: params.fetch(:debate_id)
-    )
+  private
 
-    @notifier.call(
-      params.fetch(:debate_id),
-      comment
-    )
-
-    comment
+  def comment_class
+    MobileComment
   end
 end
