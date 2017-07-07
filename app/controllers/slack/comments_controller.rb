@@ -16,9 +16,9 @@ class Slack::CommentsController < ApplicationController
 
   def create
     if debate && user
-      Slack::CommentMaker.perform(comment_maker_params)
+      CommentMaker.perform(debate: debate, user: user, comment_class: SlackComment, params: comment_params)
     else
-      Slack::UserMaker.perform_later(user_maker_params)
+      Slack::UserMaker.perform_later(user_params)
     end
 
     render json: Slack::ResponseSerializer.in_channel(
@@ -32,17 +32,12 @@ class Slack::CommentsController < ApplicationController
 
   private
 
-  def comment_maker_params
-    {
-      user_id: user&.id,
-      slack_user_id: params.fetch(:user_id),
-      debate_id: debate.id,
-      comment_text: params.fetch(:text)
-    }
+  def comment_params
+    { content: params.fetch(:text) }
   end
 
-  def user_maker_params
-    comment_maker_params.slice(:slack_user_id, :debate_id, :comment_text)
+  def user_params
+    { slack_user_id: params.fetch(:user_id) }
   end
 
   def debate

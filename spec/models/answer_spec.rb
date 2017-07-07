@@ -61,34 +61,6 @@ describe Answer do
     end
   end
 
-
-  describe 'class value methods' do
-    before do
-      allow_any_instance_of(DebateMaker).to receive(:add_default_answers).and_return([])
-    end
-
-    describe '#positive_value' do
-      it 'returns value for positive answer' do
-        positive_answer = create(:answer, :positive_answer)
-        expect(Answer.positive_value).to eq(positive_answer.value)
-      end
-    end
-
-    describe '#neutral_value' do
-      it 'returns value for neutral answer' do
-        neutral_answer = create(:answer, :neutral_answer)
-        expect(Answer.neutral_value).to eq(neutral_answer.value)
-      end
-    end
-
-    describe '#negative_value' do
-      it 'returns value for negative answer' do
-        negative_answer = create(:answer, :negative_answer)
-        expect(Answer.negative_value).to eq(negative_answer.value)
-      end
-    end
-  end
-
   describe '#answer_type_key' do
     before do
       allow_any_instance_of(DebateMaker).to receive(:add_default_answers).and_return([])

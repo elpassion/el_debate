@@ -1,6 +1,6 @@
 module Debates
   class DebateService
-    def initialize(debate:, notifier: DebateNotifier.build)
+    def initialize(debate:, notifier: DebateNotifier.new)
       @debate   = debate
       @notifier = notifier
     end

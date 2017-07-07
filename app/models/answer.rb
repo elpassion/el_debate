@@ -19,18 +19,6 @@ class Answer < ApplicationRecord
     end
   end
 
-  def self.positive_value
-    positive.first.value
-  end
-
-  def self.neutral_value
-    neutral.first.value
-  end
-
-  def self.negative_value
-    negative.first.value
-  end
-
   def answer_type_key
     answer_type.to_sym
   end

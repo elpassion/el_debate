@@ -4,7 +4,7 @@ class Api::CommentsController < Api::ApplicationController
 
   def create
     if current_debate
-      Mobile::CommentMaker.perform(comment_maker_params)
+      CommentMaker.perform(debate: current_debate, user: @user, comment_class: MobileComment, params: comment_params)
 
       head :created
     else
@@ -22,12 +22,7 @@ class Api::CommentsController < Api::ApplicationController
     @user.update_attribute(:name, params.fetch(:username))
   end
 
-  def comment_maker_params
-    {
-      auth_token_id: @auth_token.id,
-      debate_id: current_debate.id,
-      comment_text: params.fetch(:text),
-      user_id: @user.id
-    }
+  def comment_params
+    { content: params.fetch(:text) }
   end
 end

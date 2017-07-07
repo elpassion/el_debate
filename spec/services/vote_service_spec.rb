@@ -3,62 +3,38 @@ require 'rails_helper'
 describe VoteService do
   let(:auth_token) { create(:auth_token) }
   let(:debate) { auth_token.debate }
-  let(:answer) { debate.answers.sample }
+  let(:notifier) { double(:notifier, notify_about_votes: true) }
+  let(:answer_1) { debate.positive_answer }
+  let(:vote_service) { described_class.new(answer: answer_1, auth_token: auth_token) }
+  subject { vote_service.vote!(notifier) }
 
-  describe 'notifications' do
-    let(:notifier) { double('notifier') }
-    let(:service) { described_class.new(answer: answer, auth_token: auth_token) }
-
-    it 'saves vote even if broadcaster does not notify user' do
-      allow(notifier).to receive(:notify_about_votes).and_return false
-      expect(service.vote!(notifier)).to be_falsey
-      expect(answer.debate.votes_count).to eq 1
-    end
-
-    it 'calls notifier #notify method' do
-      expect(notifier).to receive(:notify_about_votes)
-      service.vote!(notifier)
-    end
+  it 'sends a notification' do
+    expect(notifier).to receive(:notify_about_votes)
+    subject
   end
 
   describe '#vote!' do
-    let(:notifier) { double('notifier', notify_about_votes: true) }
-    let(:new_answer) { debate.answers.first }
-    let(:vote_service) { VoteService.new(answer: new_answer, auth_token: auth_token) }
+    let(:answer_2) { debate.negative_answer }
 
-    it 'creates new vote' do
-      expect { vote_service.vote!(notifier) }.to change(Vote, :count).by 1
+    it 'creates a new vote' do
+      expect { subject }.to change { answer_1.votes_count }.by 1
     end
 
-    context 'when already voted' do
-      let!(:old_vote) { create(:vote, answer: answer, auth_token: auth_token) }
+    context 'when the user has already voted' do
+      let!(:vote) { create(:vote, answer: answer_2, auth_token: auth_token) }
 
-      it 'updates answer_id if previous vote exists' do
-        expect { vote_service.vote!(notifier) }.to_not change { Vote.count }
-        auth_token.reload
-        expect(auth_token.vote.answer_id).to eq(new_answer.id)
+      it 'changes the vote' do
+        expect { subject }.to change { vote.reload.answer }.from(answer_2).to(answer_1)
       end
 
-      it 'does not delete old votes if something goes wrong' do
-        expect { vote_service.vote!(notifier) rescue nil }.not_to change { Vote.count }
-        expect(auth_token.vote).to eq(old_vote)
-      end
-
-      Answer.answer_types.keys.each do |existing_type|
-        Answer.answer_types.keys.reject { |t| t == existing_type }.each do |new_type|
-          context "when changing from #{existing_type} to #{new_type}" do
-            let(:answer) { debate.send("#{existing_type}_answer") }
-            let(:new_answer) { debate.send("#{new_type}_answer") }
-
-            it "decrements debate #{existing_type}_count" do
-              expect { vote_service.vote!(notifier) }.to change { debate.send("#{existing_type}_count") }.by(-1)
-            end
-
-            it "increments debate #{new_type}_count" do
-              expect { vote_service.vote!(notifier) }.to change { debate.send("#{new_type}_count") }.by(1)
-            end
-          end
-        end
+      it 'changes answers vote counters' do
+        expect { subject }.to change {
+          [answer_1.reload.votes_count, answer_2.reload.votes_count]
+        }.from(
+          [0, 1]
+        ).to(
+          [1, 0]
+        )
       end
     end
   end

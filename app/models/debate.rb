@@ -17,7 +17,7 @@ class Debate < ApplicationRecord
   before_save  :block_code_change
 
   mattr_accessor :debate_notifier
-  self.debate_notifier = DebateNotifier.build
+  self.debate_notifier = DebateNotifier.new
 
   scope :opened_debates, -> { where(closed: false) }
   scope :closed_debates, -> { where(closed: true) }
@@ -51,15 +51,15 @@ class Debate < ApplicationRecord
   end
 
   def positive_answer
-    answers.positive.first
+    @positive_answer ||= answers.positive.take
   end
 
   def negative_answer
-    answers.negative.first
+    @negative_answer ||= answers.negative.take
   end
 
   def neutral_answer
-    answers.neutral.first
+    @neutral_answer ||= answers.neutral.take
   end
 
   private

@@ -1,17 +1,14 @@
 class CommentNotifier
-  def initialize(broadcaster)
+  def initialize(broadcaster: PusherBroadcaster.new, serializer: CommentSerializer)
     @broadcaster = broadcaster
+    @serializer = serializer
   end
 
-  def self.call(debate_id, comment)
-    new(PusherBroadcaster).call(debate_id, comment)
-  end
-
-  def call(debate_id, comment)
+  def call(debate, comment)
     @broadcaster.push(
-      "dashboard_channel_#{debate_id}",
+      "dashboard_channel_#{debate.id}",
       "comment_added",
-      CommentSerializer.new(comment).to_h
+      @serializer.new(comment).to_h
     )
   end
 end
