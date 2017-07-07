@@ -3,7 +3,7 @@ require 'rails_helper'
 describe DebateNotifier do
   let(:debate)      { create(:debate) }
   let(:channel)     { "dashboard_channel_#{debate.id}" }
-  let(:broadcaster) { double(PusherBroadcaster) }
+  let(:broadcaster) { instance_double(PusherBroadcaster) }
   subject           { described_class.new(broadcaster: broadcaster) }
 
   it 'notifies about debate current state' do

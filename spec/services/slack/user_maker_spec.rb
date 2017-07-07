@@ -1,69 +1,36 @@
 require 'rails_helper'
 
 describe Slack::UserMaker do
-  subject do
-    Slack::UserMaker.new.perform(params)
-  end
+  let(:params) {{ slack_user_id: '1' }}
+  subject { described_class.new.perform(params) }
 
-  let(:params) do
-    {
-      slack_user_id: "slack_user_id"
-    }
-  end
+  describe '#perform' do
+    let(:slack_api_client) { instance_double(Slack::ApiClient) }
+    before { described_class.slack_api_client = slack_api_client }
 
-  describe "perform" do
-    context "all went good" do
+    context 'when all went good' do
       before do
-        allow(Slack::CommentMaker).to receive(:perform)
+        allow(slack_api_client).to receive(:get_user_data) {{ user_image_url: 'image/url', user_name: 'Slack User Name' }}
       end
 
-      before do
-        Slack::UserMaker.slack_api_client = double(:slack_api_client,
-          get_user_data: {
-            user_image_url: "image_url",
-            user_name: "Slack User Name"
-          }
-        )
+      it 'creates a new user' do
+        expect { subject }.to change(SlackUser, :count).by(1)
       end
 
-      it "creates a new user" do
-        expect {
-          subject
-        }.to change(SlackUser, :count).by(1)
-      end
-
-      it "executes a CommentMaker service with correct params" do
-        expect(Slack::CommentMaker).to receive(:perform).with(
-          hash_including(params)
-        )
-        subject
-      end
-
-      it "fetches user image url and name from Slack api" do
+      it 'returns a user with correct params' do
         user = subject
-        expect(user.name).to eq "Slack User Name"
-        expect(user.image_url).to eq "image_url"
+        expect(user.name).to eq 'Slack User Name'
+        expect(user.image_url).to eq 'image/url'
       end
     end
 
-    context "there was a problem fetching data" do
+    context 'when there was a problem fetching data' do
       before do
-        Slack::UserMaker.slack_api_client = double(:slack_api_client).tap do |client|
-          allow(client).to receive(:get_user_data) {
-            raise Slack::ApiNetworkError, 'Error'
-          }
-        end
+        allow(slack_api_client).to receive(:get_user_data) { raise Slack::ApiNetworkError, 'Error' }
       end
 
-      it "does not create a new user" do
-        expect {
-          subject
-        }.not_to change(SlackUser, :count)
-      end
-
-      it "does not execute CommentMaker" do
-        expect(Slack::CommentMaker).not_to receive(:perform)
-        subject
+      it 'does not create a new user' do
+        expect { subject }.not_to change(SlackUser, :count)
       end
     end
   end

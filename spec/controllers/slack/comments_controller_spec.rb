@@ -1,25 +1,36 @@
 require 'rails_helper'
 
 describe Slack::CommentsController do
-  describe "#create" do
+  describe '#create' do
     let(:slack_params) do
       {
-        user_id: "existing_user_id",
-        channel_name: "debate_channel",
-        text: "comment_text"
+        user_id:      '1',
+        channel_name: 'debate_channel',
+        text:         'comment_text'
       }
     end
 
-    context "first comment by a given user" do
-      before do
-        create(:debate, channel_name: "debate_channel")
-      end
+    context 'when it is a first comment by a given user' do
+      let!(:debate) { create(:debate, channel_name: 'debate_channel') }
 
-      it "executes the slack user maker job" do
-        expect(Slack::UserMaker).to receive(:perform_later).with(
+      it 'executes the slack user maker job' do
+        expect(Slack::UserMaker).to receive(:perform_later).with(hash_including({ slack_user_id: '1' }))
+
+        post :create, params: slack_params
+      end
+    end
+
+    context 'when it is not a first comment by a given user' do
+      let!(:debate) { create(:debate, channel_name: 'debate_channel') }
+      let!(:slack_user) { create(:slack_user, slack_id: '1') }
+
+      it 'executes the comment maker service' do
+        expect(CommentMaker).to receive(:perform).with(
           hash_including({
-            slack_user_id: "existing_user_id",
-            comment_text: "comment_text"
+            debate:         debate,
+            user:           slack_user,
+            comment_class:  SlackComment,
+            params:         { content: 'comment_text' }
           })
         )
 
@@ -27,27 +38,9 @@ describe Slack::CommentsController do
       end
     end
 
-    context "not the first comment by a given user" do
-      before do
-        create(:debate, channel_name: "debate_channel")
-        create(:slack_user, slack_id: slack_params.fetch(:user_id))
-      end
-
-      it "executes the comment maker service" do
-        expect(Slack::CommentMaker).to receive(:perform).with(
-          hash_including({
-            slack_user_id: "existing_user_id",
-            comment_text: "comment_text"
-          })
-        )
-
-        post :create, params: slack_params
-      end
-    end
-
-    context "debate not found by a given name" do
-      it "does not execute any of the service objects" do
-        expect(Slack::CommentMaker).not_to receive(:perform)
+    context 'when debate was not found' do
+      it 'does not execute any of the services' do
+        expect(CommentMaker).not_to receive(:perform)
         expect(Slack::UserMaker).not_to receive(:perform_later)
 
         post :create, params: slack_params
