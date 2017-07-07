@@ -3,7 +3,7 @@ require 'rails_helper'
 describe Mobile::CommentMaker do
 
   let(:notifier_mock) do
-    double(:comment_notifier, call: nil)
+    double(:notifier, call: nil)
   end
 
   let(:user) do
@@ -12,32 +12,31 @@ describe Mobile::CommentMaker do
 
   let(:params) do
     {
-        comment_text: 'No agree',
-        debate_id: 123,
-        auth_token_id: user.auth_token.id,
-        username: 'username'
+      comment_text: 'I do not agree',
+      debate_id: 123,
+      username: 'TestUsername',
+      user_id: user.id
     }
   end
 
   subject do
-    Mobile::CommentMaker.new(notifier_mock)
+    Mobile::CommentMaker.new(notifier_mock).call(params)
   end
 
   describe '#call' do
     it 'creates a new comment' do
-      expect {
-        subject.call(params)
-      }.to change(MobileComment, :count).by(1)
+      expect { subject }.to change(MobileComment, :count).by(1)
     end
 
-    it 'assigns a comment to a correct user' do
-      comment = subject.call(params.merge(user_id: user.id))
+    it 'returns a comment with correct assignment to user' do
+      comment = subject
+      expect(comment).to be_a MobileComment
       expect(comment.user).to eq user
     end
 
-    it 'executes a CommentNotifier service' do
+    it 'calls a notification service' do
       expect(notifier_mock).to receive(:call)
-      subject.call(params)
+      subject
     end
   end
 end
