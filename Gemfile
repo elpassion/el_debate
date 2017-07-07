@@ -13,15 +13,15 @@ gem 'slim-rails'
 gem 'materialize-sass'
 gem 'jquery-turbolinks'
 gem 'sprockets', '~> 3.0'
-gem 'activeadmin', github: 'activeadmin'
-gem 'inherited_resources', github: 'activeadmin/inherited_resources'
+gem 'activeadmin'
+gem 'inherited_resources'
 gem 'devise'
 gem 'ffaker'
 gem 'pusher'
 gem 'sucker_punch'
 gem 'faraday'
 gem 'values'
-gem 'rack-cors', :require => 'rack/cors'
+gem 'rack-cors', require: 'rack/cors'
 gem 'exception_notification'
 gem 'slack-notifier'
 gem 'rack-attack', '~> 5.0.1'
@@ -49,4 +49,3 @@ end
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 ruby '2.3.3'
-
