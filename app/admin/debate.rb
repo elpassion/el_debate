@@ -62,7 +62,7 @@ ActiveAdmin.register Debate do
   end
 
   after_update do |debate|
-    DebateNotifier.build.notify_about_votes(debate)
+    DebateNotifier.new.notify_about_votes(debate)
   end
 
   action_item :close_or_reopen, only: :show do

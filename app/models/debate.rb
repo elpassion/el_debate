@@ -17,7 +17,7 @@ class Debate < ApplicationRecord
   before_save  :block_code_change
 
   mattr_accessor :debate_notifier
-  self.debate_notifier = DebateNotifier.build
+  self.debate_notifier = DebateNotifier.new
 
   scope :opened_debates, -> { where(closed: false) }
   scope :closed_debates, -> { where(closed: true) }

@@ -1,30 +1,24 @@
 class DebateNotifier
-  def self.build
-    new(PusherBroadcaster)
-  end
-
-  def initialize(broadcaster, serializer = DashboardSerializer)
+  def initialize(broadcaster: PusherBroadcaster.new, serializer: DashboardSerializer)
     @broadcaster = broadcaster
-    @debate_serializer = serializer
+    @serializer = serializer
   end
 
   def notify_about_votes(debate, vote_change = {})
-    broadcaster.push("dashboard_channel_#{debate.id}", 'debate_changed', merge_data(debate, vote_change))
+    @broadcaster.push("dashboard_channel_#{debate.id}", 'debate_changed', merge_data(debate, vote_change))
   end
 
   def notify_about_closing(debate)
-    broadcaster.push("dashboard_channel_#{debate.id}", 'debate_closed', {})
+    @broadcaster.push("dashboard_channel_#{debate.id}", 'debate_closed', {})
   end
 
   def notify_about_opening(debate)
-    broadcaster.push("dashboard_channel_#{debate.id}", 'debate_opened', {})
+    @broadcaster.push("dashboard_channel_#{debate.id}", 'debate_opened', {})
   end
 
   private
 
-  attr_reader :broadcaster, :debate_serializer
-
   def merge_data(debate, vote_change)
-    debate_serializer.new(debate).to_h.merge(vote_change.to_h)
+    @serializer.new(debate).to_h.merge(vote_change.to_h)
   end
 end
