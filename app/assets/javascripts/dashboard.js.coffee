@@ -84,7 +84,7 @@ class PositiveVotes
     @progressBar = new ProgressBar('#left-progress-bar')
     @percentage  = $('#positive-percent')
 
-  update: (debate, voteChange) ->
+  update: (debate) ->
     @votesCount.update(debate.positive_count)
     @progressBar.update(debate.positive_percent)
     @percentage.html(debate.positive_percent)
@@ -95,7 +95,7 @@ class NegativeVotes
     @progressBar = new ProgressBar('#right-progress-bar')
     @percentage  = $('#negative-percent')
 
-  update: (debate, voteChange) ->
+  update: (debate) ->
     @votesCount.update(debate.negative_count)
     @progressBar.update(debate.negative_percent)
     @percentage.html(debate.negative_percent)
@@ -121,21 +121,15 @@ class Votes
     @neutralVotes    = new NeutralVotes()
     @validVotes      = new ValidVotes()
 
-  update: (debate, voteChange) =>
-    @negativeVotes.update(debate, voteChange)
-    @positiveVotes.update(debate, voteChange)
+  update: (debate) =>
+    @negativeVotes.update(debate)
+    @positiveVotes.update(debate)
     @neutralVotes.update(debate)
     @validVotes.update(debate)
 
   subscribe: (channel) ->
-    channel.bind('debate_changed', @onDebateChanged)
-    channel.bind('debate_reset', @onDebateReset)
-
-  onDebateChanged: (data) =>
-    @update(data.debate, data.voteChange)
-
-  onDebateReset: (data) =>
-    @update(data.debate, {})
+    channel.bind 'debate_changed', (data) =>
+      @update(data.debate)
 
 class Debate
   subscribe: (channel) ->
