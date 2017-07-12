@@ -27,10 +27,9 @@ describe Slack::CommentsController do
       it 'executes the comment maker service' do
         expect(CommentMaker).to receive(:perform).with(
           hash_including({
-            debate:         debate,
-            user:           slack_user,
-            comment_class:  SlackComment,
-            params:         { content: 'comment_text' }
+            debate: debate,
+            user:   slack_user,
+            params: { content: 'comment_text' }
           })
         )
 

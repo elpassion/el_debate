@@ -1,18 +1,27 @@
 require 'rails_helper'
 
 describe Comment do
-  let(:slack_user) { create(:slack_user) }
-  let(:mobile_user) { create(:mobile_user) }
-  let(:slack_comment) { create(:slack_comment, user: slack_user) }
-  let(:mobile_comment) { create(:mobile_comment, user: mobile_user) }
+  context 'user params delegation' do
+    let(:comment) { create(:comment, user: user) }
 
-  it 'returns slack user proper values' do
-    expect(slack_comment.user_image_url).to eq slack_user.image_url
-    expect(slack_comment.user_name).to eq slack_user.name
-  end
+    context 'when comment is made by a mobile user' do
+      let(:user) { create(:mobile_user) }
 
-  it 'returns mobile user proper values' do
-    expect(mobile_comment.user_image_url).to eq mobile_user.image_url
-    expect(mobile_comment.user_name).to eq mobile_user.name
+      it 'delegates mobile user params' do
+        expect(comment.user).to be_a MobileUser
+        expect(comment.user_image_url).to eq user.image_url
+        expect(comment.user_name).to eq user.name
+      end
+    end
+
+    context 'when comment is made by a slack user' do
+      let(:user) { create(:slack_user) }
+
+      it 'delegates slack user params' do
+        expect(comment.user).to be_a SlackUser
+        expect(comment.user_image_url).to eq user.image_url
+        expect(comment.user_name).to eq user.name
+      end
+    end
   end
 end

@@ -15,10 +15,9 @@ describe Api::CommentsController do
       it 'executes the comment maker service' do
         expect(CommentMaker).to receive(:perform).with(
           hash_including({
-            debate:         debate,
-            user:           mobile_user,
-            comment_class:  MobileComment,
-            params:         { content: 'comment_text' }
+            debate: debate,
+            user:   mobile_user,
+            params: { content: 'comment_text' }
           })
         )
 

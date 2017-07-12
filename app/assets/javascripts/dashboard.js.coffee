@@ -143,7 +143,7 @@ class Debate
 initialize = ->
   pusher      = new Pusher(pusherAppKey, { cluster: pusherAppCluster, encrypted: true })
   userChannel = pusher.subscribe("dashboard_channel_#{debateId}")
-  feed        = new Feed(userChannel, $('#slack-comments .comments'))
+  feed        = new Feed(userChannel, $('#comments-feed .comments'))
 
   component.subscribe(userChannel) for component in [
     (new Circle('#circle-chart')),

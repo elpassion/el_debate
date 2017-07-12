@@ -5,20 +5,20 @@ class CommentMaker
     @notifier = notifier
   end
 
-  def self.perform(debate:, user:, comment_class:, params:, notifier: CommentNotifier.new)
-    new(debate, user, notifier).call(comment_class, params)
+  def self.perform(debate:, user:, params:, notifier: CommentNotifier.new)
+    new(debate, user, notifier).call(params)
   end
 
-  def call(comment_class, params)
-    create_comment!(comment_class, params).tap do |comment|
+  def call(params)
+    create_comment!(params).tap do |comment|
       @notifier.call(@debate, comment)
     end
   end
 
   private
 
-  def create_comment!(comment_class, params)
-    comment_class.create!(
+  def create_comment!(params)
+    Comment.create!(
       debate:   @debate,
       user:     @user,
       content:  params.fetch(:content).squish

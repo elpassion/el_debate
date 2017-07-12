@@ -1,4 +1,4 @@
 class SlackUser < ApplicationRecord
-  has_many :slack_comments, foreign_key: :id
+  has_many :comments, as: :user
 end
 
