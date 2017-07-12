@@ -338,6 +338,20 @@ p.debate-status {
       }
     }
   }
+
+  .call-for-action {
+    color: $dark-grey;
+    margin-top: 50px;
+    padding-top: 5px;
+    padding-left: 70px;
+    text-align: left;
+
+    .app-icon {
+      border-radius: 10%;
+      margin-right: 20px;
+      margin-bottom: -12px;
+    }
+  }
 }
 
 .call-for-action {
@@ -352,20 +366,6 @@ p.debate-status {
     font-weight: 600;
     padding-left: 33px;
     padding-right: 15px;
-  }
-}
-
-.call-for-action.from-mobile {
-  color: $dark-grey;
-  margin-top: 50px;
-  padding-top: 5px;
-  padding-left: 70px;
-  text-align: left;
-
-  .app-icon {
-    border-radius: 10%;
-    margin-right: 20px;
-    margin-bottom: -12px;
   }
 }
 
