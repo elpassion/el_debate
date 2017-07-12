@@ -52,12 +52,11 @@
           span.channel-title = @debate.channel_name
           | channel
   .col.s4
-    #slack-comments
-      #comments-feed
-        .call-for-action.from-mobile
-          = image_tag('dashboard/app_icon.png', height: 40, width: 40,class: 'app-icon')
-          | Download EL Debate app and comment!
-        .comments
+    #comments-feed
+      .call-for-action.from-mobile
+        = image_tag('dashboard/app_icon.png', height: 40, width: 40,class: 'app-icon')
+        | Download EL Debate app and comment!
+      .comments
 
 
 javascript:

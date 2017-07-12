@@ -271,14 +271,11 @@ p.debate-status {
   }
 }
 
-#slack-comments {
+#comments-feed {
   height: calc(100vh - 110px);
   border-left: 1px solid $grey;
   background: white;
   overflow: hidden;
-
-  #comments-feed {
-  }
 
   .moving-feed {
     .comment {
