@@ -4,7 +4,7 @@ class Api::CommentsController < Api::ApplicationController
 
   def create
     if current_debate
-      CommentMaker.perform(debate: current_debate, user: @user, comment_class: MobileComment, params: comment_params)
+      CommentMaker.perform(debate: current_debate, user: @user, params: comment_params)
 
       head :created
     else
