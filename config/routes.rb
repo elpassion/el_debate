@@ -22,7 +22,7 @@ Rails.application.routes.draw do
     resources :comments, only: [:create]
   end
 
-  root to: redirect('admin/debates#index')
+  root to: redirect('/admin/debates')
 
   get '/dashboard/:slug', to: 'dashboard#index'
 end
