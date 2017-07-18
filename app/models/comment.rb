@@ -4,5 +4,5 @@ class Comment < ActiveRecord::Base
 
   validates :content, presence: true
 
-  delegate :image_url, :name, to: :user, prefix: true
+  delegate :image_url, :name, :first_name, :last_name, to: :user, prefix: true
 end
