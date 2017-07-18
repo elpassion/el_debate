@@ -25,5 +25,5 @@
 .ruby-gemset
 .env
 
-# Ignore idea files (user by RubyMine).
+# Ignore idea files (used by RubyMine).
 .idea/
