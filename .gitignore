@@ -24,3 +24,6 @@
 .ruby-version
 .ruby-gemset
 .env
+
+# Ignore idea files (user by RubyMine).
+.idea/
