@@ -1,10 +1,10 @@
 class Api::CommentsController < Api::ApplicationController
-  before_action :set_user
+  before_action :set_mobile_user
   before_action :update_username_if_changed
 
   def create
     if current_debate
-      CommentMaker.perform(debate: current_debate, user: @user, params: comment_params)
+      CommentMaker.perform(debate: current_debate, user: @mobile_user, params: comment_params)
 
       head :created
     else
@@ -14,12 +14,12 @@ class Api::CommentsController < Api::ApplicationController
 
   private
 
-  def set_user
-    @user = MobileUser.find_by(auth_token: @auth_token)
+  def set_mobile_user
+    @mobile_user = MobileUser.find_by(auth_token: @auth_token)
   end
 
   def update_username_if_changed
-    @user.update_attribute(:name, params.fetch(:username))
+    @mobile_user.update_attribute(:name, params.fetch(:username))
   end
 
   def comment_params
