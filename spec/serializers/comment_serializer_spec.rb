@@ -9,7 +9,7 @@ describe CommentSerializer do
   subject { described_class.new(comment).to_h }
 
   it 'receives valid data' do
-    expect(subject).to include(:user_initials_background_color)
+    expect(subject).to have_key(:user_initials_background_color)
     expect(subject[:user_initials]).to eq('J D')
   end
 end
