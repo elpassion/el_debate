@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170725080313) do
+ActiveRecord::Schema.define(version: 20170726081716) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -74,12 +74,12 @@ ActiveRecord::Schema.define(version: 20170725080313) do
 
   create_table "mobile_users", force: :cascade do |t|
     t.string   "name"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
     t.integer  "auth_token_id"
     t.string   "first_name"
     t.string   "last_name"
-    t.string   "avatar_color"
+    t.string   "initials_background_color"
     t.index ["auth_token_id"], name: "index_mobile_users_on_auth_token_id", using: :btree
   end
 

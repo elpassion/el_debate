@@ -10,7 +10,7 @@ class CommentSerializer
       first_name: comment.user_first_name,
       last_name: comment.user_last_name,
       created_at: comment.created_at.to_i,
-      user_initials_avatar_color: comment.user_avatar_color,
+      user_initials_background_color: comment.user_initials_background_color,
       user_initials: comment.user_initials
     }
   end

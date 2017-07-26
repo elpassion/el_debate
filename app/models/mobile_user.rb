@@ -8,11 +8,11 @@ class MobileUser < ApplicationRecord
   before_save :set_color
 
   def set_color
-    self.avatar_color = InitialsAvatarGenerator.call
+    self.initials_background_color = InitialsBackgroundColorGenerator.call
   end
 
   def initials
-    [self.first_name, self.last_name].compact.map { |s| s.first }.join(' ')
+    [first_name, last_name].compact.map(&:first).join(' ')
   end
 
   private
