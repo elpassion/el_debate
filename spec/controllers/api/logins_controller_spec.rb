@@ -24,20 +24,6 @@ describe Api::LoginsController, type: :controller do
     end
   end
 
-  context 'mobile user validation' do
-    before { post :create, params: params.merge!(username: nil) }
-
-    it 'returns bad request error if username is not valid' do
-      expect(response).to have_http_status(:bad_request)
-    end
-
-    it 'returns proper error message' do
-      json_response = JSON.parse(response.body)
-      expect(json_response).to include('error')
-      expect(json_response['error']).to eq('User invalid')
-    end
-  end
-
   context 'when everything is ok' do
     subject { post :create, params: params }
 

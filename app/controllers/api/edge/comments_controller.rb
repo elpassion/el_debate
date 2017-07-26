@@ -5,7 +5,7 @@ class Api::Edge::CommentsController < Api::CommentsController
   private
 
   def set_mobile_user
-    @mobile_user = ::Edge::MobileUser.find_by(auth_token: @auth_token)
+    @mobile_user = MobileUser.find_by(auth_token: @auth_token)
   end
 
   def update_first_and_last_name

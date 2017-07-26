@@ -307,10 +307,18 @@ p.debate-status {
       clear: both;
     }
 
-    .left .image img {
-      border-radius: 50%;
+    .left .avatar {
       width: 60px;
       height: 60px;
+      display: table;
+    }
+
+    .left .avatar .initials {
+      color: white;
+      font-size: 1.5em;
+      display: table-cell;
+      vertical-align: middle;
+      text-align: center;
     }
 
     .username {

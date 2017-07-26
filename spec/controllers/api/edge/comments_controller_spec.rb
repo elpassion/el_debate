@@ -5,7 +5,7 @@ describe Api::Edge::CommentsController do
     context 'when mobile user does not have the first name and the last name' do
       let(:debate)        { create(:debate) }
       let(:auth_token)    { debate.auth_tokens.create }
-      let!(:mobile_user)  { create(:edge_mobile_user, auth_token: auth_token)}
+      let!(:mobile_user)  { create(:mobile_user, auth_token: auth_token)}
       before do
         request.env['HTTP_AUTHORIZATION'] = auth_token.value
         post :create, params: params
@@ -32,7 +32,7 @@ describe Api::Edge::CommentsController do
     context 'when correct auth_token was given' do
       let(:debate)        { create(:debate) }
       let(:auth_token)    { debate.auth_tokens.create }
-      let!(:mobile_user)  { create(:edge_mobile_user, auth_token: auth_token)}
+      let!(:mobile_user)  { create(:mobile_user, auth_token: auth_token)}
       let(:params) {{ text: 'comment_text', first_name: 'First Name', last_name: 'Last Name' }}
       before do
         request.env['HTTP_AUTHORIZATION'] = auth_token.value

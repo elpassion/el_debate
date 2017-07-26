@@ -3,15 +3,14 @@ class MobileUser < ApplicationRecord
   has_many :comments, as: :user
 
   validates :auth_token, presence: true
-  validates :name, presence: true, unless: :edge?
 
-  def image_url
-    AvatarGenerator.new(auth_token.value).generate_url
+  before_save :set_color
+
+  def set_color
+    self.initials_background_color = InitialsBackgroundColorGenerator.call
   end
 
-  private
-
-  def edge?
-    self.class.name.split('::')[0] == 'Edge'
+  def initials
+    [first_name, last_name].compact.map(&:first).join(' ')
   end
 end

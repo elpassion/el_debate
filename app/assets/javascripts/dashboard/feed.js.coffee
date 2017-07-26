@@ -31,9 +31,10 @@ class ChannelObserver
 
 class Comment
   constructor: (comment, opts = {}) ->
-    @avatarUrl  = comment.user_image_url
-    @comment    = comment.content
-    @username   = comment.user_name
+    @comment          = comment.content
+    @username         = comment.user_name
+    @background_color = comment.user_initials_background_color
+    @user_initials    = comment.user_initials
 
   render: ->
     element = $('<div>', {class: 'comment'})
@@ -47,8 +48,9 @@ class Comment
   renderUserInfo: ->
     $('<div>', { class: 'left' })
       .append(
-        $('<div>', { class: 'image' })
-          .append($('<img>', { src: @avatarUrl }))
+        $('<div>', { class: 'avatar' })
+          .css('background-color', @background_color)
+          .append($('<span>', { text: @user_initials, class: 'initials' }))
       )
   renderUserName: ->
     $('<div>', { class: 'username col s10' })
