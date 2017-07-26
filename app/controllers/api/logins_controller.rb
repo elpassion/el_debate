@@ -24,7 +24,6 @@ class Api::LoginsController < Api::ApplicationController
 
   def mobile_user_params
     {
-      name: params[:username],
       auth_token: @auth_token
     }
   end

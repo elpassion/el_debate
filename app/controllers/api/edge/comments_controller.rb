@@ -1,5 +1,4 @@
 class Api::Edge::CommentsController < Api::CommentsController
-  skip_before_action :update_username_if_changed
   before_action :update_first_and_last_name, unless: :first_and_last_name_present?
 
   private

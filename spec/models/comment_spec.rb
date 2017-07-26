@@ -10,7 +10,6 @@ describe Comment do
       it 'delegates mobile user params' do
         expect(comment.user).to be_a MobileUser
         expect(comment.user_initials_background_color).to eq user.initials_background_color
-        expect(comment.user_name).to eq user.name
       end
     end
 
@@ -19,7 +18,6 @@ describe Comment do
 
       it 'delegates slack user params' do
         expect(comment.user).to be_a SlackUser
-        expect(comment.user_name).to eq user.name
       end
     end
   end
