@@ -1,9 +1,9 @@
 class Api::CommentsController < Api::ApplicationController
   before_action :set_mobile_user
-  before_action :update_first_and_last_name, unless: :first_and_last_name_present?
 
   def create
     if current_debate
+      update_mobile_user_identity
       CommentMaker.perform(debate: current_debate, user: @mobile_user, params: comment_params)
 
       head :created
@@ -22,7 +22,8 @@ class Api::CommentsController < Api::ApplicationController
     { content: params.fetch(:text) }
   end
 
-  def update_first_and_last_name
+  def update_mobile_user_identity
+    return if first_and_last_name_present?
     @mobile_user.update_attributes(
       first_name: params.dig(:first_name),
       last_name:  params.dig(:last_name)

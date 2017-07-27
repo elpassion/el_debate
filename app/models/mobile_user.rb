@@ -10,7 +10,11 @@ class MobileUser < ApplicationRecord
     self.initials_background_color = InitialsBackgroundColorGenerator.call
   end
 
+  def full_name
+    "#{first_name} #{last_name}".titleize
+  end
+
   def initials
-    [first_name, last_name].compact.map(&:first).join(' ')
+    [first_name, last_name].compact.map(&:first).join(' ').titleize
   end
 end

@@ -4,5 +4,5 @@ class Comment < ActiveRecord::Base
 
   validates :content, presence: true
 
-  delegate :first_name, :last_name, :initials_background_color, :initials,  to: :user, prefix: true
+  delegate :first_name, :last_name, :full_name, :initials_background_color, :initials,  to: :user, prefix: true
 end
