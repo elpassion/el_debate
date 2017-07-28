@@ -1,18 +1,17 @@
 class MobileUserIdentity
-  def call
+  def update(first_name:, last_name:)
     return if has_identity?
     mobile_user.update(
-      first_name: params.fetch(:first_name),
-      last_name:  params.fetch(:last_name)
+      first_name: first_name,
+      last_name:  last_name
     )
   end
   private
 
-  attr_reader :mobile_user, :params
+  attr_reader :mobile_user
 
-  def initialize(mobile_user, params)
+  def initialize(mobile_user)
     @mobile_user = mobile_user
-    @params = params
   end
 
   def has_identity?

@@ -11,10 +11,10 @@ class MobileUser < ApplicationRecord
   end
 
   def full_name
-    "#{first_name} #{last_name}".titleize
+    [first_name, last_name].compact.map(&:strip).join(' ').titleize
   end
 
   def initials
-    [first_name, last_name].compact.map(&:first).join(' ').titleize
+    full_name.split.map(&:first).join
   end
 end

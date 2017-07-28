@@ -23,14 +23,7 @@ class Api::CommentsController < Api::ApplicationController
   end
 
   def update_mobile_user_identity
-    return if first_and_last_name_present?
-    @mobile_user.update(
-      first_name: params.dig(:first_name),
-      last_name: params.dig(:last_name)
-    )
-  end
-
-  def first_and_last_name_present?
-    @mobile_user.first_name.present? && @mobile_user.last_name.present?
+    MobileUserIdentity.new(@mobile_user).update(first_name: params.dig(:first_name),
+                                                last_name: params.dig(:last_name))
   end
 end
