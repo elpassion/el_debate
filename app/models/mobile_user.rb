@@ -11,7 +11,7 @@ class MobileUser < ApplicationRecord
   end
 
   def full_name
-    [first_name, last_name].compact.map(&:strip).join(' ').titleize
+    [first_name, last_name].compact.map{ |name| name.strip.capitalize }.join(' ')
   end
 
   def initials
