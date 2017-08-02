@@ -31,8 +31,8 @@ class ChannelObserver
 
 class Comment
   constructor: (comment, opts = {}) ->
+    @full_name        = comment.user_full_name
     @comment          = comment.content
-    @username         = comment.user_name
     @background_color = comment.user_initials_background_color
     @user_initials    = comment.user_initials
 
@@ -54,7 +54,7 @@ class Comment
       )
   renderUserName: ->
     $('<div>', { class: 'username col s10' })
-      .append($('<strong>', { text: @username }))
+      .append($('<strong>', { text: @full_name }))
 
   renderCurrentTime: ->
     today = new Date

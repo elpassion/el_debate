@@ -10,7 +10,7 @@ describe CommentSerializer do
 
   it 'receives valid data' do
     expect(subject).to have_key(:user_initials_background_color)
-    expect(subject[:user_initials]).to eq('J D')
+    expect(subject[:user_initials]).to eq('JD')
   end
 end
 
