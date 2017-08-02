@@ -13,10 +13,10 @@ describe MobileUser do
     end
 
     context 'when last_name is long' do
-      let(:mobile_user) { create(:mobile_user, first_name: 'John', last_name: 'Last-LastName') }
+      let(:mobile_user) { create(:mobile_user, first_name: 'John', last_name: 'last-lastName') }
 
       it 'checks users valid initials and full name' do
-        expect(mobile_user.full_name).to eq('John Last-Lastname')
+        expect(mobile_user.full_name).to eq('John Last-LastName')
         expect(mobile_user.initials).to eq('JL')
       end
     end
