@@ -12,6 +12,16 @@ class Api::CommentsController < Api::ApplicationController
     end
   end
 
+  def index
+    if current_debate
+      comments = GetComments.new(current_debate.id).to_h
+
+      render json: comments, status: 200
+    else
+      render json: { error: 'Debate not found' }, status: :not_found
+    end
+  end
+
   private
 
   def set_mobile_user

@@ -6,7 +6,7 @@ class CommentNotifier
 
   def call(debate, comment)
     @broadcaster.push(
-      "dashboard_channel_#{debate.id}",
+      "dashboard_channel_#{debate.code}",
       "comment_added",
       @serializer.new(comment).to_h
     )
