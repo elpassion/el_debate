@@ -142,7 +142,7 @@ class Debate
 
 initialize = ->
   pusher      = new Pusher(pusherAppKey, { cluster: pusherAppCluster, encrypted: true })
-  userChannel = pusher.subscribe("dashboard_channel_#{debateId}")
+  userChannel = pusher.subscribe("dashboard_channel_#{debatCode}")
   feed        = new Feed(userChannel, $('#comments-feed .comments'))
 
   component.subscribe(userChannel) for component in [
