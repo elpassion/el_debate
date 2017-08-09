@@ -24,4 +24,8 @@ class Api::ApplicationController < ActionController::Base
     return unless @auth_token.present?
     @_current_debate ||= @auth_token.debate
   end
+
+  def require_current_debate
+    render json: { error: 'Debate not found' }, status: :not_found unless current_debate
+  end
 end
