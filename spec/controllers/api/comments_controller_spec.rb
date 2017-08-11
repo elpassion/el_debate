@@ -41,13 +41,13 @@ describe Api::CommentsController do
              "created_at" => Time.now.to_i,
              "user_initials_background_color" => mobile_user.initials_background_color,
              "user_initials" => 'JD',
-             "token" => mobile_user.auth_token.value },
+             "token" => mobile_user.id },
            { "content" => "content comment 2",
              "full_name" => 'John Doe',
              "created_at" => Time.now.to_i,
              "user_initials_background_color" => mobile_user.initials_background_color,
              "user_initials" => 'JD',
-             "token" => mobile_user.auth_token.value }]
+             "token" => mobile_user.id }]
         end
 
         before do
