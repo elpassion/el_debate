@@ -10,7 +10,7 @@ class CommentSerializer
       created_at: comment.created_at.to_i,
       user_initials_background_color: comment.user_initials_background_color,
       user_initials: comment.user_initials,
-      token: comment.user_id
+      user_id: comment.user_id
     }
   end
 
