@@ -32,10 +32,11 @@ describe Api::LoginsController, type: :controller do
       expect(response).to have_http_status(:success)
     end
 
-    it 'returns auth token' do
+    it 'returns auth token and user_id' do
       subject
       json_response = JSON.parse(response.body)
       expect(json_response).to include('auth_token')
+      expect(json_response).to include('user_id')
     end
 
     it 'creates mobile user' do

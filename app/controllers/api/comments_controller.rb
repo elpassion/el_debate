@@ -1,15 +1,15 @@
 class Api::CommentsController < Api::ApplicationController
-  before_action :set_mobile_user
+  before_action :set_mobile_user, only: [:create]
+  before_action :require_current_debate
 
   def create
-    if current_debate
       update_mobile_user_identity
       CommentMaker.perform(debate: current_debate, user: @mobile_user, params: comment_params)
-
       head :created
-    else
-      render json: { error: 'Debate not found' }, status: :not_found
-    end
+  end
+
+  def index
+      render json: current_debate.comments.map { |comment| CommentSerializer.new(comment).to_h }
   end
 
   private

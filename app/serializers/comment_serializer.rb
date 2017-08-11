@@ -9,7 +9,8 @@ class CommentSerializer
       full_name: comment.user_full_name,
       created_at: comment.created_at.to_i,
       user_initials_background_color: comment.user_initials_background_color,
-      user_initials: comment.user_initials
+      user_initials: comment.user_initials,
+      token: comment.user_id
     }
   end
 

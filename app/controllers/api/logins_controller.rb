@@ -4,7 +4,7 @@ class Api::LoginsController < Api::ApplicationController
 
   def create
     if @mobile_user.save
-      render json: { auth_token: @auth_token.value, debate_closed: @debate.closed? }
+      render json: { user_id: @mobile_user.id, auth_token: @auth_token.value, debate_closed: @debate.closed? }
     else
       render json: { error: 'User invalid' }, status: :bad_request
     end
