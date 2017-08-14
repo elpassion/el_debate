@@ -1,4 +1,5 @@
 class Comment < ActiveRecord::Base
+  enum status: [:inactive, :active]
   belongs_to :debate
   belongs_to :user, polymorphic: true
 

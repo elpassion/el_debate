@@ -21,7 +21,12 @@ class CommentMaker
     Comment.create!(
       debate:   @debate,
       user:     @user,
-      content:  params.fetch(:content).squish
+      content:  params.fetch(:content).squish,
+      status: status
     )
+  end
+
+  def status
+    @debate.moderate? ? :inactive : :active
   end
 end

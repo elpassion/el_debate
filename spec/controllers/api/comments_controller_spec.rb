@@ -34,7 +34,7 @@ describe Api::CommentsController do
     end
 
     describe '#index' do
-      context 'when comments are created' do
+      context 'when comments are created and have status active' do
         let(:expected_hash) do
           [{ "content" => "content comment 1",
              "full_name" => 'John Doe',
@@ -51,8 +51,8 @@ describe Api::CommentsController do
         end
 
         before do
-          FactoryGirl.create(:comment, user: mobile_user, content: 'content comment 1', debate: debate)
-          FactoryGirl.create(:comment, user: mobile_user, content: 'content comment 2', debate: debate)
+          FactoryGirl.create(:comment, user: mobile_user, content: 'content comment 1', debate: debate, status: :active)
+          FactoryGirl.create(:comment, user: mobile_user, content: 'content comment 2', debate: debate, status: :active)
           request.env['HTTP_AUTHORIZATION'] = auth_token.value
         end
 
@@ -64,7 +64,20 @@ describe Api::CommentsController do
       end
 
       context 'when comments are not created' do
-        it 'retrieve valid status' do
+        it 'retrieve valid status and empty array of comments' do
+          get :index
+          expect(response.status).to eq(200)
+          expect(JSON.parse(response.body)).to eq([])
+        end
+      end
+
+      context 'when comments are created, but status is inactive' do
+        before do
+          FactoryGirl.create(:comment, user: mobile_user, content: 'content comment 1', debate: debate)
+          FactoryGirl.create(:comment, user: mobile_user, content: 'content comment 2', debate: debate)
+          request.env['HTTP_AUTHORIZATION'] = auth_token.value
+        end
+        it 'retrieve valid status and empty array of comments' do
           get :index
           expect(response.status).to eq(200)
           expect(JSON.parse(response.body)).to eq([])

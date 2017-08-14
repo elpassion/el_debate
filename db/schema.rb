@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170726104538) do
+ActiveRecord::Schema.define(version: 20170811143415) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -50,10 +50,11 @@ ActiveRecord::Schema.define(version: 20170726104538) do
   create_table "comments", force: :cascade do |t|
     t.integer  "user_id"
     t.text     "content"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
     t.integer  "debate_id"
     t.string   "user_type"
+    t.integer  "status",     default: 0
     t.index ["debate_id"], name: "index_comments_on_debate_id", using: :btree
     t.index ["user_id"], name: "index_comments_on_user_id", using: :btree
     t.index ["user_type"], name: "index_comments_on_user_type", using: :btree
@@ -67,6 +68,7 @@ ActiveRecord::Schema.define(version: 20170726104538) do
     t.string   "channel_name"
     t.string   "slug"
     t.boolean  "closed",       default: false, null: false
+    t.boolean  "moderate",     default: true
     t.index ["channel_name"], name: "index_debates_on_channel_name", using: :btree
     t.index ["code"], name: "index_debates_on_code", unique: true, using: :btree
     t.index ["slug"], name: "index_debates_on_slug", unique: true, using: :btree

@@ -10,6 +10,7 @@ describe Comment do
       it 'delegates mobile user params' do
         expect(comment.user).to be_a MobileUser
         expect(comment.user_initials_background_color).to eq user.initials_background_color
+        expect(comment.status).to eq('inactive')
       end
     end
 

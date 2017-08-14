@@ -9,7 +9,7 @@ class Api::CommentsController < Api::ApplicationController
   end
 
   def index
-      render json: current_debate.comments.map { |comment| CommentSerializer.new(comment).to_h }
+      render json: comments.map { |comment| CommentSerializer.new(comment).to_h }
   end
 
   private
@@ -25,5 +25,9 @@ class Api::CommentsController < Api::ApplicationController
   def update_mobile_user_identity
     MobileUserIdentity.new(@mobile_user).update(first_name: params.dig(:first_name),
                                                 last_name: params.dig(:last_name))
+  end
+
+  def comments
+    current_debate.moderate? ? current_debate.comments.active : current_debate.comments
   end
 end
