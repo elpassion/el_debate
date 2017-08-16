@@ -11,7 +11,7 @@ class CommentMaker
 
   def call(params)
     create_comment!(params).tap do |comment|
-      @notifier.call(@debate, comment)
+      @notifier.call(comment, channel)
     end
   end
 
@@ -27,6 +27,10 @@ class CommentMaker
   end
 
   def status
-    @debate.moderate? ? :inactive : :active
+    @status ||= @debate.moderate? ? :inactive : :active
+  end
+
+  def channel
+    status == :active ? "dashboard_channel_#{@debate.code}" : "admin_channel_#{@debate.code}"
   end
 end

@@ -141,9 +141,10 @@ class Debate
       $('#debate-topic')[0].className = 'closed-debate'
 
 initialize = ->
-  pusher      = new Pusher(pusherAppKey, { cluster: pusherAppCluster, encrypted: true })
-  userChannel = pusher.subscribe("dashboard_channel_#{debatCode}")
-  feed        = new Feed(userChannel, $('#comments-feed .comments'))
+  pusher              = new Pusher(pusherAppKey, { cluster: pusherAppCluster, encrypted: true })
+  userChannel         = pusher.subscribe("dashboard_channel_#{debateCode}")
+  userChannelMultiple = pusher.subscribe("dashboard_channel_multiple_#{debateCode}")
+  feed                = new Feed(userChannel, userChannelMultiple, $('#comments-feed .comments'))
 
   component.subscribe(userChannel) for component in [
     (new Circle('#circle-chart')),

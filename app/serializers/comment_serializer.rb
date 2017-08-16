@@ -5,6 +5,7 @@ class CommentSerializer
 
   def to_h
     {
+      id: comment.id,
       content: comment.content,
       full_name: comment.user_full_name,
       created_at: comment.created_at.to_i,

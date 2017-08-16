@@ -36,13 +36,15 @@ describe Api::CommentsController do
     describe '#index' do
       context 'when comments are created and have status active' do
         let(:expected_hash) do
-          [{ "content" => "content comment 1",
+          [{ "id" => comment1.id,
+             "content" => "content comment 1",
              "full_name" => 'John Doe',
              "created_at" => Time.now.to_i,
              "user_initials_background_color" => mobile_user.initials_background_color,
              "user_initials" => 'JD',
              "user_id" => mobile_user.id },
-           { "content" => "content comment 2",
+           { "id" => comment2.id,
+             "content" => "content comment 2",
              "full_name" => 'John Doe',
              "created_at" => Time.now.to_i,
              "user_initials_background_color" => mobile_user.initials_background_color,
@@ -50,9 +52,12 @@ describe Api::CommentsController do
              "user_id" => mobile_user.id }]
         end
 
+        let(:comment1) { build(:comment, user: mobile_user, content: 'content comment 1', debate: debate, status: :active) }
+        let(:comment2) { build(:comment, user: mobile_user, content: 'content comment 2', debate: debate, status: :active) }
+
         before do
-          FactoryGirl.create(:comment, user: mobile_user, content: 'content comment 1', debate: debate, status: :active)
-          FactoryGirl.create(:comment, user: mobile_user, content: 'content comment 2', debate: debate, status: :active)
+          comment1.save
+          comment2.save
           request.env['HTTP_AUTHORIZATION'] = auth_token.value
         end
 

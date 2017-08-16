@@ -4,11 +4,19 @@ class CommentNotifier
     @serializer = serializer
   end
 
-  def call(debate, comment)
+  def call(comment, channel)
     @broadcaster.push(
-      "dashboard_channel_#{debate.code}",
+      channel,
       "comment_added",
       @serializer.new(comment).to_h
+    )
+  end
+
+  def send_comments(debate_id, comments)
+    @broadcaster.push(
+      "dashboard_channel_multiple_#{Debate.find(debate_id)[:code]}",
+      "comments_added",
+      comments
     )
   end
 end

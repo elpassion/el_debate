@@ -1,0 +1,66 @@
+$(document).ready(function () {
+    var pusherAppKey = '<%= "#{ENV['PUSHER_APP_KEY']}" %>';
+    var pusherAppCluster = '<%= "#{ENV['PUSHER_APP_CLUSTER']}" %>';
+    var debateCode = $('#debateCode').val();
+    pusher = new Pusher(pusherAppKey, {cluster: pusherAppCluster, encrypted: true});
+    var channel = pusher.subscribe("admin_channel_" + debateCode);
+
+    channel.bind('comment_added', function (comment) {
+        $('#index_table_comments tbody').append(line_html(comment));
+    });
+});
+
+function line_html(comment) {
+    var html = '<tr class="' + get_class() + '"><td class="col col-selectable">';
+    html += '<div class="resource_selection_cell">';
+    html += '<input type="checkbox" id="batch_action_item_' + comment.id + '" value="' + comment.id + '" class="collection_selection" name="collection_selection[]">';
+    html += '</div>';
+    html += '</td>';
+    html += '<td class="col col-id"><a class="resource_id_link" href="/admin/debates/'+$("#debateId").val()+'/comments/'+comment.id+'">'+comment.id+'</a></td>';
+    html += '<td class="col col-content">'+comment.content + '</td>';
+    html += '<td class="col col-status">'+comment.status + '</td>';
+    html += '<td class="col col-created_at">'+format_date(comment.created_at)+'</td>';
+    html += '<td class="col col-actions"><div class="table_actions">'+generate_links(comment.id)+'</div></td>';
+    html += '</tr>';
+
+    return html;
+}
+
+function generate_links(comment_id){
+  var view = '<a class="view_link member_link" title="View" href="/admin/debates/'+$("#debateId").val()+'/comments/'+comment_id+'">View</a>';
+  var edit = '<a class="edit_link member_link" title="Edit" href="/admin/debates/'+$("#debateId").val()+'/comments/'+comment_id+'/edit">Edit</a>';
+  var del = '<a class="delete_link member_link" title="Delete" data-confirm="Are you sure you want to delete this?" rel="nofollow" data-method="delete" href="/admin/debates/'+$("#debateId").val()+'/comments/'+comment_id+'">Delete</a>';
+
+  return view+' '+edit+' '+del;
+}
+
+function get_class() {
+    var tr_class = $('#index_table_comments tbody tr:last').attr('class');
+    if (tr_class == 'even') return 'odd';
+    return 'even';
+}
+
+function format_date(created_at){
+    var date = new Date(created_at * 1000);
+
+    var year = date.getFullYear();
+
+    var month = date.getMonthName();
+
+    var day = date.getDay();
+    day = (day < 10 ? '0' : '')+day;
+
+    var hours = date.getHours()
+    hours = (hours >= 0 && hours < 10) ? '0' + hours.toString() : hours;
+
+    var minutes = date.getMinutes()
+    minutes = (minutes < 10 ? '0' : '')+minutes;
+
+    return month+' '+day+', '+year+' '+hours+':'+minutes;
+}
+
+Date.prototype.getMonthName = function() {
+    var monthNames = [ "January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December" ];
+    return monthNames[this.getMonth()];
+}
