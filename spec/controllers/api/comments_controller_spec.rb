@@ -42,14 +42,16 @@ describe Api::CommentsController do
              "created_at" => Time.now.to_i,
              "user_initials_background_color" => mobile_user.initials_background_color,
              "user_initials" => 'JD',
-             "user_id" => mobile_user.id },
+             "user_id" => mobile_user.id,
+             "status" => "active" },
            { "id" => comment2.id,
              "content" => "content comment 2",
              "full_name" => 'John Doe',
              "created_at" => Time.now.to_i,
              "user_initials_background_color" => mobile_user.initials_background_color,
              "user_initials" => 'JD',
-             "user_id" => mobile_user.id }]
+             "user_id" => mobile_user.id,
+             "status" => "active" }]
         end
 
         let(:comment1) { build(:comment, user: mobile_user, content: 'content comment 1', debate: debate, status: :active) }

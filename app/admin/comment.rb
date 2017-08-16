@@ -1,5 +1,6 @@
 ActiveAdmin.register Comment do
   belongs_to :debate
+  actions :all, :except => [:show, :edit]
 
   index do
     selectable_column
@@ -7,8 +8,28 @@ ActiveAdmin.register Comment do
     column :content
     column :status
     column :created_at
-    actions
-    render :partial => 'admin/store_code_debate', :locals => {:debate_code => debate[:code], :debate_id => debate[:id] }
+    actions do |comment|
+      if comment.active?
+        link_to "deactivate", deactivate_admin_debate_comment_path(debate, comment), method: :put, class: 'member_link'
+      elsif comment.inactive?
+        link_to "activate", activate_admin_debate_comment_path(debate, comment), method: :put, class: 'member_link'
+      end
+
+    end
+    render :partial => 'admin/store_code_debate', :locals => { :debate_code => debate[:code], :debate_id => debate[:id] }
+  end
+
+  member_action :activate, method: :put do
+    debate = Debate.find(params[:debate_id])
+    resource.active!
+    CommentNotifier.new.call(resource, "dashboard_channel_#{debate[:code]}")
+    redirect_to admin_debate_comments_url, alert: "Status was changed"
+  end
+
+  member_action :deactivate, method: :put do
+    debate = Debate.find(params[:debate_id])
+    resource.inactive!
+    redirect_to admin_debate_comments_url, alert: "Status was changed"
   end
 
   controller do

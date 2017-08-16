@@ -17,7 +17,7 @@ ActiveAdmin.register Debate do
         item 'Reset', reset_admin_debate_path(debate), method: :put, class: 'member_link'
         item 'Close', close_admin_debate_path(debate), method: :put, class: 'member_link'
       end
-        item 'Comments', admin_debate_comments_path(debate)
+      item 'Comments', admin_debate_comments_path(debate)
     end
   end
 
@@ -73,7 +73,7 @@ ActiveAdmin.register Debate do
   after_update do |debate|
     DebateNotifier.new.notify_about_votes(debate)
   end
-  
+
   action_item :reopen, only: :show, if: -> { debate.closed? } do
     link_to 'Reopen', reopen_admin_debate_path(debate), method: :put
   end
