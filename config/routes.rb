@@ -24,5 +24,5 @@ Rails.application.routes.draw do
 
   root to: redirect('/admin/debates')
 
-  get '/dashboard/:slug', to: 'dashboard#index'
+  get '/dashboard/:slug', to: 'dashboard#index', as: :dashboard
 end
