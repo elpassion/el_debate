@@ -14,37 +14,66 @@
               span.inline#votes-count = @debate.votes_count
               span.inline#noun-count = pluralize_without_count(@debate.votes_count, 'person')
               span.inline debating
-      .row.answer-values
-        .col.s4
-          .positive-box.positive-image
-            h4.positive= @debate.positive_value
-        .col.s1
-        .col.s4.negative-value
-          .negative-box.negative-image
-            h4.negative= @debate.negative_value
-      .row
-        .col.s5
-          .left-counters
-            span.left-align#positive-count
-              = "#{@debate.positive_count} #{pluralize_without_count(@debate.positive_count, 'person')}"
-            span.right-align#positive-percent
-              = @debate.positive_percent
-          .progressbar.left-border-radius
+
+      .row.answers
+        .answers-values.positive
+          .answers-values-positive
+            h4= @debate.positive_value
+          .answers-values-bar.left.left-border-radius
             #left-progress-bar style="width: #{@debate.positive_percent}"
-        .col.s2#center-info
-          h4.center-align#neutral-count
+          .answers-values-people 
+            = "#{@debate.positive_count} #{pluralize_without_count(@debate.positive_count, 'person')}"
+          .answers-values-percentage.positive
+            h4#positive-percent= @debate.positive_percent
+
+        #votes-chart data-positive=@debate.positive_count data-negative=@debate.negative_count
+        .answers-circle data-positive=@debate.positive_count data-negative=@debate.negative_count
+          h4.answers-circle-count#neutral-count
             = @debate.neutral_count
-          .center-align#neutral-noun
+          .answers-circle-noun
             = @debate.neutral_value
-          #circle-chart data-positive=@debate.positive_count data-negative=@debate.negative_count
-          .circle-shadow
-        .col.s5
-          .right-counters
-            span.left-align#negative-percent = @debate.negative_percent
-            span.right-align#negative-count
-              ="#{@debate.negative_count} #{pluralize_without_count(@debate.negative_count, 'person')}"
-          .progressbar.right-border-radius
+
+        .answers-values.negative
+          .answers-values-negative
+            h4= @debate.negative_value
+          .answers-values-bar.right.right-border-radius
             #right-progress-bar style="width: #{@debate.negative_percent}"
+          .answers-values-people 
+            = "#{@debate.negative_count} #{pluralize_without_count(@debate.negative_count, 'person')}"
+          .answers-values-percentage.negative
+            h4#negative-percent= @debate.negative_percent
+
+      / .row.answer-values
+      /   .col.s4
+      /     .positive-box.positive-image
+      /       h4.positive= @debate.positive_value
+      /   .col.s1
+      /   .col.s4.negative-value
+      /     .negative-box.negative-image
+      /       h4.negative= @debate.negative_value
+      / .row
+      /   .col.s5
+      /     .left-counters
+      /       span.left-align#positive-count
+      /         = "#{@debate.positive_count} #{pluralize_without_count(@debate.positive_count, 'person')}"
+      /       span.right-align#positive-percent
+      /         = @debate.positive_percent
+      /     .progressbar.left-border-radius
+      /       #left-progress-bar style="width: #{@debate.positive_percent}"
+      /   .col.s2#center-info
+      /     h4.center-align#neutral-count
+      /       = @debate.neutral_count
+      /     .center-align#neutral-noun
+      /       = @debate.neutral_value
+      /     #circle-chart data-positive=@debate.positive_count data-negative=@debate.negative_count
+      /     .circle-shadow
+      /   .col.s5
+      /     .right-counters
+      /       span.left-align#negative-percent = @debate.negative_percent
+      /       span.right-align#negative-count
+      /         ="#{@debate.negative_count} #{pluralize_without_count(@debate.negative_count, 'person')}"
+      /     .progressbar.right-border-radius
+      /       #right-progress-bar style="width: #{@debate.negative_percent}"
 
       - if @debate.channel_name.present?
         .call-for-action
