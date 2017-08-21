@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe DebateNotifier do
   let(:debate)      { create(:debate) }
-  let(:channel)     { "dashboard_channel_#{debate.id}" }
+  let(:channel)     { "dashboard_channel_#{debate.code}" }
   let(:broadcaster) { instance_double(PusherBroadcaster) }
   subject           { described_class.new(broadcaster: broadcaster) }
 
@@ -23,7 +23,7 @@ describe DebateNotifier do
 
   it 'notifies about debate reset' do
     expect(broadcaster)
-        .to receive(:push).with(channel, 'debate_reset', hash_including(:debate))
+      .to receive(:push).with(channel, 'debate_reset', hash_including(:debate))
     subject.notify_about_reset(debate)
   end
 end
