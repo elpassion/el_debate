@@ -219,7 +219,7 @@ p.debate-status {
 }
 
 .debate {
-  margin-bottom: 65px;
+  margin-bottom: 45px;
 }
 
 #center-info {
@@ -471,6 +471,7 @@ p#debate-status {
     align-items: center;
     justify-content: center;
     flex-direction: column;
+    flex-shrink: 0;
     
     // &:before {
     //   content: close-quote;
@@ -509,21 +510,51 @@ p#debate-status {
   width: #{$circle-size}px;
   height: #{$circle-size}px;
   background: $light-blue;
-  background-image: linear-gradient(to right, transparent 50%, $light-red 0);
   border-radius: 50%;
+  backface-visibility: hidden;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
 
+  .right_half {
+    background-color: $light-blue;
+  }
+
+  .right_half,
   &:before {
-    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
     display: block;
-    margin-left: 50%;
+    width: 50%;
     height: 100%;
     border-radius: 0 100% 100% 0 / 50%;
-    background-color: inherit;
     transform-origin: left;
     transition: transform .5s;
+  }
+
+  &:before {
+    background-color: $light-red;
+    content: close-quote;
+  }
+}
+
+#circle-chart {
+  width: #{$circle-size + 5}px;
+  height: #{$circle-size + 5}px;
+  position: absolute;
+  z-index: 2;
+
+  .ct-series-d .ct-slice-donut {
+    stroke: $light-blue;
+  }
+
+  .ct-series-b .ct-slice-donut {
+    stroke: $light-red;
+  }
+
+  .ct-series-a .ct-slice-donut, .ct-series-c .ct-slice-donut {
+    stroke: white;
   }
 }

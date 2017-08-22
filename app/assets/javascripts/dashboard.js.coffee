@@ -80,7 +80,7 @@ class MultilineVotesCount extends Pluralized
 
 class PositiveVotes
   constructor: ->
-    @votesCount  = new VotesCount('#positive-count')
+    @votesCount  = new VotesCount('.js-positive-count')
     @progressBar = new ProgressBar('#left-progress-bar')
     @percentage  = $('#positive-percent')
 
@@ -91,7 +91,7 @@ class PositiveVotes
 
 class NegativeVotes
   constructor: ->
-    @votesCount  = new VotesCount('#negative-count')
+    @votesCount  = new VotesCount('.js-negative-count')
     @progressBar = new ProgressBar('#right-progress-bar')
     @percentage  = $('#negative-percent')
 

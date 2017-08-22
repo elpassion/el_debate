@@ -11,16 +11,20 @@ body {
 
 #main {
   flex: 1 0 auto;
+
+  & > .row {
+    margin-bottom: 0;
+  }
 }
 
 .container {
-  padding-left: 120px;
-  padding-right: 120px;
+  
+  padding: 0 60px;
   width: 100%;
   margin: 0 auto;
 
   &.content {
-    padding-top: 100px;
+    padding-top: 40px;
   }
 }
 
