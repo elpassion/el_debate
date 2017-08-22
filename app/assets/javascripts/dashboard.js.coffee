@@ -9,8 +9,6 @@ class Circle
     negative = parseInt(@container.data('negative'))
     @update(positive, negative);
 
-    console.log(@chart);
-
   subscribe: (channel) ->
     channel.bind('debate_changed', @onDebateChanged)
     channel.bind('debate_reset', @onDebateChanged)
@@ -49,7 +47,7 @@ class Circle
   options: ->
     donut: true
     showLabel: false
-    donutWidth: 8
+    donutWidth: 12
     total: 100
     startAngle: @calculateStartAngle()
 

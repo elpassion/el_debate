@@ -127,12 +127,6 @@ p.debate-status {
   margin-top: 20px;
 }
 
-.left-counters {
-}
-
-.right-counters {
-}
-
 .left-border-radius {
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
@@ -141,22 +135,6 @@ p.debate-status {
 .right-border-radius {
   border-top-right-radius: 10px;
   border-bottom-right-radius: 10px;
-}
-
-.progressbar {
-  margin-top: -50px;
-  overflow: hidden;
-  width: 100%;
-  height: 20px;
-  color: $grey;
-  background: repeating-linear-gradient(
-    -55deg,
-    white,
-    white 10px,
-    $grey 10px,
-    $grey 20px
-  );
-  // background: repeating-linear-gradient(-60deg, white, $light-grey 4px, $light-grey 4px, white 7px);
 }
 
 #right-progress-bar {
@@ -180,20 +158,6 @@ p.debate-status {
   float: right;
   transition: width 500ms ease-out;
 }
-
-// #negative-percent {
-//   font-size: 35px;
-//   float: left;
-//   color: $light-red;
-//   margin-left: 35px;
-// }
-
-// #positive-percent {
-//   font-size: 35px;
-//   float: right;
-//   color: $light-blue;
-//   margin-right: 35px;
-// }
 
 #negative-count {
   margin-top: -35px;
@@ -548,10 +512,6 @@ p#debate-status {
       h4 {
         font-size: 3rem;
       }
-
-      .ct-series path {
-        stroke-width: 12px !important;
-      }
     }
 
     &-count {
@@ -611,10 +571,15 @@ p#debate-status {
 }
 
 #circle-chart {
-  width: 100%;
-  height: 100%;
+  width: 103%;
+  height: 103%;
   position: absolute;
   z-index: 2;
+
+  @include media('>=tv') {
+    width: 101%;
+    height: 101%;
+  }
 
   .ct-series-d .ct-slice-donut {
     stroke: $light-blue;
