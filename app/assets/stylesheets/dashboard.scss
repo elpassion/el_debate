@@ -28,6 +28,10 @@ h4 {
     text-align: center;
     padding-top: 1px;
     color: $grey;
+
+    @include media('>=tv') {
+      font-size: 30px;
+    }
   }
 }
 
@@ -39,6 +43,10 @@ h5 {
     margin-right: 20px;
     margin-left: 20px;
     font-weight: 500;
+
+    @include media('>=tv') {
+      font-size: 3rem;
+    }
   }
 
   &.closed-debate {
@@ -140,10 +148,15 @@ p.debate-status {
   overflow: hidden;
   width: 100%;
   height: 20px;
-  color: lightgray;
-  background: repeating-linear-gradient(-60deg, white, whitesmoke 4px, whitesmoke 4px, white 7px);
-
-
+  color: $grey;
+  background: repeating-linear-gradient(
+    -55deg,
+    white,
+    white 10px,
+    $grey 10px,
+    $grey 20px
+  );
+  // background: repeating-linear-gradient(-60deg, white, $light-grey 4px, $light-grey 4px, white 7px);
 }
 
 #right-progress-bar {
@@ -152,6 +165,7 @@ p.debate-status {
   width: 100%;
   height: 20px;
   background-color: $light-red;
+  position: relative;
   float: left;
   transition: width 500ms;
 }
@@ -162,6 +176,7 @@ p.debate-status {
   width: 100%;
   height: 20px;
   background-color: $light-blue;
+  position: relative;
   float: right;
   transition: width 500ms ease-out;
 }
@@ -183,7 +198,7 @@ p.debate-status {
 #negative-count {
   margin-top: -35px;
   font-size: 14px;
-  color: lightgray;
+  color: $grey;
   float:right;
   padding-top: 10px;
 }
@@ -196,7 +211,7 @@ p.debate-status {
 #positive-count {
   margin-top: -35px;
   font-size: 14px;
-  color: lightgray;
+  color: $grey;
   float: left;
   padding-top: 10px;
 }
@@ -215,7 +230,7 @@ p.debate-status {
 }
 
 #votes-noun {
-  color: lightgray;
+  color: $grey;
 }
 
 .debate {
@@ -236,7 +251,7 @@ p.debate-status {
   #neutral-noun {
     position: relative;
     z-index: 2;
-    color: lightgray;
+    color: $grey;
   }
 
   .circle-shadow {
@@ -275,10 +290,12 @@ p.debate-status {
   }
 }
 
+.comments-feed-wrapper {
+  background-color: #f6f6f6;
+}
+
 #comments-feed {
   height: calc(100vh - 110px);
-  border-left: 1px solid $grey;
-  background: white;
   overflow: hidden;
 
   .moving-feed {
@@ -353,17 +370,20 @@ p.debate-status {
 
   .call-for-action {
     color: $dark-grey;
-    margin-top: 50px;
-    // padding-top: 5px;
-    padding-left: 70px;
-    text-align: left;
-
-    padding-top: 65px;
+    text-align: center;
+    padding-top: 0;
+    max-width: 200px;
+    margin: 65px auto 0 auto;
 
     .app-icon {
+      width: 40px;
       border-radius: 10%;
       margin-right: 20px;
       margin-bottom: -12px;
+
+      @include media('>=tv') {
+        width: 60px;
+      }
     }
   }
 }
@@ -373,6 +393,11 @@ p.debate-status {
   font-size: 20px;
   height: 100px;
   text-align: center;
+
+  @include media('>=tv') {
+    font-size: 26px;
+  }
+
 
   span.channel-title {
     background: image_url('dashboard/slack_icon.png') 10px 4px no-repeat;
@@ -422,15 +447,33 @@ p#debate-status {
     &-bar {
       width: 100%;
       height: 20px;
-      background: repeating-linear-gradient(-60deg, white, whitesmoke 4px, whitesmoke 4px, white 7px);
+      position: relative;
+      background: repeating-linear-gradient(-60deg, white, white 4px, whitesmoke 4px, whitesmoke 7px);
+
+      &:before {
+        width: 100%;
+        height: 100%;
+        content: close-quote;
+        border-radius: inherit;
+        border: 1px solid whitesmoke;
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
     }
 
     &-people {
-      font-size: 16px;
-      color: lightgray;
+      font-size: 18px;
+      color: #d6d6d6;
       position: absolute;
       right: 0;
-      bottom: 0;
+      top: 16px;
+      font-weight: 500;
+
+      @include media('>=tv') {
+        top: 0;
+        font-size: 30px;
+      }
     }
 
     &-percentage {
@@ -450,15 +493,39 @@ p#debate-status {
     &-positive,
     &-negative {
       margin-bottom: 20px;
+      position: relative;
+
+      h4 {
+        display: inline-block;
+        position: relative;
+      }
     }
 
     &-positive {
       color: $light-blue;
+
+      h4:before {
+        content: image_url('dashboard/positive.svg');
+        position: absolute;
+        left: -10px;
+        transform: translate(-100%, 0);
+        height: 40px;
+        top: 5px;
+      }
     }
 
     &-negative {
       color: $light-red;
       margin-left: 20px;
+
+      h4:before {
+        content: image_url('dashboard/negative.svg');
+        position: absolute;
+        right: -10px;
+        transform: translate(100%, 0);
+        height: 100%;
+        top: 5px;
+      }
     }
   }
 
@@ -473,23 +540,26 @@ p#debate-status {
     flex-direction: column;
     flex-shrink: 0;
     
-    // &:before {
-    //   content: close-quote;
-    //   width: 90%;
-    //   height: 90%;
-    //   display: block;
-    //   position: absolute;
-    //   top: 5%;
-    //   left: 5%;
-    //   background: white;
-    // }
+    @include media('>=tv') {
+      width: 11vw;
+      height: 11vw;
+      font-size: 22px;
+
+      h4 {
+        font-size: 3rem;
+      }
+
+      .ct-series path {
+        stroke-width: 12px !important;
+      }
+    }
 
     &-count {
       margin: 0;
     }
 
     &-noun {
-      color: lightgray;
+      color: $grey;
     }
 
     &:before {
@@ -541,8 +611,8 @@ p#debate-status {
 }
 
 #circle-chart {
-  width: #{$circle-size + 5}px;
-  height: #{$circle-size + 5}px;
+  width: 100%;
+  height: 100%;
   position: absolute;
   z-index: 2;
 

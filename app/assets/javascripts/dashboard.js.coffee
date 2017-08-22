@@ -7,7 +7,9 @@ class Circle
     @chart = new Chartist.Pie(containerSelector)
     positive = parseInt(@container.data('positive'))
     negative = parseInt(@container.data('negative'))
-    @update(positive, negative)
+    @update(positive, negative);
+
+    console.log(@chart);
 
   subscribe: (channel) ->
     channel.bind('debate_changed', @onDebateChanged)
