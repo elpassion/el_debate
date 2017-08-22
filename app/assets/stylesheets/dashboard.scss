@@ -573,10 +573,14 @@ p#debate-status {
 #circle-chart {
   width: 103%;
   height: 103%;
+  top: -1.5%;
+  left: -1.5%;
   position: absolute;
   z-index: 2;
 
   @include media('>=tv') {
+    top: -0.5%;
+    left: -0.5%;
     width: 101%;
     height: 101%;
   }
