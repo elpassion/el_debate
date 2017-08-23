@@ -22,7 +22,7 @@ ActiveAdmin.register Comment do
   member_action :activate, method: :put do
     debate = Debate.find(params[:debate_id])
     resource.active!
-    CommentNotifier.new.call(resource, "dashboard_channel_#{debate[:code]}")
+    CommentNotifier.new.send_comment(resource, "dashboard_channel_#{debate.code}")
     redirect_to admin_debate_comments_url, alert: "Status was changed"
   end
 
@@ -39,12 +39,10 @@ ActiveAdmin.register Comment do
   end
 
   batch_action :activate do |ids|
-    comments = Comment.find(ids).map do |comment|
-      comment.active!
-      CommentSerializer.new(comment).to_h
-    end
+    debate = Debate.find_by_id!(params[:debate_id])
+    comments = debate.comments.where(id: ids).update(status: :active)
 
-    CommentNotifier.new.send_comments(params[:debate_id], comments)
+    CommentNotifier.new.send_comments(comments, "dashboard_channel_multiple_#{debate.code}")
     redirect_to admin_debate_comments_url, alert: "Status was changed"
   end
 

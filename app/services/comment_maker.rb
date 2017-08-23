@@ -11,7 +11,7 @@ class CommentMaker
 
   def call(params)
     create_comment!(params).tap do |comment|
-      @notifier.call(comment, channel)
+      @notifier.send_comment(comment, channel)
     end
   end
 

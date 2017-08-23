@@ -1,4 +1,8 @@
 class CommentSerializer
+  def self.serialize(comment)
+    new(comment).to_h
+  end
+
   def initialize(comment)
     @comment = comment
   end
@@ -14,6 +18,10 @@ class CommentSerializer
       user_id: comment.user_id,
       status: comment.status
     }
+  end
+
+  def as_json(*)
+    to_h
   end
 
   private
