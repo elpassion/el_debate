@@ -4,56 +4,32 @@
     .container.content
       .debate
         .center
-          h5#debate-topic class=(@debate.closed? ? 'closed-debate' : 'debate-topic')
+          h5.debate-topic.js-debate-topic class=(@debate.closed? ? 'closed-debate' : 'debate-topic')
             = @debate.topic
-          p#debate-status
+          p.debate-status.js-debate-status
             - if @debate.closed?
               | Debate is closed.
           .votes-box
-            h4.votes-count
-              span.inline#votes-count = @debate.votes_count
-              span.inline#noun-count = pluralize_without_count(@debate.votes_count, 'person')
+            h4.votes-count-wrapper
+              span.inline.js-votes-count = @debate.votes_count
+              span.inline.js-noun-count = pluralize_without_count(@debate.votes_count, 'person')
               span.inline debating
 
-      .row.answers
-        .answers-values.positive
-          .answers-values-positive
-            h4.thumb_image= @debate.positive_value
-          .answers-values-bar.left.left-border-radius
-            #left-progress-bar style="width: #{@debate.positive_percent}"
-          .answers-values-people.js-positive-count
-            = "#{@debate.positive_count} #{pluralize_without_count(@debate.positive_count, 'person')}"
-          .answers-values-percentage.positive
-            h4#positive-percent= @debate.positive_percent
-
-        .answers-circle data-positive=@debate.positive_count data-negative=@debate.negative_count
-          #circle-chart data-positive=@debate.positive_count data-negative=@debate.negative_count
-          h4.answers-circle-count#neutral-count
-            = @debate.neutral_count
-          .answers-circle-noun
-            = @debate.neutral_value
-
-        .answers-values.negative
-          .answers-values-negative
-            h4.thumb_image= @debate.negative_value
-          .answers-values-bar.right.right-border-radius
-            #right-progress-bar style="width: #{@debate.negative_percent}"
-          .answers-values-people.js-negative-count
-            = "#{@debate.negative_count} #{pluralize_without_count(@debate.negative_count, 'person')}"
-          .answers-values-percentage.negative
-            h4#negative-percent= @debate.negative_percent
+      .row
+        = render partial: 'dashboard/votes-chart'
 
       - if @debate.channel_name.present?
         .call-for-action
           | Comment a discussion on
           span.channel-title = @debate.channel_name
           | channel
+          
   .col.s4.comments-feed-wrapper 
-    #comments-feed
+    .comments-feed
       .call-for-action
         = image_tag('dashboard/app_icon.png',class: 'app-icon')
         p Download EL Debate app and comment!
-      .comments
+      .comments.js-comments
 
 
 javascript:

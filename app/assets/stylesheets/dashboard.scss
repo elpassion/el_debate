@@ -5,33 +5,15 @@ span.inline {
   margin: 4px;
 }
 
-h4 {
-  &.positive {
-    color: $light-blue;
-    display: table-cell;
-    white-space: nowrap;
-    float: right;
-    padding-top: 14px;
-  }
+.votes-count-wrapper {
+  font-weight: 300;
+  font-size: 24px;
+  text-align: center;
+  padding-top: 1px;
+  color: $grey;
 
-  &.negative {
-    color: $light-red;
-    display: table-cell;
-    white-space: nowrap;
-    float: left;
-    padding-top: 14px;
-  }
-
-  &.votes-count {
-    font-weight: 300;
-    font-size: 24px;
-    text-align: center;
-    padding-top: 1px;
-    color: $grey;
-
-    @include media('>=tv') {
-      font-size: 30px;
-    }
+  @include media('>=tv') {
+    font-size: 30px;
   }
 }
 
@@ -61,7 +43,6 @@ p.debate-status {
   font-weight: 400;
 }
 
-
 .row {
   .col.s5 {
     width: 44.66667%;
@@ -74,51 +55,6 @@ p.debate-status {
   }
 }
 
-.vote-box {
-  height: 104px;
-  width: 250px;
-  background-repeat: no-repeat;
-  margin-bottom: 10px;
-  padding-left: 80px;
-  padding-bottom: 15px;
-  display: table;
-  text-align: center;
-}
-
-.answer-values {
-  padding-left: 180px;
-}
-
-.negative-value {
-  padding-right: 25px !important;
-}
-
-.positive-box {
-  @extend .vote-box;
-  float: right;
-
-  &.positive-image {
-    background-image: image_url('dashboard/positive.svg');
-    background-position: right center;
-    background-size: 40px;
-    padding-right: 50px;
-    margin-right: 20px;
-  }
-}
-
-.negative-box {
-  @extend .vote-box;
-  float: left;
-
-  &.negative-image {
-    background-image: image_url('dashboard/negative.svg');
-    background-position: left center;
-    background-size: 40px;
-    padding-left: 50px;
-    margin-left: 60px;
-  }
-}
-
 .votes-box {
   height: 65px;
   width: 230px;
@@ -127,140 +63,17 @@ p.debate-status {
   margin-top: 20px;
 }
 
-.left-border-radius {
-  border-top-left-radius: 10px;
-  border-bottom-left-radius: 10px;
-}
-
-.right-border-radius {
-  border-top-right-radius: 10px;
-  border-bottom-right-radius: 10px;
-}
-
-#right-progress-bar {
-  border-top-right-radius: 10px;
-  border-bottom-right-radius: 10px;
-  width: 100%;
-  height: 20px;
-  background-color: $light-red;
-  position: relative;
-  float: left;
-  transition: width 500ms;
-}
-
-#left-progress-bar {
-  border-top-left-radius: 10px;
-  border-bottom-left-radius: 10px;
-  width: 100%;
-  height: 20px;
-  background-color: $light-blue;
-  position: relative;
-  float: right;
-  transition: width 500ms ease-out;
-}
-
-#negative-count {
-  margin-top: -35px;
-  font-size: 14px;
-  color: $grey;
-  float:right;
-  padding-top: 10px;
-}
-
-#negative-noun {
-  @extend #negative-count;
-  margin-left: 5px;
-}
-
-#positive-count {
-  margin-top: -35px;
-  font-size: 14px;
-  color: $grey;
-  float: left;
-  padding-top: 10px;
-}
-
-#positive-noun {
-  @extend #positive-count;
-  margin-left: 5px;
-}
-
-#neutral-count {
-  font-weight: 500;
-}
-
-#neutral-noun {
-  font-weight: 400;
-}
-
-#votes-noun {
-  color: $grey;
-}
-
 .debate {
   margin-bottom: 45px;
 }
 
-#center-info {
-  position: relative;
-
-  // #neutral-count {
-  //   margin-top: -70px;
-  //   position: relative;
-  //   z-index: 2;
-  //   font-weight: 400;
-  //   margin-bottom: 0
-  // }
-
-  #neutral-noun {
-    position: relative;
-    z-index: 2;
-    color: $grey;
-  }
-
-  .circle-shadow {
-    border-radius: 50%;
-    background-color: white;
-    box-shadow: 0 1px 15px 0 rgba(0, 0, 0, 0.16);
-    position: absolute;
-    left: -13px;
-    top: -110px;
-    width: 140px;
-    height: 140px;
-    z-index: 1;
-  }
-
-
-  
-  #circle-chart {
-    width: 153px;
-    height: 153px;
-    position: absolute;
-    left: -20px;
-    top: -115px;
-    z-index: 2;
-
-    .ct-series-d .ct-slice-donut {
-      stroke: $light-blue;
-    }
-
-    .ct-series-b .ct-slice-donut {
-      stroke: $light-red;
-    }
-
-    .ct-series-a .ct-slice-donut, .ct-series-c .ct-slice-donut {
-      stroke: white;
-    }
-  }
-}
-
-.comments-feed-wrapper {
-  background-color: #f6f6f6;
-}
-
-#comments-feed {
+.comments-feed {
   height: calc(100vh - 110px);
   overflow: hidden;
+  
+  &-wrapper {
+    background-color: #f6f6f6;
+  }
 
   .moving-feed {
     .comment {
@@ -372,228 +185,33 @@ p.debate-status {
   }
 }
 
-p#debate-status {
+.debate-status {
   font-weight: 500;
   font-size: 20px;
   margin-top: 25px;
 }
 
-.answers {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-
-  &-values {
-    width: calc(50% - #{$circle-size / 2}px);
-    display: flex;
-    position: relative;
-    flex-direction: column;
-    
-    &.positive {
-      align-items: flex-end; 
-
-      .answers-values-people {
-        left: 0;
-      }
-
-      .answers-values-positive,
-      .answers-values-percentage {
-        margin-left: 0;
-        margin-right: 20px;
-      }
-    }
-
-    h4 {
-      margin: 0;
-    }
-
-    &-bar {
-      width: 100%;
-      height: 20px;
-      position: relative;
-      background: repeating-linear-gradient(-60deg, white, white 4px, whitesmoke 4px, whitesmoke 7px);
-
-      &:before {
-        width: 100%;
-        height: 100%;
-        content: close-quote;
-        border-radius: inherit;
-        border: 1px solid whitesmoke;
-        position: absolute;
-        top: 0;
-        left: 0;
-      }
-    }
-
-    &-people {
-      font-size: 18px;
-      color: #d6d6d6;
-      position: absolute;
-      right: 0;
-      top: 16px;
-      font-weight: 500;
-
-      @include media('>=tv') {
-        top: 0;
-        font-size: 30px;
-      }
-    }
-
-    &-percentage {
-      font-size: 35px;
-      margin-top: 20px;
-      margin-left: 20px;
-
-      &.positive {
-        color: $light-blue;
-      }
-
-      &.negative {
-        color: $light-red;
-      }
-    }
-    
-    &-positive,
-    &-negative {
-      margin-bottom: 20px;
-      position: relative;
-
-      h4 {
-        display: inline-block;
-        position: relative;
-      }
-    }
-
-    &-positive {
-      color: $light-blue;
-
-      h4:before {
-        content: image_url('dashboard/positive.svg');
-        position: absolute;
-        left: -10px;
-        transform: translate(-100%, 0);
-        height: 40px;
-        top: 5px;
-      }
-    }
-
-    &-negative {
-      color: $light-red;
-      margin-left: 20px;
-
-      h4:before {
-        content: image_url('dashboard/negative.svg');
-        position: absolute;
-        right: -10px;
-        transform: translate(100%, 0);
-        height: 100%;
-        top: 5px;
-      }
-    }
-  }
-
-  &-circle {
-    width: #{$circle-size}px;
-    height: #{$circle-size}px;
-    border-radius: 50%;
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    flex-shrink: 0;
-    
-    @include media('>=tv') {
-      width: 11vw;
-      height: 11vw;
-      font-size: 22px;
-
-      h4 {
-        font-size: 3rem;
-      }
-    }
-
-    &-count {
-      margin: 0;
-    }
-
-    &-noun {
-      color: $grey;
-    }
-
-    &:before {
-      content: close-quote;
-      display: block;
-      border-radius: 50%;
-      width: 100%;
-      height: 100%;
-      box-shadow: 0 0 15px 0 rgba(58, 32, 32, 0.15);
-      position: absolute;
-      top: 0;
-      left: 0;
-    }
-  }
+.text-small,
+.text-medium {
+  font-weight: 500;
+  line-height: 1;
 }
 
-#votes-chart {
-  width: #{$circle-size}px;
-  height: #{$circle-size}px;
-  background: $light-blue;
-  border-radius: 50%;
-  backface-visibility: hidden;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-
-  .right_half {
-    background-color: $light-blue;
-  }
-
-  .right_half,
-  &:before {
-    position: absolute;
-    top: 0;
-    right: 0;
-    display: block;
-    width: 50%;
-    height: 100%;
-    border-radius: 0 100% 100% 0 / 50%;
-    transform-origin: left;
-    transition: transform .5s;
-  }
-
-  &:before {
-    background-color: $light-red;
-    content: close-quote;
-  }
-}
-
-#circle-chart {
-  width: 103%;
-  height: 103%;
-  top: -1.5%;
-  left: -1.5%;
-  position: absolute;
-  z-index: 2;
+.text-small {
+  font-size: 18px;
+  color: #d6d6d6;
+  font-weight: 500;
 
   @include media('>=tv') {
-    top: -0.5%;
-    left: -0.5%;
-    width: 101%;
-    height: 101%;
+    font-size: 30px;
   }
+}
 
-  .ct-series-d .ct-slice-donut {
-    stroke: $light-blue;
-  }
+.text-medium {
+  font-size: 34px;
+  font-weight: 400;
 
-  .ct-series-b .ct-slice-donut {
-    stroke: $light-red;
-  }
-
-  .ct-series-a .ct-slice-donut, .ct-series-c .ct-slice-donut {
-    stroke: white;
+  @include media('>=tv') {
+    font-size: 40px;
   }
 }
