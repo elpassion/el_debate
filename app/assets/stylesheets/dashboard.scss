@@ -91,6 +91,7 @@ p.debate-status {
   .comments {
     width: 90%;
     padding: 25px;
+    margin: 0 auto;
     position: relative;
   }
 
@@ -132,15 +133,18 @@ p.debate-status {
     }
 
     .content {
-      text-align: justify;
       width: 100%;
       float: left;
 
       p {
         color: $dark-grey;
         margin: 10px 0 35px;
-        font-size: 25px;
+        font-size: 16px;
         word-wrap: break-word;
+
+        @include media('>=tv') {
+          font-size: 25px;
+        }
       }
     }
   }
