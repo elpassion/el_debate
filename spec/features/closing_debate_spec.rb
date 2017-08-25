@@ -18,7 +18,7 @@ feature 'Closing debate' do
     expect(page).to have_content('Debate closed!')
 
     visit "/dashboard/#{debate.slug}"
-    within 'p#debate-status' do
+    within 'p.js-debate-status' do
       expect(page).to have_content('closed')
     end
   end

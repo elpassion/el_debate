@@ -1,6 +1,23 @@
 # Place all the behaviors and hooks related to the matching controller here.
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
+selectors = 
+  left:
+    progress: '.js-left-progress'
+    count: '.js-left-count'
+    percentage: '.js-left-percentage'
+  right:
+    progress: '.js-right-progress'
+    count: '.js-right-count'
+    percentage: '.js-right-percentage'
+  centerCircle: '.js-center-circle'
+  centerCount: '.js-center-count'
+  debateTopic: '.js-debate-topic'
+  debateStatus: '.js-debate-status'
+  votesCount: '.js-votes-count'
+  nounCount: '.js-noun-count'
+  comments: '.js-comments'
+
 class Circle
   constructor: (containerSelector) ->
     @container = $(containerSelector)
@@ -19,7 +36,10 @@ class Circle
 
   update: (positive, negative) =>
     if positive + negative > 0
-      @setPercentage(positive, negative)
+      order = [negative, positive]
+      if window.leftSidePositive == "true" then order.reverse()
+
+      @setPercentage.apply(this, order)
       @container.show()
       @chart.update(@series(), @options())
     else
@@ -47,7 +67,7 @@ class Circle
   options: ->
     donut: true
     showLabel: false
-    donutWidth: 8
+    donutWidth: 12
     total: 100
     startAngle: @calculateStartAngle()
 
@@ -80,9 +100,9 @@ class MultilineVotesCount extends Pluralized
 
 class PositiveVotes
   constructor: ->
-    @votesCount  = new VotesCount('#positive-count')
-    @progressBar = new ProgressBar('#left-progress-bar')
-    @percentage  = $('#positive-percent')
+    @votesCount  = new VotesCount(positiveSelectors.count)
+    @progressBar = new ProgressBar(positiveSelectors.progress)
+    @percentage  = $(positiveSelectors.percentage)
 
   update: (debate) ->
     @votesCount.update(debate.positive_count)
@@ -91,9 +111,9 @@ class PositiveVotes
 
 class NegativeVotes
   constructor: ->
-    @votesCount  = new VotesCount('#negative-count')
-    @progressBar = new ProgressBar('#right-progress-bar')
-    @percentage  = $('#negative-percent')
+    @votesCount  = new VotesCount(negativeSelectors.count)
+    @progressBar = new ProgressBar(negativeSelectors.progress)
+    @percentage  = $(negativeSelectors.percentage)
 
   update: (debate) ->
     @votesCount.update(debate.negative_count)
@@ -102,14 +122,14 @@ class NegativeVotes
 
 class NeutralVotes
   constructor: ->
-    @counter = new MultilineVotesCount('#neutral-count')
+    @counter = new MultilineVotesCount(selectors.centerCount)
 
   update: (debate) ->
     @counter.update(debate.neutral_count)
 
 class ValidVotes
   constructor: ->
-    @counter = new MultilineVotesCount('#votes-count', '#noun-count')
+    @counter = new MultilineVotesCount(selectors.votesCount, selectors.nounCount)
 
   update: (debate) ->
     @counter.update(debate.votes_count)
@@ -134,19 +154,23 @@ class Votes
 class Debate
   subscribe: (channel) ->
     channel.bind 'debate_opened', =>
-      $('#debate-status').text('')
-      $('#debate-topic')[0].className = 'debate-topic'
+      $(selectors.debateStatus).text('')
+      $(selectors.debateTopic)[0].className = 'debate-topic'
     channel.bind 'debate_closed', =>
-      $('#debate-status').text('Debate is closed.')
-      $('#debate-topic')[0].className = 'closed-debate'
+      $(selectors.debateStatus).text('Debate is closed.')
+      $(selectors.debateTopic)[0].className = 'closed-debate'
 
 initialize = ->
   pusher      = new Pusher(pusherAppKey, { cluster: pusherAppCluster, encrypted: true })
   userChannel = pusher.subscribe("dashboard_channel_#{debateCode}")
-  feed        = new Feed(userChannel, $('#comments-feed .comments'))
+  feed        = new Feed(userChannel, $(selectors.comments))
+
+  window.leftSidePositive = $('.js-left-positive').attr('data-positive')
+  window.positiveSelectors = if leftSidePositive == 'true' then selectors.left else selectors.right
+  window.negativeSelectors = if leftSidePositive != 'true' then selectors.right else selectors.left
 
   component.subscribe(userChannel) for component in [
-    (new Circle('#circle-chart')),
+    (new Circle(selectors.centerCircle)),
     (new Votes()),
     (new Debate())
   ]
