@@ -18,7 +18,7 @@ feature 'Reopening debate' do
     expect(page).to have_content('Debate reopened!')
 
     visit "/dashboard/#{debate.slug}"
-    within 'p.debate-status' do
+    within 'p.js-debate-status' do
       expect(page).not_to have_content('closed')
     end
   end
