@@ -1,7 +1,14 @@
 require 'rails_helper'
 
 describe Api::LoginsController, type: :controller do
+  subject do
+    action
+    response
+  end
+
+  let(:action) { post :create, params: params }
   let(:debate) { create(:debate) }
+  let(:json_response) { JSON.parse(subject.body) }
 
   let(:params) do
     {
@@ -11,58 +18,48 @@ describe Api::LoginsController, type: :controller do
   end
 
   context 'when debate not found' do
-    before { post :create, params: { code: '12345' } }
+    let(:params) do
+      { code: '12345' }
+    end
 
     it 'return not found status' do
-      expect(response).to have_http_status(:not_found)
+      expect(subject).to have_http_status(:not_found)
     end
 
     it 'returns proper error message' do
-      json_response = JSON.parse(response.body)
       expect(json_response).to include('error')
       expect(json_response['error']).to eq('Debate not found')
+    end
+
+    it 'does not create mobile user' do
+      expect { subject }.not_to change { MobileUser.count }
     end
   end
 
   context 'when everything is ok' do
-    subject { post :create, params: params }
-
     it 'returns success status' do
-      subject
-      expect(response).to have_http_status(:success)
+      expect(subject).to have_http_status(:success)
     end
 
     it 'returns auth token and user_id' do
-      subject
-      json_response = JSON.parse(response.body)
       expect(json_response).to include('auth_token', 'user_id')
     end
 
     it 'creates mobile user' do
-      expect{ subject }.to change{ MobileUser.count }.by 1
+      expect { subject }.to change { MobileUser.count }.by 1
     end
   end
 
   context 'when debate is closed' do
     let(:debate) { create(:debate, :closed_debate) }
 
-    before do
-      post :create, params: { code: debate.code, username: 'Abc' }
-    end
-
     it 'returns debate_closed flag set to true' do
-      json_response = JSON.parse(response.body)
       expect(json_response['debate_closed']).to eq true
     end
   end
 
   context 'when debate is opened' do
-    before do
-      post :create, params: { code: debate.code, username: 'Abc' }
-    end
-
     it 'returns debate_closed flag set to false' do
-      json_response = JSON.parse(response.body)
       expect(json_response['debate_closed']).to eq false
     end
   end
