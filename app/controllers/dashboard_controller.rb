@@ -3,14 +3,14 @@ class DashboardController < ApplicationController
     debate = Debate.find_by!(slug: params[:slug])
     @debate = DebatePresenter.new(debate)
 
-    @right = {
+    @chart_right_data = {
       positive: true,
       value: @debate.positive_value,
       percent: @debate.positive_percent,
       count: @debate.positive_count
     }
     
-    @left = {
+    @chart_left_data = {
       positive: false,
       value: @debate.negative_value,
       percent: @debate.negative_percent,

@@ -24,7 +24,7 @@ class Circle
     @chart = new Chartist.Pie(containerSelector)
     positive = parseInt(@container.data('positive'))
     negative = parseInt(@container.data('negative'))
-    @update(positive, negative);
+    @update(positive, negative)
 
   subscribe: (channel) ->
     channel.bind('debate_changed', @onDebateChanged)
@@ -36,7 +36,7 @@ class Circle
 
   update: (positive, negative) =>
     if positive + negative > 0
-      order = [negative, positive];
+      order = [negative, positive]
       if window.leftSidePositive == "true" then order.reverse()
 
       @setPercentage.apply(this, order)
