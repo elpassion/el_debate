@@ -3,7 +3,7 @@ require 'rails_helper'
 describe Api::CommentsController do
   let(:params) { { text: 'comment_text', username: 'username' } }
   before(:all) do
-    Timecop.freeze(Time.local(2017, 8, 5, 0, 0, 0))
+    Timecop.freeze(Time.local(2017, 8, 5, 10, 10, 10))
   end
 
   after do
@@ -39,23 +39,23 @@ describe Api::CommentsController do
           [{ "id" => comment1.id,
              "content" => "content comment 1",
              "full_name" => 'John Doe',
-             "created_at" => Time.now.to_i,
+             "created_at" => Time.now.to_i * 1000,
              "user_initials_background_color" => mobile_user.initials_background_color,
              "user_initials" => 'JD',
              "user_id" => mobile_user.id,
-             "status" => "active" },
+             "status" => "accepted" },
            { "id" => comment2.id,
              "content" => "content comment 2",
              "full_name" => 'John Doe',
-             "created_at" => Time.now.to_i,
+             "created_at" => Time.now.to_i * 1000,
              "user_initials_background_color" => mobile_user.initials_background_color,
              "user_initials" => 'JD',
              "user_id" => mobile_user.id,
-             "status" => "active" }]
+             "status" => "accepted" }]
         end
 
-        let(:comment1) { build(:comment, user: mobile_user, content: 'content comment 1', debate: debate, status: :active) }
-        let(:comment2) { build(:comment, user: mobile_user, content: 'content comment 2', debate: debate, status: :active) }
+        let(:comment1) { build(:comment, user: mobile_user, content: 'content comment 1', debate: debate, status: :accepted) }
+        let(:comment2) { build(:comment, user: mobile_user, content: 'content comment 2', debate: debate, status: :accepted) }
 
         before do
           comment1.save
@@ -78,7 +78,7 @@ describe Api::CommentsController do
         end
       end
 
-      context 'when comments are created, but status is inactive' do
+      context 'when comments are created, but status is pending' do
         before do
           FactoryGirl.create(:comment, user: mobile_user, content: 'content comment 1', debate: debate)
           FactoryGirl.create(:comment, user: mobile_user, content: 'content comment 2', debate: debate)

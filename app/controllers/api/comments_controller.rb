@@ -3,13 +3,13 @@ class Api::CommentsController < Api::ApplicationController
   before_action :require_current_debate
 
   def create
-      update_mobile_user_identity
-      CommentMaker.perform(debate: current_debate, user: @mobile_user, params: comment_params)
-      head :created
+    update_mobile_user_identity
+    CommentMaker.perform(debate: current_debate, user: @mobile_user, params: comment_params)
+    head :created
   end
 
   def index
-      render json: comments.map { |comment| CommentSerializer.new(comment).to_h }
+    render json: current_debate.retrieve_comments.map { |comment| CommentSerializer.new(comment) }
   end
 
   private
@@ -25,9 +25,5 @@ class Api::CommentsController < Api::ApplicationController
   def update_mobile_user_identity
     MobileUserIdentity.new(@mobile_user).update(first_name: params.dig(:first_name),
                                                 last_name: params.dig(:last_name))
-  end
-
-  def comments
-    current_debate.moderate? ? current_debate.comments.active : current_debate.comments
   end
 end

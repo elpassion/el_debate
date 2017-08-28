@@ -146,6 +146,9 @@ GEM
       turbolinks
     jquery-ui-rails (6.0.1)
       railties (>= 3.2.16)
+    js-routes (1.4.0)
+      railties (>= 3.2)
+      sprockets-rails
     kaminari (1.0.1)
       activesupport (>= 4.1.0)
       kaminari-actionview (= 1.0.1)
@@ -335,6 +338,7 @@ DEPENDENCIES
   jbuilder (~> 2.5)
   jquery-rails
   jquery-turbolinks
+  js-routes
   listen (~> 3.0.5)
   materialize-sass
   pg
@@ -362,4 +366,4 @@ RUBY VERSION
    ruby 2.3.3p222
 
 BUNDLED WITH
-   1.15.1
+   1.15.3

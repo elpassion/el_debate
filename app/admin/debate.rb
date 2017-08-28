@@ -17,7 +17,8 @@ ActiveAdmin.register Debate do
         item 'Reset', reset_admin_debate_path(debate), method: :put, class: 'member_link'
         item 'Close', close_admin_debate_path(debate), method: :put, class: 'member_link'
       end
-      item 'Comments', admin_debate_comments_path(debate)
+      item 'Comments', admin_debate_comments_path(debate), method: :get, class: 'member_link'
+      item 'Comments stream', admin_debate_commentstream_path(debate), method: :get, class: 'member_link'
     end
   end
 

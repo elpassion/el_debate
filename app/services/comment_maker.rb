@@ -27,10 +27,10 @@ class CommentMaker
   end
 
   def status
-    @status ||= @debate.moderate? ? :inactive : :active
+    @status ||= @debate.moderate? ? :pending : :accepted
   end
 
   def channel
-    status == :active ? "dashboard_channel_#{@debate.code}" : "admin_channel_#{@debate.code}"
+    status == :accepted ? "dashboard_channel_#{@debate.code}" : "admin_channel_#{@debate.code}"
   end
 end

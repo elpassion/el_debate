@@ -31,7 +31,7 @@ class ChannelObserver
 
   updateCommentsMultiple: (comments) =>
     for comment in comments
-      @commentsQueue.enq(comment)
+      @updateComments(comment)
 
   updateComments: (comment) =>
     @commentsQueue.enq(comment)
