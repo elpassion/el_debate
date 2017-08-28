@@ -60,7 +60,7 @@ class Comment
           .append($('<span>', { text: @user_initials, class: 'initials' }))
       )
   renderUserName: ->
-    $('<div>', { class: 'username col s10' })
+    $('<div>', { class: 'username col s8' })
       .append($('<strong>', { text: @full_name }))
 
   renderCurrentTime: ->
@@ -71,7 +71,7 @@ class Comment
     hours = today.getHours()
     hours = if hours >= 0 && hours < 10 then '0' + hours.toString() else hours
 
-    $('<div>', { class: 'time col s10' })
+    $('<div>', { class: 'time col s8' })
     .append($('<span>', { text: hours + ':' + minutes }))
 
   renderComment: ->

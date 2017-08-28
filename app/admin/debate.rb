@@ -26,7 +26,7 @@ ActiveAdmin.register Debate do
     attributes_table do
       row :topic
       row :link do |debate|
-        link_to "Go to dashboard", "/dashboard/#{debate.slug}"
+        link_to "Go to dashboard", dashboard_path(slug: debate.slug)
       end
 
       row :code do |debate|

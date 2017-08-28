@@ -1,0 +1,27 @@
+.votes-chart
+  .color-first.js-left-positive data-positive="#{@chart_left_data[:positive]}"
+    .text-medium
+      = @chart_left_data[:value]
+    .progress-bar
+      .progress-bar-inner.js-left-progress style="width: #{@chart_left_data[:percent]}"
+    .text-small.js-left-count
+      = "#{@chart_left_data[:count]} #{pluralize_without_count(@chart_left_data[:count], 'person')}"
+    .text-medium.js-left-percentage 
+      = @chart_left_data[:percent]
+    
+  div
+    .circle-chart.js-center-circle data-positive=@debate.positive_count data-negative=@debate.negative_count
+    .text-medium.js-center-count
+      = @debate.neutral_count
+    .text-small
+      = @debate.neutral_value
+
+  .color-second
+    .text-medium
+      = @chart_right_data[:value]
+    .progress-bar
+      .progress-bar-inner.js-right-progress style="width: #{@chart_right_data[:percent]}"
+    .text-small.js-right-count
+      = "#{@chart_right_data[:count]} #{pluralize_without_count(@chart_right_data[:count], 'person')}"
+    .text-medium.js-right-percentage
+      = @chart_right_data[:percent]
