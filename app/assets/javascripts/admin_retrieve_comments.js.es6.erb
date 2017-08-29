@@ -3,7 +3,7 @@ $(document).ready(function () {
     var pusherAppCluster = '<%= "#{ENV['PUSHER_APP_CLUSTER']}" %>';
     var debateCode = $('#debateCode').val();
     var debateId = $('#debateId').val();
-    pusher = new Pusher(pusherAppKey, {cluster: pusherAppCluster, encrypted: true});
+    var pusher = new Pusher(pusherAppKey, {cluster: pusherAppCluster, encrypted: true});
     var channel = pusher.subscribe("admin_channel_" + debateCode);
 
     channel.bind('comment_added', function (comment) {

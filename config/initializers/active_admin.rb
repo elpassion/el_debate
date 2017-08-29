@@ -192,8 +192,8 @@ ActiveAdmin.setup do |config|
   #   config.register_stylesheet 'my_print_stylesheet.css', media: :print
   #
   # To load a javascript file:
-    config.register_javascript 'admin_retrieve_comments.js'
-    config.register_javascript 'https://js.pusher.com/4.1/pusher.min.js'
+  config.register_javascript 'https://js.pusher.com/4.1/pusher.min.js'
+  config.register_javascript 'admin_retrieve_comments'
 
   # == CSV options
   #
