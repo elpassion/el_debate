@@ -14,6 +14,7 @@ gem 'materialize-sass'
 gem 'jquery-turbolinks'
 gem "js-routes"
 gem 'sprockets', '~> 3.0'
+gem 'sprockets-es6'
 gem 'activeadmin'
 gem 'inherited_resources'
 gem 'devise'
