@@ -15,6 +15,8 @@ class MobileUser < ApplicationRecord
   end
 
   def initials
-    full_name.split.map(&:first).join
+    [first_name, last_name]
+      .map { |name_part| name_part[0].upcase if name_part.present? }
+      .join
   end
 end
