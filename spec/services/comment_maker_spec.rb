@@ -25,6 +25,9 @@ describe CommentMaker do
 
       it 'saves a correct content' do
         expect(subject.content).to eq 'I do not agree with this'
+      end
+
+      it 'saves a correct status' do
         expect(subject.status).to eq('pending')
       end
 
@@ -37,7 +40,7 @@ describe CommentMaker do
     context 'when debate is non moderable' do
       let(:debate) { create(:debate, moderate: false) }
 
-      it 'sets comment status to active after save' do
+      it 'sets comment status to active' do
         expect(subject.status).to eq('accepted')
       end
     end

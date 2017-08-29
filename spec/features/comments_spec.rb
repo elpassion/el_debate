@@ -13,15 +13,15 @@ feature 'Debates comment' do
   before do
     FactoryGirl.create(:comment, debate_id: debate.id, user: user, status: :pending)
   end
+
   scenario 'activate comment' do
     visit admin_debate_comments_path(debate)
 
     expect(page).to have_content('pending')
 
     within 'div.table_actions' do
-      click_link_or_button 'accept'
+      click_link_or_button 'Accept'
     end
     expect(page).to have_content('accepted')
-
   end
 end

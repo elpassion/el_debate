@@ -35,38 +35,27 @@ describe Api::CommentsController do
 
     describe '#index' do
       context 'when comments are created and have status active' do
-        let(:expected_hash) do
-          [{ "id" => comment1.id,
-             "content" => "content comment 1",
-             "full_name" => 'John Doe',
+        let(:expected_list) do
+          [{ "id" => comment.id,
+             "content" => comment.content,
+             "full_name" => mobile_user.full_name,
              "created_at" => Time.now.to_i * 1000,
              "user_initials_background_color" => mobile_user.initials_background_color,
-             "user_initials" => 'JD',
+             "user_initials" => mobile_user.initials,
              "user_id" => mobile_user.id,
-             "status" => "accepted" },
-           { "id" => comment2.id,
-             "content" => "content comment 2",
-             "full_name" => 'John Doe',
-             "created_at" => Time.now.to_i * 1000,
-             "user_initials_background_color" => mobile_user.initials_background_color,
-             "user_initials" => 'JD',
-             "user_id" => mobile_user.id,
-             "status" => "accepted" }]
+             "status" => comment.status }]
         end
 
-        let(:comment1) { build(:comment, user: mobile_user, content: 'content comment 1', debate: debate, status: :accepted) }
-        let(:comment2) { build(:comment, user: mobile_user, content: 'content comment 2', debate: debate, status: :accepted) }
+        let!(:comment) { create(:comment, user: mobile_user, debate: debate, status: :accepted) }
 
         before do
-          comment1.save
-          comment2.save
           request.env['HTTP_AUTHORIZATION'] = auth_token.value
         end
 
         it 'retrieve valid status' do
           get :index
           expect(response.status).to eq(200)
-          expect(JSON.parse(response.body)).to eq(expected_hash)
+          expect(JSON.parse(response.body)).to eq(expected_list)
         end
       end
 
@@ -80,8 +69,8 @@ describe Api::CommentsController do
 
       context 'when comments are created, but status is pending' do
         before do
-          FactoryGirl.create(:comment, user: mobile_user, content: 'content comment 1', debate: debate)
-          FactoryGirl.create(:comment, user: mobile_user, content: 'content comment 2', debate: debate)
+          FactoryGirl.create(:comment, user: mobile_user, debate: debate)
+          FactoryGirl.create(:comment, user: mobile_user, debate: debate)
           request.env['HTTP_AUTHORIZATION'] = auth_token.value
         end
         it 'retrieve valid status and empty array of comments' do

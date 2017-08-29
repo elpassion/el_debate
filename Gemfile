@@ -27,6 +27,7 @@ gem 'exception_notification'
 gem 'slack-notifier'
 gem 'rack-attack', '~> 5.0.1'
 gem 'include_media_rails'
+gem 'momentjs-rails', '~> 2.11', '>= 2.11.1'
 
 group :development, :test do
   gem 'byebug', platform: :mri

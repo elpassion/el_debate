@@ -10,6 +10,9 @@ describe Comment do
       it 'delegates mobile user params' do
         expect(comment.user).to be_a MobileUser
         expect(comment.user_initials_background_color).to eq user.initials_background_color
+      end
+
+      it 'comment status is pending' do
         expect(comment.status).to eq('pending')
       end
     end

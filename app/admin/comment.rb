@@ -9,14 +9,8 @@ ActiveAdmin.register Comment do
     column :status
     column :created_at
     actions do |comment|
-      if comment.accepted?
-        item "reject", reject_admin_debate_comment_path(debate, comment), method: :put, class: 'member_link'
-      elsif comment.pending?
-        item "accept", accept_admin_debate_comment_path(debate, comment), method: :put, class: 'member_link'
-        item "reject", reject_admin_debate_comment_path(debate, comment), method: :put, class: 'member_link'
-      else
-        item "accept", accept_admin_debate_comment_path(debate, comment), method: :put, class: 'member_link'
-      end
+      item "Reject", reject_admin_debate_comment_path(debate, comment), method: :put, class: 'member_link' if !comment.rejected?
+      item "Accept", accept_admin_debate_comment_path(debate, comment), method: :put, class: 'member_link' if !comment.accepted?
     end
     render partial: 'admin/store_code_debate', locals: { debate_code: debate.code, debate_id: debate.id }
   end
