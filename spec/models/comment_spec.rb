@@ -12,7 +12,7 @@ describe Comment do
         expect(comment.user_initials_background_color).to eq user.initials_background_color
       end
 
-      it 'comment status is pending' do
+      it 'is pending' do
         expect(comment.status).to eq('pending')
       end
     end
