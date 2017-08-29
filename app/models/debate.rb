@@ -62,6 +62,10 @@ class Debate < ApplicationRecord
     @neutral_answer ||= answers.neutral.take
   end
 
+  def retrieve_comments
+    moderate? ? comments.accepted : comments
+  end
+
   private
 
   def block_code_change

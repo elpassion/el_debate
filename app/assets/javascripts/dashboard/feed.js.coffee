@@ -26,6 +26,13 @@ class ChannelObserver
   subscribe: (channel) ->
     channel.bind 'comment_added', @updateComments
 
+  subscribe_multiple: (channel) ->
+    channel.bind 'comments_added', @updateCommentsMultiple
+
+  updateCommentsMultiple: (comments) =>
+    for comment in comments
+      @updateComments(comment)
+
   updateComments: (comment) =>
     @commentsQueue.enq(comment)
 
@@ -123,11 +130,12 @@ class CommentsFeed
     @canAdd = true
 
 class Feed
-  constructor: (channel, node) ->
+  constructor: (channel, channel_multiple, node) ->
     @comments     = new CommentsQueue()
     @feed         = new ChannelObserver(@comments)
     @commentsFeed = new CommentsFeed(@comments, node, commentsCount: 40)
     @feed.subscribe(channel)
+    @feed.subscribe_multiple(channel_multiple)
 
   run: ->
     @commentsFeed.run()

@@ -11,7 +11,7 @@ class CommentMaker
 
   def call(params)
     create_comment!(params).tap do |comment|
-      @notifier.call(@debate, comment)
+      @notifier.send_comment(comment, channel)
     end
   end
 
@@ -21,7 +21,16 @@ class CommentMaker
     Comment.create!(
       debate:   @debate,
       user:     @user,
-      content:  params.fetch(:content).squish
+      content:  params.fetch(:content).squish,
+      status: status
     )
+  end
+
+  def status
+    @status ||= @debate.moderate? ? :pending : :accepted
+  end
+
+  def channel
+    status == :accepted ? "dashboard_channel_#{@debate.code}" : "admin_channel_#{@debate.code}"
   end
 end

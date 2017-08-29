@@ -1,0 +1,70 @@
+<%= form_tag batch_action_admin_debate_comments_url(debate.id), method: :post, id: :collection_selection do %>
+    <input name="batch_action" id="batch_action" type="hidden">
+    <input name="batch_action_inputs" id="batch_action_inputs" type="hidden">
+    <div class="table_tools">
+      <div class="batch_actions_selector dropdown_menu">
+        <a class="dropdown_menu_button" href="#">Batch Actions</a>
+        <div class="dropdown_menu_list_wrapper" style="display: none;">
+          <div class="dropdown_menu_nipple"></div>
+          <ul class=" dropdown_menu_list">
+            <li><%= link_to "Accept Selected", "#", data: { action: "accept", inputs: "null" }, class: "batch_action" %></li>
+            <li><%= link_to "Reject Selected", "#", data: { action: "reject", inputs: "null" }, class: "batch_action" %></li>
+            <li>
+              <%= link_to "Delete Selected",
+                          "#",
+                          data: { action: "destroy",
+                                  inputs: "null",
+                                  confirm: "Are you sure you want to delete these comments?" },
+                          class: "batch_action" %>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="paginated_collection">
+      <div class="paginated_collection_contents">
+        <div class="index_as_table">
+          <table id="index_table_comments" class="index_table index">
+            <thead>
+            <th class="col col-selectable">
+              <div class="resource_selection_toggle_cell">
+                <input type="checkbox" id="collection_selection_toggle_all" name="collection_selection_toggle_all" class="toggle_all">
+              </div>
+            </th>
+            <th class="sortable sorted-desc col col-id">Id</th>
+            <th class="sortable col col-content">Content</th>
+            <th class="sortable col col-status">Status</th>
+            <th class="sortable col col-created_at">Created At</th>
+            <th class="col col-actions"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <% comments.each do |comment| %>
+                <tr id="comment_<%= comment.id %>" class="<%= cycle('odd', 'even') %>">
+                  <td class="col col-selectable">
+                    <div class="resource_selection_cell">
+                      <%= check_box_tag 'collection_selection[]', comment.id, false, { id: "batch_action_item_#{comment.id}", class: "collection_selection" } %>
+                    </div>
+                  </td>
+                  <td class="col col-id"><%= link_to comment.id, admin_debate_comment_path(debate.id, comment.id) %></td>
+                  <td class="col col-content"><%= comment.content %></td>
+                  <td class="col col-status"><%= comment.status %></td>
+                  <td class="col col-created_at" width="100px"><%=
+                    comment.created_at.strftime("%B %d, %Y %H:%M")
+                  %></td>
+                  <td class="col col-actions" width="100px">
+                    <div class="table_actions">
+                      <%= link_to "Accept", accept_admin_debate_comment_path(debate.id, comment.id), method: :put, class: "view_link member_link" %>
+                      <%= link_to "Reject", reject_admin_debate_comment_path(debate.id, comment.id), method: :put, class: "view_link member_link" %>
+                    </div>
+                  </td>
+                </tr>
+            <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+<% end %>
+<input type="hidden" id="debateCode" name="debateCode" value='<%= "#{debate.code}" %>'/>
+<input type="hidden" id="debateId" name="debateId" value='<%= "#{debate.id}" %>'/>

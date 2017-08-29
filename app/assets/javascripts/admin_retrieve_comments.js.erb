@@ -1,0 +1,43 @@
+$(document).ready(function () {
+    var pusherAppKey = '<%= "#{ENV['PUSHER_APP_KEY']}" %>';
+    var pusherAppCluster = '<%= "#{ENV['PUSHER_APP_CLUSTER']}" %>';
+    var debateCode = $('#debateCode').val();
+    var debateId = $('#debateId').val();
+    pusher = new Pusher(pusherAppKey, {cluster: pusherAppCluster, encrypted: true});
+    var channel = pusher.subscribe("admin_channel_" + debateCode);
+
+    channel.bind('comment_added', function (comment) {
+        $('#index_table_comments tbody').prepend(lineHtml(comment, debateId));
+    });
+});
+
+function lineHtml(comment, debateId) {
+    const html = `
+      <tr class="${getClass()}">
+        <td class="col col-selectable">
+          <div class="resource_selection_cell">
+            <input type="checkbox" id="batch_action_item_${comment.id} " value="${comment.id}" class="collection_selection" name="collection_selection[]">
+          </div>
+        </td>
+        <td class="col col-id"><a class="resource_id_link" href="${Routes.admin_debate_comment_path(debateId, comment.id)}">${comment.id}</a></td>
+        <td class="col col-content">${comment.content}</td>
+        <td class="col col-status">${comment.status}</td>
+        <td class="col col-created_at" width="100px">${moment(comment.created_at).format('MMMM DD, YYYY h:mm')}</td>
+        <td class="col col-actions" width="100px"><div class="table_actions">${generateLinks(comment.id, debateId)}</div></td>
+      </tr>
+    `;
+    return html;
+}
+
+function generateLinks(commentId, debateId) {
+    var reject = '<a class="view_link member_link" data-method="put" title="Reject" href="' + Routes.reject_admin_debate_comment_path(debateId, commentId) + '">Reject</a>';
+    var accept = '<a class="view_link member_link" data-method="put" title="Accept" href="' + Routes.accept_admin_debate_comment_path(debateId, commentId) + '">Accept</a>';
+
+    return accept + reject;
+}
+
+function getClass() {
+    var tr_class = $('#index_table_comments tbody tr:first').attr('class');
+    if (tr_class == 'even') return 'odd';
+    return 'even';
+}

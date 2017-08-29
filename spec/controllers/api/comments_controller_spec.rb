@@ -3,7 +3,7 @@ require 'rails_helper'
 describe Api::CommentsController do
   let(:params) { { text: 'comment_text', username: 'username' } }
   before(:all) do
-    Timecop.freeze(Time.local(2017, 8, 5, 0, 0, 0))
+    Timecop.freeze(Time.local(2017, 8, 5, 10, 10, 10))
   end
 
   after do
@@ -34,37 +34,46 @@ describe Api::CommentsController do
     end
 
     describe '#index' do
-      context 'when comments are created' do
-        let(:expected_hash) do
-          [{ "content" => "content comment 1",
-             "full_name" => 'John Doe',
-             "created_at" => Time.now.to_i,
+      context 'when comments are created and have status active' do
+        let(:expected_list) do
+          [{ "id" => comment.id,
+             "content" => comment.content,
+             "full_name" => mobile_user.full_name,
+             "created_at" => Time.now.to_i * 1000,
              "user_initials_background_color" => mobile_user.initials_background_color,
-             "user_initials" => 'JD',
-             "user_id" => mobile_user.id },
-           { "content" => "content comment 2",
-             "full_name" => 'John Doe',
-             "created_at" => Time.now.to_i,
-             "user_initials_background_color" => mobile_user.initials_background_color,
-             "user_initials" => 'JD',
-             "user_id" => mobile_user.id }]
+             "user_initials" => mobile_user.initials,
+             "user_id" => mobile_user.id,
+             "status" => comment.status }]
         end
 
+        let!(:comment) { create(:comment, user: mobile_user, debate: debate, status: :accepted) }
+
         before do
-          FactoryGirl.create(:comment, user: mobile_user, content: 'content comment 1', debate: debate)
-          FactoryGirl.create(:comment, user: mobile_user, content: 'content comment 2', debate: debate)
           request.env['HTTP_AUTHORIZATION'] = auth_token.value
         end
 
         it 'retrieve valid status' do
           get :index
           expect(response.status).to eq(200)
-          expect(JSON.parse(response.body)).to eq(expected_hash)
+          expect(JSON.parse(response.body)).to eq(expected_list)
         end
       end
 
       context 'when comments are not created' do
-        it 'retrieve valid status' do
+        it 'retrieve valid status and empty array of comments' do
+          get :index
+          expect(response.status).to eq(200)
+          expect(JSON.parse(response.body)).to eq([])
+        end
+      end
+
+      context 'when comments are created, but status is pending' do
+        before do
+          FactoryGirl.create(:comment, user: mobile_user, debate: debate)
+          FactoryGirl.create(:comment, user: mobile_user, debate: debate)
+          request.env['HTTP_AUTHORIZATION'] = auth_token.value
+        end
+        it 'retrieve valid status and empty array of comments' do
           get :index
           expect(response.status).to eq(200)
           expect(JSON.parse(response.body)).to eq([])

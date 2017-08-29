@@ -12,6 +12,7 @@ gem 'jbuilder', '~> 2.5'
 gem 'slim-rails'
 gem 'materialize-sass'
 gem 'jquery-turbolinks'
+gem "js-routes"
 gem 'sprockets', '~> 3.0'
 gem 'activeadmin'
 gem 'inherited_resources'
@@ -26,6 +27,7 @@ gem 'exception_notification'
 gem 'slack-notifier'
 gem 'rack-attack', '~> 5.0.1'
 gem 'include_media_rails'
+gem 'momentjs-rails', '~> 2.11', '>= 2.11.1'
 
 group :development, :test do
   gem 'byebug', platform: :mri

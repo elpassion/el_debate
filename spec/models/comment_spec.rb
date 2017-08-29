@@ -11,6 +11,10 @@ describe Comment do
         expect(comment.user).to be_a MobileUser
         expect(comment.user_initials_background_color).to eq user.initials_background_color
       end
+
+      it 'is pending' do
+        expect(comment.status).to eq('pending')
+      end
     end
 
     context 'when comment is made by a slack user' do

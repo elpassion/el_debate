@@ -1,7 +1,7 @@
 # Place all the behaviors and hooks related to the matching controller here.
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
-selectors = 
+selectors =
   left:
     progress: '.js-left-progress'
     count: '.js-left-count'
@@ -161,9 +161,10 @@ class Debate
       $(selectors.debateTopic)[0].className = 'closed-debate'
 
 initialize = ->
-  pusher      = new Pusher(pusherAppKey, { cluster: pusherAppCluster, encrypted: true })
-  userChannel = pusher.subscribe("dashboard_channel_#{debateCode}")
-  feed        = new Feed(userChannel, $(selectors.comments))
+  pusher              = new Pusher(pusherAppKey, { cluster: pusherAppCluster, encrypted: true })
+  userChannel         = pusher.subscribe("dashboard_channel_#{debateCode}")
+  userChannelMultiple = pusher.subscribe("dashboard_channel_multiple_#{debateCode}")
+  feed                = new Feed(userChannel, userChannelMultiple, $(selectors.comments))
 
   window.leftSidePositive = $('.js-left-positive').attr('data-positive')
   window.positiveSelectors = if leftSidePositive == 'true' then selectors.left else selectors.right
