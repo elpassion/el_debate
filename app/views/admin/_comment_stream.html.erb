@@ -33,6 +33,7 @@
             </th>
             <th class="sortable sorted-desc col col-id">Id</th>
             <th class="sortable col col-content">Content</th>
+            <th class="sortable col col-full_name">Full Name</th>
             <th class="sortable col col-status">Status</th>
             <th class="sortable col col-created_at">Created At</th>
             <th class="col col-actions"></th>
@@ -48,6 +49,7 @@
                   </td>
                   <td class="col col-id"><%= link_to comment.id, admin_debate_comment_path(debate.id, comment.id) %></td>
                   <td class="col col-content"><%= comment.content %></td>
+                  <td class="col col-content"><%= comment.user.full_name %></td>
                   <td class="col col-status"><%= comment.status %></td>
                   <td class="col col-created_at" width="100px"><%=
                     comment.created_at.strftime("%B %d, %Y %H:%M")

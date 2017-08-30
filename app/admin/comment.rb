@@ -6,6 +6,9 @@ ActiveAdmin.register Comment do
     selectable_column
     id_column
     column :content
+    column :full_name do |comment|
+      comment.user.full_name
+    end
     column :status
     column :created_at
     actions do |comment|
