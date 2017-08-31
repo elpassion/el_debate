@@ -31,8 +31,8 @@ describe Api::LoginsController, type: :controller do
       expect(json_response['error']).to eq('Debate not found')
     end
 
-    it 'does not create mobile user' do
-      expect { subject }.not_to change { MobileUser.count }
+    it 'does not create user' do
+      expect { subject }.not_to change { User.count }
     end
   end
 
@@ -45,8 +45,8 @@ describe Api::LoginsController, type: :controller do
       expect(json_response).to include('auth_token', 'user_id')
     end
 
-    it 'creates mobile user' do
-      expect { subject }.to change { MobileUser.count }.by 1
+    it 'creates  user' do
+      expect { subject }.to change { User.count }.by 1
     end
   end
 

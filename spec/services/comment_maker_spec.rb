@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe CommentMaker do
-  let(:user) { create(:mobile_user) }
+  let(:user) { create(:user) }
   let(:notifier) { instance_double(CommentNotifier, send_comment: nil) }
   let(:comment_maker) { described_class.new(debate, user, notifier) }
   let(:params) { { content: "I  do  not agree \n with this" } }

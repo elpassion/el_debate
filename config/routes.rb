@@ -17,11 +17,6 @@ Rails.application.routes.draw do
     concerns :api_base
   end
 
-  namespace :slack do
-    post :comments, to: 'comments#help', constraints: CommentHelpConstraint
-    resources :comments, only: [:create]
-  end
-
   root to: redirect('/admin/debates')
 
   get '/dashboard/:slug', to: 'dashboard#index', as: :dashboard
