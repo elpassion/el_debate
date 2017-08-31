@@ -1,7 +1,7 @@
 class Comment < ActiveRecord::Base
   enum status: [:pending, :accepted, :rejected]
   belongs_to :debate
-  belongs_to :user, polymorphic: true
+  belongs_to :user
 
   validates :content, presence: true
 

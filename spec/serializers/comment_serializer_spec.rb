@@ -3,8 +3,8 @@ require 'rails_helper'
 describe CommentSerializer do
   let(:debate) { create(:debate) }
   let(:auth_token) { debate.auth_tokens.create }
-  let(:mobile_user) { create(:mobile_user, auth_token: auth_token, first_name: 'John', last_name: 'Doe') }
-  let(:comment) { create(:comment, user: mobile_user) }
+  let(:user) { create(:user, auth_token: auth_token, first_name: 'John', last_name: 'Doe') }
+  let(:comment) { create(:comment, user: user) }
 
   subject { described_class.new(comment).to_h }
 

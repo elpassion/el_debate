@@ -1,5 +1,5 @@
 FactoryGirl.define do
-  factory :mobile_user do
+  factory :user do
     auth_token
   end
 end

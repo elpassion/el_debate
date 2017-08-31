@@ -1,12 +1,12 @@
 require 'rails_helper'
 
-describe MobileUser do
-  subject { mobile_user }
-  let(:mobile_user) { create(:mobile_user, user_attributes) }
+describe User do
+  subject { user }
+  let(:user) { create(:user, user_attributes) }
   let(:user_attributes) { {} }
 
   describe '#full_name' do
-    subject { mobile_user.full_name }
+    subject { user.full_name }
     let(:user_attributes) { { first_name: first_name, last_name: last_name } }
     let(:first_name) { FFaker::Name.first_name }
     let(:last_name) { FFaker::Name.last_name }
@@ -30,7 +30,7 @@ describe MobileUser do
   end
 
   describe '#initials' do
-    subject { mobile_user.initials }
+    subject { user.initials }
     let(:user_attributes) { { first_name: first_name, last_name: last_name } }
     let(:first_name) { FFaker::Name.first_name }
     let(:last_name) { FFaker::Name.last_name }

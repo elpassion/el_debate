@@ -1,4 +1,4 @@
-class MobileUser < ApplicationRecord
+class User < ApplicationRecord
   belongs_to :auth_token
   has_many :comments, as: :user
 

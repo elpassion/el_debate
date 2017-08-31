@@ -3,7 +3,7 @@ require 'rails_helper'
 feature 'Debates comment' do
   given(:admin_user) { create(:admin_user) }
   given(:debate) { create(:debate) }
-  given(:user) { create(:mobile_user) }
+  given(:user) { create(:user) }
   given(:comment) { create(:comment, debate_id: debate.id, user: user, status: :pending) }
 
   background do

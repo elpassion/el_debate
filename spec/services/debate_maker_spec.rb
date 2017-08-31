@@ -4,8 +4,7 @@ describe DebateMaker do
   describe "#call" do
     let(:params) do
       {
-        topic: "Our debate topic",
-        channel_name: "slack_debate_channel"
+        topic: "Our debate topic"
       }
     end
 

@@ -22,10 +22,6 @@ class Debate < ApplicationRecord
   scope :opened_debates, -> { where(closed: false) }
   scope :closed_debates, -> { where(closed: true) }
 
-  def self.opened_for_channel!(channel_name)
-    opened_debates.where(channel_name: channel_name).first!
-  end
-
   def open
     update(closed: false)
   end

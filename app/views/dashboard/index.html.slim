@@ -17,12 +17,6 @@
 
       .row
         = render partial: 'dashboard/votes-chart'
-
-      - if @debate.channel_name.present?
-        .call-for-action
-          | Comment a discussion on
-          span.channel-title = @debate.channel_name
-          | channel
           
   .col.s4.comments-feed-wrapper 
     .comments-feed
