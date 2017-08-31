@@ -123,25 +123,5 @@ describe Debate, type: :model do
       end
     end
   end
-
-  describe ".opened_for_channel!" do
-    context "there is an open debate for a given channel" do
-      let!(:debate) do
-        create(:debate, channel_name: 'channel_name')
-      end
-
-      it "returns it" do
-        expect(Debate.opened_for_channel!('channel_name')).to eq debate
-      end
-    end
-
-    context "there is no open debate for a given channel" do
-      it "raises an error" do
-        expect {
-          Debate.opened_for_channel!('channel_name')
-        }.to raise_error(ActiveRecord::RecordNotFound)
-      end
-    end
-  end
 end
 

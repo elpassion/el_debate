@@ -13,7 +13,7 @@ describe Api::CommentsController do
   context 'when correct auth_token was given' do
     let(:debate) { create(:debate) }
     let(:auth_token) { debate.auth_tokens.create }
-    let!(:mobile_user) { create(:mobile_user, auth_token: auth_token, first_name: 'John', last_name: 'Doe') }
+    let!(:user) { create(:user, auth_token: auth_token, first_name: 'John', last_name: 'Doe') }
 
     before do
       request.env['HTTP_AUTHORIZATION'] = auth_token.value
@@ -24,11 +24,11 @@ describe Api::CommentsController do
         expect(CommentMaker).to receive(:perform).with(
           hash_including({
                            debate: debate,
-                           user: mobile_user,
+                           user: user,
                            params: { content: 'comment_text' }
                          })
         )
-
+        
         post :create, params: params
       end
     end
@@ -38,15 +38,15 @@ describe Api::CommentsController do
         let(:expected_list) do
           [{ "id" => comment.id,
              "content" => comment.content,
-             "full_name" => mobile_user.full_name,
+             "full_name" => user.full_name,
              "created_at" => Time.now.to_i * 1000,
-             "user_initials_background_color" => mobile_user.initials_background_color,
-             "user_initials" => mobile_user.initials,
-             "user_id" => mobile_user.id,
+             "user_initials_background_color" => user.initials_background_color,
+             "user_initials" => user.initials,
+             "user_id" => user.id,
              "status" => comment.status }]
         end
 
-        let!(:comment) { create(:comment, user: mobile_user, debate: debate, status: :accepted) }
+        let!(:comment) { create(:comment, user: user, debate: debate, status: :accepted) }
 
         before do
           request.env['HTTP_AUTHORIZATION'] = auth_token.value
@@ -69,8 +69,8 @@ describe Api::CommentsController do
 
       context 'when comments are created, but status is pending' do
         before do
-          FactoryGirl.create(:comment, user: mobile_user, debate: debate)
-          FactoryGirl.create(:comment, user: mobile_user, debate: debate)
+          FactoryGirl.create(:comment, user: user, debate: debate)
+          FactoryGirl.create(:comment, user: user, debate: debate)
           request.env['HTTP_AUTHORIZATION'] = auth_token.value
         end
         it 'retrieve valid status and empty array of comments' do

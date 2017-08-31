@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170811143415) do
+ActiveRecord::Schema.define(version: 20170831124510) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -53,44 +53,31 @@ ActiveRecord::Schema.define(version: 20170811143415) do
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
     t.integer  "debate_id"
-    t.string   "user_type"
     t.integer  "status",     default: 0
     t.index ["debate_id"], name: "index_comments_on_debate_id", using: :btree
     t.index ["user_id"], name: "index_comments_on_user_id", using: :btree
-    t.index ["user_type"], name: "index_comments_on_user_type", using: :btree
   end
 
   create_table "debates", force: :cascade do |t|
     t.string   "topic"
     t.string   "code"
-    t.datetime "created_at",                   null: false
-    t.datetime "updated_at",                   null: false
-    t.string   "channel_name"
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
     t.string   "slug"
-    t.boolean  "closed",       default: false, null: false
-    t.boolean  "moderate",     default: true
-    t.index ["channel_name"], name: "index_debates_on_channel_name", using: :btree
+    t.boolean  "closed",     default: false, null: false
+    t.boolean  "moderate",   default: true
     t.index ["code"], name: "index_debates_on_code", unique: true, using: :btree
     t.index ["slug"], name: "index_debates_on_slug", unique: true, using: :btree
   end
 
-  create_table "mobile_users", force: :cascade do |t|
+  create_table "users", force: :cascade do |t|
     t.datetime "created_at",                null: false
     t.datetime "updated_at",                null: false
     t.integer  "auth_token_id"
     t.string   "first_name"
     t.string   "last_name"
     t.string   "initials_background_color"
-    t.index ["auth_token_id"], name: "index_mobile_users_on_auth_token_id", using: :btree
-  end
-
-  create_table "slack_users", force: :cascade do |t|
-    t.string   "slack_id"
-    t.string   "name"
-    t.string   "image_url"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["slack_id"], name: "index_slack_users_on_slack_id", unique: true, using: :btree
+    t.index ["auth_token_id"], name: "index_users_on_auth_token_id", using: :btree
   end
 
   create_table "votes", force: :cascade do |t|
@@ -100,5 +87,5 @@ ActiveRecord::Schema.define(version: 20170811143415) do
     t.index ["auth_token_id"], name: "index_votes_on_auth_token_id", using: :btree
   end
 
-  add_foreign_key "mobile_users", "auth_tokens"
+  add_foreign_key "users", "auth_tokens"
 end

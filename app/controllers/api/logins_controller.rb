@@ -1,10 +1,10 @@
 class Api::LoginsController < Api::ApplicationController
   skip_before_action :authenticate
-  before_action :create_debate_auth_token, :set_mobile_user
+  before_action :create_debate_auth_token, :set_user
 
   def create
-    if @mobile_user.save
-      render json: { user_id: @mobile_user.id, auth_token: @auth_token.value, debate_closed: @debate.closed? }
+    if @user.save
+      render json: { user_id: @user.id, auth_token: @auth_token.value, debate_closed: @debate.closed? }
     else
       render json: { error: 'User invalid' }, status: :bad_request
     end
@@ -18,11 +18,11 @@ class Api::LoginsController < Api::ApplicationController
     @auth_token = @debate.auth_tokens.create!
   end
 
-  def set_mobile_user
-    @mobile_user = MobileUser.new(mobile_user_params)
+  def set_user
+    @user = User.new(user_params)
   end
 
-  def mobile_user_params
+  def user_params
     {
       auth_token: @auth_token
     }

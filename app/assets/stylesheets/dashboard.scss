@@ -169,26 +169,6 @@ p.debate-status {
   }
 }
 
-.call-for-action {
-  padding-top: 65px;
-  font-size: 20px;
-  height: 100px;
-  text-align: center;
-
-  @include media('>=tv') {
-    font-size: 26px;
-  }
-
-
-  span.channel-title {
-    background: image_url('dashboard/slack_icon.png') 10px 4px no-repeat;
-    background-size: 20px;
-    font-weight: 600;
-    padding-left: 33px;
-    padding-right: 15px;
-  }
-}
-
 .debate-status {
   font-weight: 500;
   font-size: 20px;

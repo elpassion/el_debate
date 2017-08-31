@@ -1,6 +1,6 @@
-class MobileUser < ApplicationRecord
+class User < ApplicationRecord
   belongs_to :auth_token
-  has_many :comments, as: :user
+  has_many :comments
 
   validates :auth_token, presence: true
 
