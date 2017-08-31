@@ -3,7 +3,7 @@ class Api::CommentsController < Api::ApplicationController
   before_action :require_current_debate
 
   def create
-    update_mobile_user_identity
+    update_user_identity
     CommentMaker.perform(debate: current_debate, user: @user, params: comment_params)
     head :created
   end
@@ -22,7 +22,7 @@ class Api::CommentsController < Api::ApplicationController
     { content: params.fetch(:text) }
   end
 
-  def update_mobile_user_identity
+  def update_user_identity
     UserIdentity.new(@user).update(first_name: params.dig(:first_name),
                                    last_name: params.dig(:last_name))
   end
