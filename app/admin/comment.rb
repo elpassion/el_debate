@@ -6,6 +6,9 @@ ActiveAdmin.register Comment do
     selectable_column
     id_column
     column :content
+    column :full_name, sortable: :full_name do |comment|
+      comment.user.full_name
+    end
     column :status
     column :created_at
     actions do |comment|
@@ -13,6 +16,10 @@ ActiveAdmin.register Comment do
       item "Accept", accept_admin_debate_comment_path(debate, comment), method: :put, class: 'member_link' if !comment.accepted?
     end
     render partial: 'admin/store_code_debate', locals: { debate_code: debate.code, debate_id: debate.id }
+  end
+
+  order_by :full_name do |order_clause|
+    ["CONCAT(users.first_name, ' ', users.last_name)", order_clause.order].join(' ')
   end
 
   member_action :accept, method: :put do
@@ -43,5 +50,9 @@ ActiveAdmin.register Comment do
   batch_action :destroy do |ids|
     Comment.where(id: ids).destroy_all
     redirect_back fallback_location: admin_debate_comments_url, alert: "#{ids.count} comments deleted"
+  end
+
+  scope :joined, :default => true do |comments|
+    comments.joins :user
   end
 end

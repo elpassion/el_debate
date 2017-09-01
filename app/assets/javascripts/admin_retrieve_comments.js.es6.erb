@@ -21,6 +21,7 @@ function lineHtml(comment, debateId) {
         </td>
         <td class="col col-id"><a class="resource_id_link" href="${Routes.admin_debate_comment_path(debateId, comment.id)}">${comment.id}</a></td>
         <td class="col col-content">${comment.content}</td>
+        <td class="col col-full_name">${comment.full_name}</td>
         <td class="col col-status">${comment.status}</td>
         <td class="col col-created_at" width="100px">${moment(comment.created_at).format('MMMM DD, YYYY h:mm')}</td>
         <td class="col col-actions" width="100px"><div class="table_actions">${generateLinks(comment.id, debateId)}</div></td>
