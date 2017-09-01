@@ -1,6 +1,6 @@
 class Api::CommentsController < Api::ApplicationController
   before_action :set_user, only: [:create]
-  before_action :require_current_debate
+  before_action :require_current_debate, :require_current_debate_not_closed
 
   def create
     update_user_identity
@@ -9,7 +9,8 @@ class Api::CommentsController < Api::ApplicationController
   end
 
   def index
-    render json: current_debate.retrieve_comments.map { |comment| CommentSerializer.new(comment) }
+    render json: { debate_closed: current_debate.closed?,
+                   comments: current_debate.retrieve_comments.map { |comment| CommentSerializer.new(comment) } }
   end
 
   private

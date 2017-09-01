@@ -10,12 +10,4 @@ class Api::VotesController < Api::ApplicationController
       render json: { error: 'Answer not found' }, status: :not_found
     end
   end
-
-  private
-
-  def require_current_debate_not_closed
-    if current_debate.closed?
-      render json: { error: 'Debate is closed' }, status: :not_acceptable
-    end
-  end
 end

@@ -28,4 +28,11 @@ class Api::ApplicationController < ActionController::Base
   def require_current_debate
     render json: { error: 'Debate not found' }, status: :not_found unless current_debate
   end
+
+  def require_current_debate_not_closed
+    return unless current_debate
+    if current_debate.closed?
+      render json: { error: 'Debate is closed' }, status: :not_acceptable
+    end
+  end
 end

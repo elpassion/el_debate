@@ -1,6 +1,6 @@
 class Api::LoginsController < Api::ApplicationController
   skip_before_action :authenticate
-  before_action :create_debate_auth_token, :set_user
+  before_action :create_debate_auth_token, :set_user, :require_current_debate_not_closed
 
   def create
     if @user.save

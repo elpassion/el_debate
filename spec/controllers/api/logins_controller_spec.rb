@@ -53,8 +53,10 @@ describe Api::LoginsController, type: :controller do
   context 'when debate is closed' do
     let(:debate) { create(:debate, :closed_debate) }
 
-    it 'returns debate_closed flag set to true' do
-      expect(json_response['debate_closed']).to eq true
+    it 'returns not_acceptable status with error message' do
+      expect(subject).to have_http_status(:not_acceptable)
+      expect(json_response).to include('error')
+      expect(json_response['error']).to eq('Debate is closed')
     end
   end
 
