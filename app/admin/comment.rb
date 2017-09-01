@@ -53,6 +53,6 @@ ActiveAdmin.register Comment do
   end
 
   scope :joined, :default => true do |comments|
-    comments.joins [:user]
+    comments.joins :user
   end
 end
