@@ -9,16 +9,16 @@ describe AuthSerializer do
   describe '#to_h' do
     subject { serializer.to_h }
 
-    it 'returns auth_token' do
-      expect(subject[:auth_token]).to eq(auth_token.value)
+    it 'should include auth_token' do
+      expect(subject).to include(auth_token: auth_token.value)
     end
 
-    it 'returns user_id' do
-      expect(subject[:user_id]).to eq(user.id)
+    it 'should include user_id' do
+      expect(subject).to include(user_id: user.id)
     end
 
-    it 'returns debate_closed value' do
-      expect(subject[:debate_closed]).to eq(debate.closed?)
+    it 'should include debate_closed' do
+      expect(subject).to include(debate_closed: debate.closed?)
     end
   end
 end

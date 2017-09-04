@@ -1,5 +1,4 @@
 class AuthSerializer
-
   def initialize(user, debate)
     @debate = debate
     @user = user
