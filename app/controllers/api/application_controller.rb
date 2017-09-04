@@ -22,6 +22,7 @@ class Api::ApplicationController < ActionController::Base
 
   def current_debate
     return unless @auth_token.present?
+
     @_current_debate ||= @auth_token.debate
   end
 
@@ -30,7 +31,6 @@ class Api::ApplicationController < ActionController::Base
   end
 
   def require_current_debate_not_closed
-    return unless current_debate
     if current_debate.closed?
       render json: { error: 'Debate is closed' }, status: :not_acceptable
     end
