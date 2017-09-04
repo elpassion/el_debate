@@ -28,7 +28,7 @@ describe Api::CommentsController do
                            params: { content: 'comment_text' }
                          })
         )
-        
+
         post :create, params: params
       end
     end
@@ -36,14 +36,16 @@ describe Api::CommentsController do
     describe '#index' do
       context 'when comments are created and have status active' do
         let(:expected_list) do
-          [{ "id" => comment.id,
-             "content" => comment.content,
-             "full_name" => user.full_name,
-             "created_at" => Time.now.to_i * 1000,
-             "user_initials_background_color" => user.initials_background_color,
-             "user_initials" => user.initials,
-             "user_id" => user.id,
-             "status" => comment.status }]
+          { "debate_closed" => false,
+            "comments" =>
+              [{ "id" => comment.id,
+                 "content" => comment.content,
+                 "full_name" => user.full_name,
+                 "created_at" => Time.now.to_i * 1000,
+                 "user_initials_background_color" => user.initials_background_color,
+                 "user_initials" => user.initials,
+                 "user_id" => user.id,
+                 "status" => comment.status }] }
         end
 
         let!(:comment) { create(:comment, user: user, debate: debate, status: :accepted) }
@@ -63,7 +65,8 @@ describe Api::CommentsController do
         it 'retrieve valid status and empty array of comments' do
           get :index
           expect(response.status).to eq(200)
-          expect(JSON.parse(response.body)).to eq([])
+          expect(JSON.parse(response.body)).to eq({ "debate_closed" => false,
+                                                    "comments" => [] })
         end
       end
 
@@ -76,9 +79,27 @@ describe Api::CommentsController do
         it 'retrieve valid status and empty array of comments' do
           get :index
           expect(response.status).to eq(200)
-          expect(JSON.parse(response.body)).to eq([])
+          expect(JSON.parse(response.body)).to eq("debate_closed" => false,
+                                                  "comments" => [])
         end
       end
+    end
+  end
+
+  context 'when debate is closed' do
+    let(:debate) { create(:debate, :closed_debate) }
+    let(:auth_token) { debate.auth_tokens.create }
+
+    before do
+      request.env['HTTP_AUTHORIZATION'] = auth_token.value
+    end
+
+    it 'returns not_acceptable status with error message' do
+      post :create, params: params
+      json_response = JSON.parse(response.body)
+      expect(response).to have_http_status(:not_acceptable)
+      expect(json_response).to include('error')
+      expect(json_response['error']).to eq('Debate is closed')
     end
   end
 

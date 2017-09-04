@@ -62,6 +62,10 @@ class Debate < ApplicationRecord
     moderate? ? comments.accepted : comments
   end
 
+  def create_auth_token!
+    auth_tokens.create!
+  end
+
   private
 
   def block_code_change
