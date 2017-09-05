@@ -7,7 +7,7 @@ describe UserIdentity do
   subject { described_class.new(user).update(first_name: params[:first_name], last_name: params[:last_name]) }
 
   context 'when user has no first_name and last_name at initialize' do
-    let(:user) { create(:user) }
+    let(:user) { create(:user, first_name: nil, last_name: nil) }
     it 'changes user identify' do
       subject
       expect(user.first_name).to eq(params[:first_name])
