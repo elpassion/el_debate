@@ -32,7 +32,7 @@ class DebatePresenter < SimpleDelegator
   end
 
   def votes_count
-    positive_count + negative_count
+    positive_count + negative_count + neutral_count
   end
 
   def status

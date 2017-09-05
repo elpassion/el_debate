@@ -28,7 +28,7 @@ describe DebatePresenter do
     end
 
     it 'returns an amount in percent of people voted for a positive answer' do
-      expect(subject.positive_percent).to eq('10%')
+      expect(subject.positive_percent).to eq('8%')
     end
   end
 
@@ -39,13 +39,13 @@ describe DebatePresenter do
     end
 
     it 'returns an amount in percent of people voted for a negative answer' do
-      expect(subject.negative_percent).to eq('90%')
+      expect(subject.negative_percent).to eq('75%')
     end
   end
 
   describe '#votes_count' do
     it 'counts positive and negative votes only' do
-      expect(subject.votes_count).to eq(debate.positive_count + debate.negative_count)
+      expect(subject.votes_count).to eq(debate.positive_count + debate.negative_count + debate.neutral_count)
     end
   end
 end
