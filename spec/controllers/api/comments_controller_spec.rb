@@ -5,6 +5,7 @@ describe Api::CommentsController do
   let(:debate) { create(:debate) }
   let(:auth_token) { create(:auth_token, debate: debate) }
   let(:token_value) { auth_token.value }
+  let!(:user) { create(:user, auth_token: auth_token, first_name: 'John', last_name: 'Doe') }
 
   before(:all) do
     Timecop.freeze(Time.local(2017, 8, 5, 10, 10, 10))
@@ -18,101 +19,102 @@ describe Api::CommentsController do
     Timecop.return
   end
 
-  context 'when correct auth_token was given' do
-    let!(:user) { create(:user, auth_token: auth_token, first_name: 'John', last_name: 'Doe') }
+  describe '#create' do
 
-    describe '#create' do
+    it 'executes the comment maker service' do
+      expect(CommentMaker).to receive(:perform).with(
+        hash_including({
+                         debate: debate,
+                         user: user,
+                         params: { content: 'comment_text' }
+                       })
+      )
 
-      it 'executes the comment maker service' do
-        expect(CommentMaker).to receive(:perform).with(
-          hash_including({
-                           debate: debate,
-                           user: user,
-                           params: { content: 'comment_text' }
-                         })
-        )
+      post :create, params: params
+    end
+
+    context 'when auth_token was not given' do
+      let(:token_value) { '' }
+
+      it 'does not execute any of the services' do
+        expect(CommentMaker).not_to receive(:perform)
 
         post :create, params: params
+
+        expect(response.status).to eq(401)
       end
     end
 
-    describe '#index' do
-      context 'when comments are created and have status active' do
-        let(:expected_list) do
-          { "debate_closed" => false,
-            "comments" =>
-              [{ "id" => comment.id,
-                 "content" => comment.content,
-                 "full_name" => user.full_name,
-                 "created_at" => Time.now.to_i * 1000,
-                 "user_initials_background_color" => user.initials_background_color,
-                 "user_initials" => user.initials,
-                 "user_id" => user.id,
-                 "status" => comment.status }] }
-        end
+    context 'when debate is closed' do
+      let(:debate) { create(:debate, :closed_debate) }
 
-        let!(:comment) { create(:comment, user: user, debate: debate, status: :accepted) }
-
-        it 'retrieve valid status' do
-          get :index
-          expect(response.status).to eq(200)
-          expect(JSON.parse(response.body)).to eq(expected_list)
-        end
-      end
-
-      context 'when comments are not created' do
-        it 'retrieve valid status and empty array of comments' do
-          get :index
-          expect(response.status).to eq(200)
-          expect(JSON.parse(response.body)).to eq({ "debate_closed" => false,
-                                                    "comments" => [] })
-        end
-      end
-
-      context 'when comments are created, but status is pending' do
-        before do
-          FactoryGirl.create(:comment, user: user, debate: debate)
-          FactoryGirl.create(:comment, user: user, debate: debate)
-        end
-
-        it 'retrieve valid status and empty array of comments' do
-          get :index
-          expect(response.status).to eq(200)
-          expect(JSON.parse(response.body)).to eq("debate_closed" => false,
-                                                  "comments" => [])
-        end
+      it 'returns not_acceptable status with error message on comments create' do
+        post :create, params: params
+        json_response = JSON.parse(response.body)
+        expect(response).to have_http_status(:not_acceptable)
+        expect(json_response).to include('error')
+        expect(json_response['error']).to eq('Debate is closed')
       end
     end
   end
 
-  context 'when debate is closed' do
-    let(:debate) { create(:debate, :closed_debate, :with_comments) }
+  describe '#index' do
+    context 'when comments are created and have status active' do
+      let(:expected_list) do
+        { "debate_closed" => false,
+          "comments" =>
+            [{ "id" => comment.id,
+               "content" => comment.content,
+               "full_name" => user.full_name,
+               "created_at" => Time.now.to_i * 1000,
+               "user_initials_background_color" => user.initials_background_color,
+               "user_initials" => user.initials,
+               "user_id" => user.id,
+               "status" => comment.status }] }
+      end
 
-    it 'returns not_acceptable status with error message on comments create' do
-      post :create, params: params
-      json_response = JSON.parse(response.body)
-      expect(response).to have_http_status(:not_acceptable)
-      expect(json_response).to include('error')
-      expect(json_response['error']).to eq('Debate is closed')
+      let!(:comment) { create(:comment, user: user, debate: debate, status: :accepted) }
+
+      it 'retrieve valid status' do
+        get :index
+        expect(response.status).to eq(200)
+        expect(JSON.parse(response.body)).to eq(expected_list)
+      end
     end
 
-    it 'returns comment list' do
-      get :index
-      json_response = JSON.parse(response.body)
-      expect(response.status).to eq(200)
-      expect(json_response).to include('comments')
-      expect(json_response).to include("debate_closed" => true)
+    context 'when comments are not created' do
+      it 'retrieve valid status and empty array of comments' do
+        get :index
+        expect(response.status).to eq(200)
+        expect(JSON.parse(response.body)).to eq({ "debate_closed" => false,
+                                                  "comments" => [] })
+      end
     end
-  end
 
-  context 'when auth_token was not given' do
-    let(:token_value) { '' }
-    it 'does not execute any of the services' do
-      expect(CommentMaker).not_to receive(:perform)
+    context 'when comments are created, but status is pending' do
+      before do
+        FactoryGirl.create(:comment, user: user, debate: debate)
+        FactoryGirl.create(:comment, user: user, debate: debate)
+      end
 
-      post :create, params: params
+      it 'retrieve valid status and empty array of comments' do
+        get :index
+        expect(response.status).to eq(200)
+        expect(JSON.parse(response.body)).to eq("debate_closed" => false,
+                                                "comments" => [])
+      end
+    end
 
-      expect(response.status).to eq(401)
+    context 'when debate is closed' do
+      let(:debate) { create(:debate, :closed_debate, :with_comments) }
+
+      it 'returns comment list' do
+        get :index
+        json_response = JSON.parse(response.body)
+        expect(response.status).to eq(200)
+        expect(json_response).to include('comments')
+        expect(json_response).to include("debate_closed" => true)
+      end
     end
   end
 end
