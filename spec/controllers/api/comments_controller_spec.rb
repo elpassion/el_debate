@@ -60,60 +60,78 @@ describe Api::CommentsController do
   end
 
   describe '#index' do
-    context 'when comments are created and have status active' do
-      let(:expected_list) do
-        { "debate_closed" => false,
-          "comments" =>
-            [{ "id" => comment.id,
-               "content" => comment.content,
-               "full_name" => user.full_name,
-               "created_at" => Time.now.to_i * 1000,
-               "user_initials_background_color" => user.initials_background_color,
-               "user_initials" => user.initials,
-               "user_id" => user.id,
-               "status" => comment.status }] }
-      end
+    subject do
+      get :index
+      response
+    end
 
+    let(:json_response) { JSON.parse(subject.body) }
+
+    context 'when comments are created and have status active' do
       let!(:comment) { create(:comment, user: user, debate: debate, status: :accepted) }
 
+      let(:expected_json_response) do
+        {
+          'debate_closed' => false,
+          'comments' => [
+            "id" => comment.id,
+            "content" => comment.content,
+            "full_name" => user.full_name,
+            "created_at" => Time.now.to_i * 1000,
+            "user_initials_background_color" => user.initials_background_color,
+            "user_initials" => user.initials,
+            "user_id" => user.id,
+            "status" => comment.status
+          ]
+        }
+      end
+
       it 'retrieve valid status' do
-        get :index
-        expect(response.status).to eq(200)
-        expect(JSON.parse(response.body)).to eq(expected_list)
+        expect(subject).to have_http_status(:ok)
+        expect(json_response).to eq(expected_json_response)
       end
     end
 
     context 'when comments are not created' do
       it 'retrieve valid status and empty array of comments' do
-        get :index
-        expect(response.status).to eq(200)
-        expect(JSON.parse(response.body)).to eq({ "debate_closed" => false,
-                                                  "comments" => [] })
+        expect(subject).to have_http_status(:ok)
+        expect(json_response).to eq({ "debate_closed" => false,
+                                      "comments" => [] })
       end
     end
 
     context 'when comments are created, but status is pending' do
       before do
-        FactoryGirl.create(:comment, user: user, debate: debate)
-        FactoryGirl.create(:comment, user: user, debate: debate)
+        create(:comment, user: user, debate: debate, status: :pending)
+        create(:comment, user: user, debate: debate, status: :pending)
       end
 
       it 'retrieve valid status and empty array of comments' do
-        get :index
-        expect(response.status).to eq(200)
-        expect(JSON.parse(response.body)).to eq("debate_closed" => false,
-                                                "comments" => [])
+        expect(subject).to have_http_status(:ok)
+        expect(json_response).to eq("debate_closed" => false,
+                                    "comments" => [])
       end
     end
 
     context 'when debate is closed' do
-      let(:debate) { create(:debate, :closed_debate, :with_comments) }
+      let(:debate) { create(:debate, :closed_debate, :with_comments, comments_status: :accepted) }
+
+      let(:comment_matcher) do
+        hash_including(
+          'id',
+          'content',
+          'full_name',
+          'created_at',
+          'user_initials_background_color',
+          'user_initials',
+          'user_id',
+          'status'
+        )
+      end
 
       it 'returns comment list' do
-        get :index
-        json_response = JSON.parse(response.body)
-        expect(response.status).to eq(200)
-        expect(json_response).to include('comments')
+        expect(subject).to have_http_status(:ok)
+        expect(json_response).to include('comments' => array_including(comment_matcher))
         expect(json_response).to include("debate_closed" => true)
       end
     end

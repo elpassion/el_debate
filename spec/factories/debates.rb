@@ -1,5 +1,9 @@
 FactoryGirl.define do
   factory :debate do
+    transient do
+      comments_status :pending
+    end
+
     topic { FFaker::HipsterIpsum.sentence }
 
     trait :closed_debate do
@@ -7,9 +11,9 @@ FactoryGirl.define do
     end
 
     trait :with_comments do
-      after(:create) do |debate|
+      after(:create) do |debate, evaluator|
         3.times do
-          create(:comment, debate: debate)
+          create(:comment, debate: debate, status: evaluator.comments_status)
         end
       end
     end
