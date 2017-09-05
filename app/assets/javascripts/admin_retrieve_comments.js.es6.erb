@@ -1,14 +1,17 @@
 $(document).ready(function () {
-    var pusherAppKey = '<%= "#{ENV['PUSHER_APP_KEY']}" %>';
-    var pusherAppCluster = '<%= "#{ENV['PUSHER_APP_CLUSTER']}" %>';
-    var debateCode = $('#debateCode').val();
-    var debateId = $('#debateId').val();
-    var pusher = new Pusher(pusherAppKey, {cluster: pusherAppCluster, encrypted: true});
-    var channel = pusher.subscribe("admin_channel_" + debateCode);
 
-    channel.bind('comment_added', function (comment) {
-        $('#index_table_comments tbody').prepend(lineHtml(comment, debateId));
-    });
+    if (window.location.pathname.indexOf('/commentstream') > 0) {
+        var pusherAppKey = '<%= "#{ENV['PUSHER_APP_KEY']}" %>';
+        var pusherAppCluster = '<%= "#{ENV['PUSHER_APP_CLUSTER']}" %>';
+        var debateCode = $('#debateCode').val();
+        var debateId = $('#debateId').val();
+        var pusher = new Pusher(pusherAppKey, {cluster: pusherAppCluster, encrypted: true});
+        var channel = pusher.subscribe("admin_channel_" + debateCode);
+
+        channel.bind('comment_added', function (comment) {
+            $('#index_table_comments tbody').prepend(lineHtml(comment, debateId));
+        });
+    }
 });
 
 function lineHtml(comment, debateId) {
