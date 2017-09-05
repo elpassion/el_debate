@@ -76,6 +76,7 @@ describe Api::CommentsController do
           FactoryGirl.create(:comment, user: user, debate: debate)
           request.env['HTTP_AUTHORIZATION'] = auth_token.value
         end
+
         it 'retrieve valid status and empty array of comments' do
           get :index
           expect(response.status).to eq(200)
@@ -89,17 +90,27 @@ describe Api::CommentsController do
   context 'when debate is closed' do
     let(:debate) { create(:debate, :closed_debate) }
     let(:auth_token) { debate.auth_tokens.create }
+    let!(:user) { create(:user, auth_token: auth_token, first_name: 'John', last_name: 'Doe') }
+    let!(:comment) { create(:comment, user: user, debate: debate, status: :accepted) }
 
     before do
       request.env['HTTP_AUTHORIZATION'] = auth_token.value
     end
 
-    it 'returns not_acceptable status with error message' do
+    it 'returns not_acceptable status with error message on comments create' do
       post :create, params: params
       json_response = JSON.parse(response.body)
       expect(response).to have_http_status(:not_acceptable)
       expect(json_response).to include('error')
       expect(json_response['error']).to eq('Debate is closed')
+    end
+
+    it 'returns comment list' do
+      get :index
+      json_response = JSON.parse(response.body)
+      expect(response.status).to eq(200)
+      expect(json_response).to include('comments')
+      expect(json_response).to include("debate_closed" => true)
     end
   end
 
