@@ -20,6 +20,12 @@ describe Api::CommentsController do
   end
 
   describe '#create' do
+    subject do
+      post :create, params: params
+      response
+    end
+
+    let(:json_response) { JSON.parse(subject.body) }
 
     it 'executes the comment maker service' do
       expect(CommentMaker).to receive(:perform).with(
@@ -30,7 +36,7 @@ describe Api::CommentsController do
                        })
       )
 
-      post :create, params: params
+      subject
     end
 
     context 'when auth_token was not given' do
@@ -39,9 +45,7 @@ describe Api::CommentsController do
       it 'does not execute any of the services' do
         expect(CommentMaker).not_to receive(:perform)
 
-        post :create, params: params
-
-        expect(response.status).to eq(401)
+        expect(subject).to have_http_status(:unauthorized)
       end
     end
 
@@ -49,11 +53,8 @@ describe Api::CommentsController do
       let(:debate) { create(:debate, :closed_debate) }
 
       it 'returns not_acceptable status with error message on comments create' do
-        post :create, params: params
-        json_response = JSON.parse(response.body)
-        expect(response).to have_http_status(:not_acceptable)
-        expect(json_response).to include('error')
-        expect(json_response['error']).to eq('Debate is closed')
+        expect(subject).to have_http_status(:not_acceptable)
+        expect(json_response).to include('error' => 'Debate is closed')
       end
     end
   end
