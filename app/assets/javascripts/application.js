@@ -18,3 +18,4 @@
 //= require js-routes
 //= require moment
 //= require_tree .
+//= stub admin_retrieve_comments
