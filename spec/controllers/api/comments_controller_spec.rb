@@ -88,10 +88,8 @@ describe Api::CommentsController do
   end
 
   context 'when debate is closed' do
-    let(:debate) { create(:debate, :closed_debate) }
+    let(:debate) { create(:debate, :closed_debate, :with_comments) }
     let(:auth_token) { debate.auth_tokens.create }
-    let!(:user) { create(:user, auth_token: auth_token, first_name: 'John', last_name: 'Doe') }
-    let!(:comment) { create(:comment, user: user, debate: debate, status: :accepted) }
 
     before do
       request.env['HTTP_AUTHORIZATION'] = auth_token.value
