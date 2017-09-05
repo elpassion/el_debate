@@ -2,8 +2,16 @@ require 'rails_helper'
 
 describe Api::CommentsController do
   let(:params) { { text: 'comment_text', username: 'username' } }
+  let(:debate) { create(:debate) }
+  let(:auth_token) { create(:auth_token, debate: debate) }
+  let(:token_value) { auth_token.value }
+
   before(:all) do
     Timecop.freeze(Time.local(2017, 8, 5, 10, 10, 10))
+  end
+
+  before do
+    request.env['HTTP_AUTHORIZATION'] = token_value
   end
 
   after do
@@ -11,13 +19,8 @@ describe Api::CommentsController do
   end
 
   context 'when correct auth_token was given' do
-    let(:debate) { create(:debate) }
-    let(:auth_token) { debate.auth_tokens.create }
     let!(:user) { create(:user, auth_token: auth_token, first_name: 'John', last_name: 'Doe') }
 
-    before do
-      request.env['HTTP_AUTHORIZATION'] = auth_token.value
-    end
     describe '#create' do
 
       it 'executes the comment maker service' do
@@ -50,10 +53,6 @@ describe Api::CommentsController do
 
         let!(:comment) { create(:comment, user: user, debate: debate, status: :accepted) }
 
-        before do
-          request.env['HTTP_AUTHORIZATION'] = auth_token.value
-        end
-
         it 'retrieve valid status' do
           get :index
           expect(response.status).to eq(200)
@@ -74,7 +73,6 @@ describe Api::CommentsController do
         before do
           FactoryGirl.create(:comment, user: user, debate: debate)
           FactoryGirl.create(:comment, user: user, debate: debate)
-          request.env['HTTP_AUTHORIZATION'] = auth_token.value
         end
 
         it 'retrieve valid status and empty array of comments' do
@@ -89,11 +87,6 @@ describe Api::CommentsController do
 
   context 'when debate is closed' do
     let(:debate) { create(:debate, :closed_debate, :with_comments) }
-    let(:auth_token) { debate.auth_tokens.create }
-
-    before do
-      request.env['HTTP_AUTHORIZATION'] = auth_token.value
-    end
 
     it 'returns not_acceptable status with error message on comments create' do
       post :create, params: params
@@ -113,6 +106,7 @@ describe Api::CommentsController do
   end
 
   context 'when auth_token was not given' do
+    let(:token_value) { '' }
     it 'does not execute any of the services' do
       expect(CommentMaker).not_to receive(:perform)
 
