@@ -19,7 +19,7 @@ selectors =
   comments: '.js-comments'
 
 class Circle
-  constructor: (containerSelector) ->
+  constructor: (containerSelector, @leftSidePositive = true) ->
     @container = $(containerSelector)
     @chart = new Chartist.Pie(containerSelector)
     positive = parseInt(@container.data('positive'))
@@ -37,9 +37,9 @@ class Circle
   update: (positive, negative) =>
     if positive + negative > 0
       order = [negative, positive]
-      if window.leftSidePositive == "true" then order.reverse()
+      if @leftSidePositive then order.reverse()
 
-      @setPercentage.apply(this, order)
+      @setPercentage(order...)
       @container.show()
       @chart.update(@series(), @options())
     else
@@ -99,7 +99,7 @@ class MultilineVotesCount extends Pluralized
     @nounNode.text(@pluralize(count))
 
 class PositiveVotes
-  constructor: ->
+  constructor: (positiveSelectors) ->
     @votesCount  = new VotesCount(positiveSelectors.count)
     @progressBar = new ProgressBar(positiveSelectors.progress)
     @percentage  = $(positiveSelectors.percentage)
@@ -110,7 +110,7 @@ class PositiveVotes
     @percentage.html(debate.positive_percent)
 
 class NegativeVotes
-  constructor: ->
+  constructor: (negativeSelectors) ->
     @votesCount  = new VotesCount(negativeSelectors.count)
     @progressBar = new ProgressBar(negativeSelectors.progress)
     @percentage  = $(negativeSelectors.percentage)
@@ -135,9 +135,15 @@ class ValidVotes
     @counter.update(debate.votes_count)
 
 class Votes
-  constructor: ->
-    @negativeVotes   = new NegativeVotes()
-    @positiveVotes   = new PositiveVotes()
+  constructor: (selectors, leftPositive = true) ->
+    [positiveSelectors, negativeSelectors] =
+      if leftPositive
+        [selectors.left, selectors.right]
+      else
+        [selectors.right, selectors.left]
+
+    @negativeVotes   = new NegativeVotes(negativeSelectors)
+    @positiveVotes   = new PositiveVotes(positiveSelectors)
     @neutralVotes    = new NeutralVotes()
     @validVotes      = new ValidVotes()
 
@@ -153,10 +159,10 @@ class Votes
 
 class Debate
   subscribe: (channel) ->
-    channel.bind 'debate_opened', =>
+    channel.bind 'debate_opened', ->
       $(selectors.debateStatus).text('')
       $(selectors.debateTopic)[0].className = 'debate-topic'
-    channel.bind 'debate_closed', =>
+    channel.bind 'debate_closed', ->
       $(selectors.debateStatus).text('Debate is closed.')
       $(selectors.debateTopic)[0].className = 'closed-debate'
 
@@ -166,13 +172,11 @@ initialize = ->
   userChannelMultiple = pusher.subscribe("dashboard_channel_multiple_#{debateCode}")
   feed                = new Feed(userChannel, userChannelMultiple, $(selectors.comments))
 
-  window.leftSidePositive = $('.js-left-positive').attr('data-positive')
-  window.positiveSelectors = if leftSidePositive == 'true' then selectors.left else selectors.right
-  window.negativeSelectors = if leftSidePositive != 'true' then selectors.right else selectors.left
+  leftSidePositive = $('.js-left-positive').attr('data-positive') == 'true'
 
   component.subscribe(userChannel) for component in [
-    (new Circle(selectors.centerCircle)),
-    (new Votes()),
+    (new Circle(selectors.centerCircle, leftSidePositive)),
+    (new Votes(selectors, leftSidePositive)),
     (new Debate())
   ]
 
