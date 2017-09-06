@@ -42,41 +42,25 @@ class Comment
     @comment          = comment.content
     @background_color = comment.user_initials_background_color
     @user_initials    = comment.user_initials
+    @created_at       = moment(comment.created_at)
 
   render: ->
-    element = $('<div>', {class: 'comment'})
-                .append(@renderUserInfo())
-                .append(@renderUserName())
-                .append(@renderCurrentTime())
-                .append(@renderComment())
 
-    element
-
-  renderUserInfo: ->
-    $('<div>', { class: 'left' })
-      .append(
-        $('<div>', { class: 'avatar' })
-          .css('background-color', @background_color)
-          .append($('<span>', { text: @user_initials, class: 'initials' }))
-      )
-  renderUserName: ->
-    $('<div>', { class: 'username col s8' })
-      .append($('<strong>', { text: @full_name }))
-
-  renderCurrentTime: ->
-    today = new Date
-    minutes = today.getMinutes()
-    minutes = (if minutes < 10 then '0' else '') + minutes
-
-    hours = today.getHours()
-    hours = if hours >= 0 && hours < 10 then '0' + hours.toString() else hours
-
-    $('<div>', { class: 'time col s8' })
-    .append($('<span>', { text: hours + ':' + minutes }))
-
-  renderComment: ->
-    $('<div>', { class: 'content' })
-      .append($('<p>', { text: @comment }))
+    """
+    <div class="comment">
+        <div class="left">
+          <div class="avatar" style="background-color: #{@background_color}">
+            <span class="initials">#{@user_initials}</span>
+          </div>
+        </div>
+        <div class="info">
+          <strong>#{@full_name}</strong> <span class="time">#{@created_at.format("HH:mm")}</span>
+        </div>
+        <div class="content">
+          #{@comment}
+        </div>
+    </div>
+    """
 
 class CommentsFeed
   constructor: (@commentsQueue, @node, opts = {}) ->
