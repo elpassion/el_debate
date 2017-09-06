@@ -38,7 +38,7 @@ class ChannelObserver
 
 class Comment
   constructor: (comment, opts = {}) ->
-    @full_name        = comment.user_full_name
+    @full_name        = comment.full_name
     @comment          = comment.content
     @background_color = comment.user_initials_background_color
     @user_initials    = comment.user_initials
