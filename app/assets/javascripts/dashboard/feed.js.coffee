@@ -129,15 +129,18 @@ class CommentsFeed
   unlock: =>
     @canAdd = true
 
-class Feed
-  constructor: (channel, channel_multiple, node) ->
+class @Feed
+  constructor: (channel, channel_multiple, node, currentComments) ->
     @comments     = new CommentsQueue()
     @feed         = new ChannelObserver(@comments)
     @commentsFeed = new CommentsFeed(@comments, node, commentsCount: 40)
+
+    @prerender(node, currentComments)
     @feed.subscribe(channel)
     @feed.subscribe_multiple(channel_multiple)
 
   run: ->
     @commentsFeed.run()
 
-window.Feed = Feed
+  prerender: (node, currentComments) ->
+    node.append(new Comment(comment).render()) for comment in currentComments

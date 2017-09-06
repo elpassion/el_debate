@@ -17,14 +17,14 @@
 
       .row
         = render partial: 'dashboard/votes-chart'
-          
-  .col.s4.comments-feed-wrapper 
+
+  .col.s4.comments-feed-wrapper
     .comments-feed
       .call-for-action
         = image_tag('dashboard/app_icon.png',class: 'app-icon')
         p Download EL Debate app and comment!
       .comments.js-comments
 
-
 javascript:
-  var debateCode = "#{@debate.code}";
+  var debateCode       = "#{@debate.code}";
+  var currentComments  = #{raw @debate.last_comments_json(count: 5)}
