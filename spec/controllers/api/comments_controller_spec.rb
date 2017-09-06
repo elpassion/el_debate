@@ -39,6 +39,14 @@ describe Api::CommentsController do
       subject
     end
 
+    it 'renders status created' do
+      expect(subject).to have_http_status(:created)
+    end
+
+    it 'renders json with created comment' do
+      expect(json_response).to look_like_comment_json
+    end
+
     context 'when auth_token was not given' do
       let(:token_value) { '' }
 
@@ -73,7 +81,7 @@ describe Api::CommentsController do
       let(:expected_json_response) do
         {
           'debate_closed' => false,
-          'comments' => [
+          'comments' => array_including(
             "id" => comment.id,
             "content" => comment.content,
             "full_name" => user.full_name,
@@ -82,13 +90,13 @@ describe Api::CommentsController do
             "user_initials" => user.initials,
             "user_id" => user.id,
             "status" => comment.status
-          ]
+          )
         }
       end
 
       it 'retrieve valid status' do
         expect(subject).to have_http_status(:ok)
-        expect(json_response).to eq(expected_json_response)
+        expect(json_response).to match(expected_json_response)
       end
     end
 
@@ -116,24 +124,27 @@ describe Api::CommentsController do
     context 'when debate is closed' do
       let(:debate) { create(:debate, :closed_debate, :with_comments, comments_status: :accepted) }
 
-      let(:comment_matcher) do
-        hash_including(
-          'id',
-          'content',
-          'full_name',
-          'created_at',
-          'user_initials_background_color',
-          'user_initials',
-          'user_id',
-          'status'
-        )
-      end
-
       it 'returns comment list' do
         expect(subject).to have_http_status(:ok)
-        expect(json_response).to include('comments' => array_including(comment_matcher))
+        expect(json_response).to include('comments' => array_including(element_looking_like_comment_json))
         expect(json_response).to include("debate_closed" => true)
       end
     end
   end
+
+  private
+
+  def look_like_comment_json
+    match(
+      "id"                             => be_a_kind_of(Integer),
+      "content"                        => be_a_kind_of(String),
+      "full_name"                      => be_a_kind_of(String),
+      "created_at"                     => be_a_kind_of(Integer),
+      "user_initials_background_color" => be_a_kind_of(String),
+      "user_initials"                  => be_a_kind_of(String),
+      "user_id"                        => be_a_kind_of(Integer),
+      "status"                         => be_a_kind_of(String)
+    )
+  end
+  alias element_looking_like_comment_json look_like_comment_json
 end
