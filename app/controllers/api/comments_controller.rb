@@ -1,6 +1,6 @@
 class Api::CommentsController < Api::ApplicationController
   before_action :set_user, only: [:create]
-  before_action :require_current_debate, :require_current_debate_not_closed
+  before_action :require_current_debate, :require_current_debate_not_closed, only: [:create]
 
   def create
     update_user_identity
