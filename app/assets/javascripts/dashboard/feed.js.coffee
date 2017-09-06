@@ -37,7 +37,7 @@ class ChannelObserver
     @commentsQueue.enq(comment)
 
 class Comment
-  constructor: (comment, opts = {}) ->
+  constructor: (comment) ->
     @full_name        = comment.full_name
     @comment          = comment.content
     @background_color = comment.user_initials_background_color
