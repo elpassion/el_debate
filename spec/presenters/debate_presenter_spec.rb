@@ -28,7 +28,7 @@ describe DebatePresenter do
     end
 
     it 'returns an amount in percent of people voted for a positive answer' do
-      expect(subject.positive_percent).to eq('8%')
+      expect(subject.positive_percent).to eq('10%')
     end
   end
 
@@ -39,7 +39,7 @@ describe DebatePresenter do
     end
 
     it 'returns an amount in percent of people voted for a negative answer' do
-      expect(subject.negative_percent).to eq('75%')
+      expect(subject.negative_percent).to eq('90%')
     end
   end
 

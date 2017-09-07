@@ -10,13 +10,13 @@ class DebatePresenter < SimpleDelegator
   end
 
   def positive_percent
-    return '0%' if votes_count.zero?
-    "#{(positive_count / votes_count.to_f * 100.0).round}%"
+    return '0%' if opinions_count.zero?
+    "#{(positive_count / opinions_count.to_f * 100.0).round}%"
   end
 
   def negative_percent
-    return '0%' if votes_count.zero?
-    "#{(negative_count / votes_count.to_f * 100.0).round}%"
+    return '0%' if opinions_count.zero?
+    "#{(negative_count / opinions_count.to_f * 100.0).round}%"
   end
 
   def positive_value
@@ -32,10 +32,16 @@ class DebatePresenter < SimpleDelegator
   end
 
   def votes_count
-    positive_count + negative_count + neutral_count
+    opinions_count + neutral_count
   end
 
   def status
     closed? ? 'closed' : 'open'
+  end
+
+  private
+
+  def opinions_count
+    positive_count + negative_count
   end
 end
