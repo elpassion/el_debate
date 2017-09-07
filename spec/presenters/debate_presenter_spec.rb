@@ -47,7 +47,7 @@ describe DebatePresenter do
 
   describe '#votes_count' do
     it 'counts positive and negative votes only' do
-      expect(subject.votes_count).to eq(debate.positive_count + debate.negative_count)
+      expect(subject.votes_count).to eq(debate.positive_count + debate.negative_count + debate.neutral_count)
     end
   end
 

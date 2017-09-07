@@ -13,7 +13,7 @@
             h4.votes-count-wrapper
               span.inline.js-votes-count = @debate.votes_count
               span.inline.js-noun-count = pluralize_without_count(@debate.votes_count, 'person')
-              span.inline debating
+              span.inline participating
 
       .row
         = render partial: 'dashboard/votes-chart'
