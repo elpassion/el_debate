@@ -4,8 +4,8 @@ class Api::CommentsController < Api::ApplicationController
 
   def create
     update_user_identity
-    CommentMaker.perform(debate: current_debate, user: @user, params: comment_params)
-    head :created
+    comment = CommentMaker.perform(debate: current_debate, user: @user, params: comment_params)
+    render json: CommentSerializer.new(comment), status: :created
   end
 
   def index
