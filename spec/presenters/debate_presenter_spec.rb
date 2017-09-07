@@ -1,12 +1,14 @@
 require 'rails_helper'
 
 describe DebatePresenter do
-  let(:debate) { OpenStruct.new(positive_count: 5,
-                                negative_count: 45,
-                                neutral_count: 10,
-                                votes_count: 60) }
+  let(:debate) do
+    OpenStruct.new(positive_count: 5,
+                   negative_count: 45,
+                   neutral_count: 10,
+                   votes_count: 60)
+  end
 
-  let(:subject) { described_class.new(debate) }
+  subject { described_class.new(debate) }
 
   describe '#positive_count_with_person' do
     it 'returns an amount of people voted for a positive answer' do
@@ -47,5 +49,51 @@ describe DebatePresenter do
     it 'counts positive and negative votes only' do
       expect(subject.votes_count).to eq(debate.positive_count + debate.negative_count + debate.neutral_count)
     end
+  end
+
+  describe '#last_comments_json' do
+    let(:debate) { create(:debate) }
+    let(:users) do
+      5.times.map { create(:user, auth_token: debate.create_auth_token!) }
+    end
+    let(:json) { subject.last_comments_json(count: number_of_comments) }
+    let(:parsed_json) { JSON.parse(json) }
+    let(:number_of_comments) { rand(1..20) }
+
+    before do
+      20.times do
+        create(
+          :comment,
+          user: users.sample,
+          debate: debate,
+          status: :accepted
+        )
+      end
+    end
+
+    it 'is valid json' do
+      expect { parsed_json }.not_to raise_error
+    end
+
+    it 'is list of serialized comments' do
+      expect(parsed_json).to all(look_like_comment_json)
+    end
+
+    it 'serializes specified number of comments' do
+      expect(parsed_json.count).to eq(number_of_comments)
+    end
+  end
+
+  def look_like_comment_json
+    match(
+      "id"                             => be_a_kind_of(Integer),
+      "content"                        => be_a_kind_of(String),
+      "full_name"                      => be_a_kind_of(String),
+      "created_at"                     => be_a_kind_of(Integer),
+      "user_initials_background_color" => be_a_kind_of(String),
+      "user_initials"                  => be_a_kind_of(String),
+      "user_id"                        => be_a_kind_of(Integer),
+      "status"                         => be_a_kind_of(String)
+    )
   end
 end

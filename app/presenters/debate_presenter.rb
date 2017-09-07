@@ -39,6 +39,12 @@ class DebatePresenter < SimpleDelegator
     closed? ? 'closed' : 'open'
   end
 
+  def last_comments_json(count: 5)
+    last_comments(count: count)
+      .map { |comment| CommentSerializer.new(comment) }
+      .to_json
+  end
+
   private
 
   def opinions_count

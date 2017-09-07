@@ -5,6 +5,7 @@ FactoryGirl.define do
     end
 
     topic { FFaker::HipsterIpsum.sentence }
+    sequence(:slug) { |num| "#{topic.parameterize}-#{num}" }
 
     trait :closed_debate do
       closed true

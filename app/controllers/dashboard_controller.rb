@@ -9,7 +9,7 @@ class DashboardController < ApplicationController
       percent: @debate.positive_percent,
       count: @debate.positive_count
     }
-    
+
     @chart_left_data = {
       positive: false,
       value: @debate.negative_value,

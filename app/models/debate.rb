@@ -66,6 +66,13 @@ class Debate < ApplicationRecord
     auth_tokens.create!
   end
 
+  def last_comments(count: 5)
+    comments
+      .accepted
+      .order(created_at: :desc)
+      .first(count)
+  end
+
   private
 
   def block_code_change
