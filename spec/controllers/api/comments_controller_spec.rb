@@ -126,7 +126,7 @@ describe Api::CommentsController do
 
       it 'returns comment list' do
         expect(subject).to have_http_status(:ok)
-        expect(json_response).to include('comments' => array_including(element_looking_like_comment_json))
+        expect(json_response).to include('comments' => all(look_like_comment_json))
         expect(json_response).to include("debate_closed" => true)
       end
     end
@@ -146,5 +146,4 @@ describe Api::CommentsController do
       "status"                         => be_a_kind_of(String)
     )
   end
-  alias element_looking_like_comment_json look_like_comment_json
 end
