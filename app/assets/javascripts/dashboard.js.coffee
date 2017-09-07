@@ -167,10 +167,10 @@ class Debate
       $(selectors.debateTopic)[0].className = 'closed-debate'
 
 initialize = ->
-  pusher              = new Pusher(pusherAppKey, { cluster: pusherAppCluster, encrypted: true })
+  pusher              = PusherFactory.create()
   userChannel         = pusher.subscribe("dashboard_channel_#{debateCode}")
   userChannelMultiple = pusher.subscribe("dashboard_channel_multiple_#{debateCode}")
-  feed                = new Feed(userChannel, userChannelMultiple, $(selectors.comments))
+  feed                = new Feed(userChannel, userChannelMultiple, $(selectors.comments), currentComments)
 
   leftSidePositive = $('.js-left-positive').attr('data-positive') == 'true'
 
