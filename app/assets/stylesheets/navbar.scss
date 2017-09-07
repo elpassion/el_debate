@@ -35,7 +35,14 @@ nav {
   margin: 0 auto;
   background-color: $light-green;
   border-radius: 7px;
-  padding-top: 5px;
+  padding-top: 3px;
+  background-image: image-url('navbar/key.png');
+  background-position: 15px center;
+  background-size: 30px;
+
+  h2 {
+    margin-left: 31px;
+  }
 }
 
 #debate-code {
@@ -59,7 +66,7 @@ h5.nav-time {
 
 .code-info {
   font-size: 12px;
-  margin-top: -3px;
+  margin-top: -8px;
 }
 
 nav {
