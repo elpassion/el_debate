@@ -70,7 +70,7 @@ p.debate-status {
 .comments-feed {
   height: calc(100vh - 110px);
   overflow: hidden;
-  
+
   &-wrapper {
     background-color: #f6f6f6;
   }
@@ -106,45 +106,41 @@ p.debate-status {
       clear: both;
     }
 
-    .left .avatar {
-      width: 60px;
-      height: 60px;
-      display: table;
+    .left {
+      margin-right: 15px;
+
+      .avatar {
+        width: 60px;
+        height: 60px;
+        display: table;
+
+        .initials {
+          color: white;
+          font-size: 1.5em;
+          display: table-cell;
+          vertical-align: middle;
+          text-align: center;
+        }
+      }
     }
 
-    .left .avatar .initials {
-      color: white;
-      font-size: 1.5em;
-      display: table-cell;
-      vertical-align: middle;
-      text-align: center;
-    }
-
-    .username {
-      padding-left: 15px;
+    .info {
       font-size: 20px;
-    }
-
-    .time {
-      padding-left: 15px;
-      font-size: 17px;
-      margin-top: -2px;
-      color: $grey;
+      .time {
+        color: $grey;
+      }
     }
 
     .content {
       width: 100%;
-      float: left;
 
-      p {
-        color: $dark-grey;
-        margin: 10px 0 35px;
-        font-size: 16px;
-        word-wrap: break-word;
+      color: $dark-grey;
+      font-size: 16px;
+      word-wrap: break-word;
+      text-align: justify;
 
-        @include media('>=tv') {
-          font-size: 25px;
-        }
+      @include media('>=tv') {
+        font-size: 25px;
       }
     }
   }
