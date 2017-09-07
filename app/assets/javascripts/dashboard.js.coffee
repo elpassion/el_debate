@@ -164,7 +164,7 @@ initialize = ->
   pusher              = PusherFactory.create()
   userChannel         = pusher.subscribe("dashboard_channel_#{debateCode}")
   userChannelMultiple = pusher.subscribe("dashboard_channel_multiple_#{debateCode}")
-  feed                = new Feed(userChannel, userChannelMultiple, $(selectors.comments), window.currentComments)
+  feed                = new Feed(userChannel, userChannelMultiple, $(selectors.comments), currentComments)
 
   window.leftSidePositive = $('.js-left-positive').attr('data-positive')
   window.positiveSelectors = if leftSidePositive == 'true' then selectors.left else selectors.right
