@@ -44,8 +44,8 @@ describe Api::VotesController, type: :controller do
 
     before { post :create, params: { id: answer_id } }
 
-    it 'returns 406 response status' do
-      expect(response).to have_http_status(406)
+    it 'returns forbidden response status' do
+      expect(response).to have_http_status(:forbidden)
     end
 
     it 'returns proper message' do

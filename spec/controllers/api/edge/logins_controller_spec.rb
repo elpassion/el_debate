@@ -54,8 +54,8 @@ describe Api::Edge::LoginsController, type: :controller do
       { code: debate.code, username: 'Abc' }
     end
 
-    it 'returns not_acceptable status with error message' do
-      expect(subject).to have_http_status(:not_acceptable)
+    it 'returns forbidden status with error message' do
+      expect(subject).to have_http_status(:forbidden)
       expect(json_response).to include('error')
       expect(json_response['error']).to eq('Debate is closed')
     end
