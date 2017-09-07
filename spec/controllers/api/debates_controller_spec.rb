@@ -31,7 +31,7 @@ describe Api::DebatesController do
       let(:debate) { create(:debate, :closed_debate) }
 
       it 'returns valid debate closed error hash' do
-        expect(subject).to have_http_status(:not_acceptable)
+        expect(subject).to have_http_status(:forbidden)
         expect(json_response).to include('error' => 'Debate is closed')
       end
     end

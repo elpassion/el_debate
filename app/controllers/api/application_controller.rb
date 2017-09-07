@@ -32,7 +32,7 @@ class Api::ApplicationController < ActionController::Base
 
   def require_current_debate_not_closed
     if current_debate.closed?
-      render json: { error: 'Debate is closed' }, status: :not_acceptable
+      render json: { error: 'Debate is closed' }, status: :forbidden
     end
   end
 end
