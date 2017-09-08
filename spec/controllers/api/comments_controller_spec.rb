@@ -130,5 +130,50 @@ describe Api::CommentsController do
         expect(json_response).to include("debate_closed" => true)
       end
     end
+
+    describe 'paginated result' do
+      let!(:comments) { create_list(:comment, all_count, user: user, debate: debate, status: :accepted) }
+      let(:all_count) { 10 }
+
+      context 'when limit given' do
+        subject do
+          get :index, params: { limit: limit }
+          response
+        end
+
+        let(:limit) { 5 }
+
+        it 'retrieves given number of comments' do
+          expect(json_response['comments'].count).to eq(limit)
+        end
+      end
+
+      context 'when limit not given' do
+        it 'retrieves 10 comments' do
+          expect(json_response['comments'].count).to eq(10)
+        end
+      end
+
+      context 'when position given' do
+        subject do
+          get :index, params: { position: position }
+          response
+        end
+
+        let(:position) { comments.map(&:id).sort[2..8].sample }
+
+        it 'retrieves comments from given position' do
+          expect(json_response['comments']).to all(include_id_lower_than_or_equal(position))
+        end
+      end
+
+      context 'when position not given' do
+        let(:newest_id) { comments.map(&:id).max }
+
+        it 'retrieves comments from newest' do
+          expect(json_response['comments']).to all(include_id_lower_than_or_equal(newest_id))
+        end
+      end
+    end
   end
 end
