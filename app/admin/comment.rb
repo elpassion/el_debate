@@ -25,14 +25,15 @@ ActiveAdmin.register Comment do
   member_action :accept, method: :put do
     debate = resource.debate
     resource.accepted!
-    CommentNotifier.new.send_comment(comment: resource, channel: "dashboard_channel_#{debate.code}")
+
+    CommentNotifier.new.comment_added(comment: resource, channel: "dashboard_channel_#{debate.code}")
     redirect_back fallback_location: resource_url, alert: "Status was changed"
   end
 
   member_action :reject, method: :put do
     resource.rejected!
 
-    CommentNotifier.new.send_comment(comment: resource, channel: "user_channel_#{resource.user_id}", event: 'comment_rejected')
+    CommentNotifier.new.comment_rejected(comment: resource, channel: "user_channel_#{resource.user_id}")
     redirect_back fallback_location: resource_url, alert: "Status was changed"
   end
 
@@ -40,15 +41,16 @@ ActiveAdmin.register Comment do
     debate = Debate.find_by_id!(params[:debate_id])
     comments = debate.comments.where(id: ids).update(status: :accepted)
 
-    CommentNotifier.new.send_comments(comments, "dashboard_channel_multiple_#{debate.code}")
+    CommentNotifier.new.comments_added(comments: comments, channel: "dashboard_channel_multiple_#{debate.code}")
     redirect_back fallback_location: admin_debate_comments_url, alert: " Status was changed"
   end
 
   batch_action :reject do |ids|
     comments = Comment.where(id: ids).update(status: :rejected)
 
+    notifier = CommentNotifier.new
     comments.each do |comment|
-      CommentNotifier.new.send_comment(comment: comment, channel: "user_channel_#{comment.user_id}", event: 'comment_rejected')
+      notifier.comment_rejected(comment: comment, channel: "user_channel_#{comment.user_id}")
     end
 
     redirect_back fallback_location: admin_debate_comments_url, alert: " Status was changed"
