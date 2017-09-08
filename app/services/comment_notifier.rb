@@ -4,18 +4,18 @@ class CommentNotifier
     @serializer = serializer
   end
 
-  def send_comment(comment, channel)
+  def send_comment(comment:, channel:, event: 'comment_added')
     @broadcaster.push(
       channel,
-      "comment_added",
+      event,
       serialize_comment(comment)
     )
   end
 
-  def send_comments(comments, channel)
+  def send_comments(comments:, channel: , event: 'comments_added')
     @broadcaster.push(
       channel,
-      "comments_added",
+      event,
       comments.map { |comment| serialize_comment(comment) }
     )
   end

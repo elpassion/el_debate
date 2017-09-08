@@ -25,12 +25,14 @@ ActiveAdmin.register Comment do
   member_action :accept, method: :put do
     debate = resource.debate
     resource.accepted!
-    CommentNotifier.new.send_comment(resource, "dashboard_channel_#{debate.code}")
+    CommentNotifier.new.send_comment(comment: resource, channel: "dashboard_channel_#{debate.code}")
     redirect_back fallback_location: resource_url, alert: "Status was changed"
   end
 
   member_action :reject, method: :put do
     resource.rejected!
+
+    CommentNotifier.new.send_comment(comment: resource, channel: "user_channel_#{resource.user_id}", event: 'comment_rejected')
     redirect_back fallback_location: resource_url, alert: "Status was changed"
   end
 
@@ -43,7 +45,12 @@ ActiveAdmin.register Comment do
   end
 
   batch_action :reject do |ids|
-    Comment.where(id: ids).update(status: :rejected)
+    comments = Comment.where(id: ids).update(status: :rejected)
+
+    comments.each do |comment|
+      CommentNotifier.new.send_comment(comment: comment, channel: "user_channel_#{comment.user_id}", event: 'comment_rejected')
+    end
+
     redirect_back fallback_location: admin_debate_comments_url, alert: " Status was changed"
   end
 
