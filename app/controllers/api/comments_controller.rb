@@ -10,8 +10,7 @@ class Api::CommentsController < Api::ApplicationController
   end
 
   def index
-    render json: { debate_closed: current_debate.closed?,
-                   comments: retrieve_comments }
+    render json: retrieve_comments.merge(debate_closed: current_debate.closed?)
   end
 
   private
@@ -21,9 +20,9 @@ class Api::CommentsController < Api::ApplicationController
   end
 
   def retrieve_comments
-    PaginatedComments.new(debate: current_debate,
-                          direction: :backward,
-                          params: params).retrieve_comments
+    PaginatedComments.new(comments_relation: current_debate.retrieve_comments,
+                          params: params,
+                          direction: :backward).to_h
   end
 
   def comment_params

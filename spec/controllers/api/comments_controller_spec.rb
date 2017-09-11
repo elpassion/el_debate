@@ -82,7 +82,8 @@ describe Api::CommentsController do
             "user_initials" => user.initials,
             "user_id" => user.id,
             "status" => comment.status
-          )
+          ),
+          "next_position" => 2
         }
       end
 
@@ -96,7 +97,8 @@ describe Api::CommentsController do
       it 'retrieve valid status and empty array of comments' do
         expect(subject).to have_http_status(:ok)
         expect(json_response).to eq({ "debate_closed" => false,
-                                      "comments" => [] })
+                                      "comments" => [],
+                                      "next_position" => nil })
       end
     end
 
@@ -109,7 +111,8 @@ describe Api::CommentsController do
       it 'retrieve valid status and empty array of comments' do
         expect(subject).to have_http_status(:ok)
         expect(json_response).to eq("debate_closed" => false,
-                                    "comments" => [])
+                                    "comments" => [],
+                                    "next_position" => nil)
       end
     end
 
