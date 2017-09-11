@@ -7,16 +7,8 @@ describe Api::CommentsController do
   let(:token_value) { auth_token.value }
   let!(:user) { create(:user, auth_token: auth_token, first_name: 'John', last_name: 'Doe') }
 
-  before(:all) do
-    Timecop.freeze(Time.local(2017, 8, 5, 10, 10, 10))
-  end
-
   before do
     request.env['HTTP_AUTHORIZATION'] = token_value
-  end
-
-  after do
-    Timecop.return
   end
 
   describe '#create' do
@@ -85,7 +77,7 @@ describe Api::CommentsController do
             "id" => comment.id,
             "content" => comment.content,
             "full_name" => user.full_name,
-            "created_at" => Time.now.to_i * 1000,
+            "created_at" => comment.created_at.to_i * 1000,
             "user_initials_background_color" => user.initials_background_color,
             "user_initials" => user.initials,
             "user_id" => user.id,
