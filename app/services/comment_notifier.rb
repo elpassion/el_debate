@@ -26,7 +26,7 @@ class CommentNotifier
     )
   end
 
-  def send_comments(comments:, channel: , event: 'comments_added')
+  def send_comments(comments:, channel:, event: 'comments_added')
     @broadcaster.push(
       channel,
       event,
