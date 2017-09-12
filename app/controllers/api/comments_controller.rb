@@ -20,9 +20,11 @@ class Api::CommentsController < Api::ApplicationController
   end
 
   def retrieve_comments
-    PaginatedComments.new(comments_relation: current_debate.retrieve_comments,
-                          params: params,
-                          direction: :backward).to_h
+    PaginatedComments
+      .new(comments_relation: current_debate.retrieve_comments,
+           params: params,
+           direction: :backward)
+      .call
   end
 
   def comment_params
