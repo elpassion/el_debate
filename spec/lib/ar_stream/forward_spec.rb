@@ -10,19 +10,12 @@ describe ARStream::Forward do
 
   describe '#next' do
     subject { comment_stream.next(records_count) }
-
     let(:records_count) { 3 }
 
-    it 'returns specified number of records' do
-      expect(subject.count).to eq records_count
-    end
+    include_examples "ar_stream_shared_example"
 
     it 'returns records sorted by id ascending' do
       expect(subject).to eq(subject.sort_by(&:id))
-    end
-
-    it 'changes stream position' do
-      expect { subject }.to(change { comment_stream.position })
     end
 
     it 'sets position to id before last element' do
@@ -35,26 +28,6 @@ describe ARStream::Forward do
 
       it 'returns empty array' do
         expect(subject).to be_empty
-      end
-    end
-
-    context 'subsequent call' do
-      it 'returns different results than first' do
-        comments  = comment_stream.next(records_count)
-        comments2 = comment_stream.next(records_count)
-
-        expect(comments2).not_to eq(comments)
-      end
-
-      context 'when no more records available' do
-        before { comment_stream.next(records_count) }
-
-        let(:records_count) { all_count }
-
-        it 'returns empty array' do
-          comments = comment_stream.next(records_count)
-          expect(comments).to be_empty
-        end
       end
     end
 
