@@ -95,7 +95,7 @@ describe Api::CommentsController do
         create(:comment, user: user, debate: debate, status: :pending)
       end
 
-      it 'retrieve valid status and empty array of comments' do
+      it 'retrieve empty array of comments' do
         expect(json_response).to include("comments" => [])
       end
     end
