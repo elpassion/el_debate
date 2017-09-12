@@ -52,8 +52,8 @@ describe Api::CommentsController do
     context 'when debate is closed' do
       let(:debate) { create(:debate, :closed_debate) }
 
-      it 'returns not_acceptable status with error message on comments create' do
-        expect(subject).to have_http_status(:not_acceptable)
+      it 'returns forbidden status with error message on comments create' do
+        expect(subject).to have_http_status(:forbidden)
         expect(json_response).to include('error' => 'Debate is closed')
       end
     end

@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe CommentMaker do
   let(:user) { create(:user) }
-  let(:notifier) { instance_double(CommentNotifier, send_comment: nil) }
+  let(:notifier) { instance_double(CommentNotifier, comment_added: nil) }
   let(:comment_maker) { described_class.new(debate, user, notifier) }
   let(:params) { { content: "I  do  not agree \n with this" } }
   subject { comment_maker.call(params) }
@@ -32,7 +32,7 @@ describe CommentMaker do
       end
 
       it 'calls a notification service' do
-        expect(notifier).to receive(:send_comment)
+        expect(notifier).to receive(:comment_added)
         subject
       end
     end
