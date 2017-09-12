@@ -6,16 +6,16 @@ class PaginatedComments
     @comments_stream = ARStream.build(direction, comments_relation, start_at: position)
   end
 
-  def to_h
+  def call
     { comments: comments, next_position: comments_stream.position }
   end
 
   private
 
-  attr_reader :limit, :comments_stream, :params
+  attr_reader :comments_stream, :params
 
   def comments
-    comments_stream.next(limit).map { |comment| CommentSerializer.new(comment) }
+    comments_stream.next(limit).map { |comment| CommentSerializer.serialize(comment) }
   end
 
   def limit
@@ -26,9 +26,9 @@ class PaginatedComments
   end
 
   def position
-    position = params[:position].to_i
-    return nil if position.zero?
+    position = params[:position]
+    return nil unless position.to_s =~ /^\d+$/
 
-    position
+    position.to_i
   end
 end
