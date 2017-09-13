@@ -75,7 +75,7 @@ describe Api::CommentsController do
       expect(subject).to have_http_status(:ok)
     end
 
-    context 'when comments are created and have status active' do
+    context 'when comments are created and have status accepted' do
       before { create(:comment, user: user, debate: debate, status: :accepted) }
 
       it 'returns comments list in json' do
@@ -91,8 +91,7 @@ describe Api::CommentsController do
 
     context 'when comments are created, but status is pending' do
       before do
-        create(:comment, user: user, debate: debate, status: :pending)
-        create(:comment, user: user, debate: debate, status: :pending)
+        create_list(:comment, 5, user: user, debate: debate, status: :pending)
       end
 
       it 'retrieve empty array of comments' do
