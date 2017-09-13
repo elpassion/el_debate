@@ -13,7 +13,7 @@ module ElDebate
     # -- all .rb files in that directory are automatically loaded.
 
     config.time_zone = 'Warsaw'
-    config.autoload_paths << Rails.root.join('lib')
+    config.eager_load_paths << Rails.root.join('lib')
     config.active_job.queue_adapter = :sucker_punch
 
     config.middleware.insert_before 0, Rack::Cors do
