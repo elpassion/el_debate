@@ -11,4 +11,8 @@ module CommentsMatchers
       "status"                         => be_a_kind_of(String)
     )
   end
+
+  def include_id_lower_than_or_equal(num)
+    include('id' => be <= num)
+  end
 end

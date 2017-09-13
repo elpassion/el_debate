@@ -7,16 +7,8 @@ describe Api::CommentsController do
   let(:token_value) { auth_token.value }
   let!(:user) { create(:user, auth_token: auth_token, first_name: 'John', last_name: 'Doe') }
 
-  before(:all) do
-    Timecop.freeze(Time.local(2017, 8, 5, 10, 10, 10))
-  end
-
   before do
     request.env['HTTP_AUTHORIZATION'] = token_value
-  end
-
-  after do
-    Timecop.return
   end
 
   describe '#create' do
@@ -75,49 +67,35 @@ describe Api::CommentsController do
 
     let(:json_response) { JSON.parse(subject.body) }
 
-    context 'when comments are created and have status active' do
-      let!(:comment) { create(:comment, user: user, debate: debate, status: :accepted) }
+    it 'returns debate status in json' do
+      expect(json_response).to include('debate_closed' => false)
+    end
 
-      let(:expected_json_response) do
-        {
-          'debate_closed' => false,
-          'comments' => array_including(
-            "id" => comment.id,
-            "content" => comment.content,
-            "full_name" => user.full_name,
-            "created_at" => Time.now.to_i * 1000,
-            "user_initials_background_color" => user.initials_background_color,
-            "user_initials" => user.initials,
-            "user_id" => user.id,
-            "status" => comment.status
-          )
-        }
-      end
+    it 'has 200 ok http status' do
+      expect(subject).to have_http_status(:ok)
+    end
 
-      it 'retrieve valid status' do
-        expect(subject).to have_http_status(:ok)
-        expect(json_response).to match(expected_json_response)
+    context 'when comments are created and have status accepted' do
+      before { create(:comment, user: user, debate: debate, status: :accepted) }
+
+      it 'returns comments list in json' do
+        expect(json_response).to include('comments' => all(look_like_comment_json))
       end
     end
 
     context 'when comments are not created' do
-      it 'retrieve valid status and empty array of comments' do
-        expect(subject).to have_http_status(:ok)
-        expect(json_response).to eq({ "debate_closed" => false,
-                                      "comments" => [] })
+      it 'returns empty comments list' do
+        expect(json_response).to include('comments' => [])
       end
     end
 
     context 'when comments are created, but status is pending' do
       before do
-        create(:comment, user: user, debate: debate, status: :pending)
-        create(:comment, user: user, debate: debate, status: :pending)
+        create_list(:comment, 5, user: user, debate: debate, status: :pending)
       end
 
-      it 'retrieve valid status and empty array of comments' do
-        expect(subject).to have_http_status(:ok)
-        expect(json_response).to eq("debate_closed" => false,
-                                    "comments" => [])
+      it 'retrieve empty array of comments' do
+        expect(json_response).to include("comments" => [])
       end
     end
 
@@ -125,9 +103,56 @@ describe Api::CommentsController do
       let(:debate) { create(:debate, :closed_debate, :with_comments, comments_status: :accepted) }
 
       it 'returns comment list' do
-        expect(subject).to have_http_status(:ok)
         expect(json_response).to include('comments' => all(look_like_comment_json))
-        expect(json_response).to include("debate_closed" => true)
+      end
+
+      it 'returns debate status in json' do
+        expect(json_response).to include('debate_closed' => true)
+      end
+    end
+
+    describe 'paginated result' do
+      let!(:comments) { create_list(:comment, all_count, user: user, debate: debate, status: :accepted) }
+      let(:all_count) { 10 }
+
+      context 'when limit given' do
+        subject do
+          get :index, params: { limit: limit }
+          response
+        end
+
+        let(:limit) { 5 }
+
+        it 'retrieves given number of comments' do
+          expect(json_response['comments'].count).to eq(limit)
+        end
+      end
+
+      context 'when limit not given' do
+        it 'retrieves 10 comments' do
+          expect(json_response['comments'].count).to eq(10)
+        end
+      end
+
+      context 'when position given' do
+        subject do
+          get :index, params: { position: position }
+          response
+        end
+
+        let(:position) { comments.map(&:id).sort[2..8].sample }
+
+        it 'retrieves comments from given position' do
+          expect(json_response['comments']).to all(include_id_lower_than_or_equal(position))
+        end
+      end
+
+      context 'when position not given' do
+        let(:newest_id) { comments.map(&:id).max }
+
+        it 'retrieves comments from newest' do
+          expect(json_response['comments']).to all(include_id_lower_than_or_equal(newest_id))
+        end
       end
     end
   end
