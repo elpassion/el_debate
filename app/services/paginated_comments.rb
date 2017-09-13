@@ -2,7 +2,8 @@ class PaginatedComments
   DEFAULT_LIMIT = 10
 
   def initialize(comments_relation:, params:, direction: :backwards)
-    @params = params
+    @limit    = params[:limit].to_i
+    @position = params[:position]
     @comments_stream = ARStream.build(direction, comments_relation, start_at: position)
   end
 
@@ -12,23 +13,20 @@ class PaginatedComments
 
   private
 
-  attr_reader :comments_stream, :params
+  attr_reader :comments_stream
 
   def comments
     comments_stream.next(limit).map { |comment| CommentSerializer.serialize(comment) }
   end
 
   def limit
-    limit = params[:limit].to_i
-    return DEFAULT_LIMIT if limit.zero?
+    return DEFAULT_LIMIT if @limit.zero?
 
-    limit
+    @limit
   end
 
   def position
-    position = params[:position]
-    return nil unless position.to_s =~ /^\d+$/
-
-    position.to_i
+    return nil unless @position.to_s =~ /^\d+$/
+    @position.to_i
   end
 end
