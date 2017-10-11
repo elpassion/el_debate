@@ -30,12 +30,19 @@ nav {
 }
 
 .key-box {
+  display: flex;
   @extend .box;
   width: 230px;
   margin: 0 auto;
   background-color: $light-green;
   border-radius: 7px;
+  align-items: baseline;
+  justify-content: center;
   padding-top: 5px;
+
+  h2 {
+    margin-left: 10px;
+  }
 }
 
 #debate-code {
@@ -55,11 +62,6 @@ nav {
 h5.nav-time {
   font-size: 31px;
   float: right;
-}
-
-.code-info {
-  font-size: 12px;
-  margin-top: -3px;
 }
 
 nav {
