@@ -3,12 +3,12 @@ class ARStream
 
   class << self
     def build(direction, relation, start_at: nil)
-      bad_direction! unless DIRECTIONS.include?(direction)
+      bad_direction!(direction) unless DIRECTIONS.include?(direction)
       klass = const_get(direction.to_s.camelize)
       klass.new(relation, start_at: start_at)
     end
 
-    def bad_direction!
+    def bad_direction!(direction)
       raise ArgumentError,
             "unknown direction `#{direction}`, available directions are #{DIRECTIONS.inspect}"
     end
